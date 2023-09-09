@@ -4,4 +4,7 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>GodotHub</RootNamespace>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Octokit" Version="7.1.0" />
+  </ItemGroup>
 </Project>

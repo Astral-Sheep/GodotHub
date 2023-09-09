@@ -1,15 +1,16 @@
-[gd_scene load_steps=8 format=3 uid="uid://dm1bwqahtni0i"]
+[gd_scene load_steps=8 format=3 uid="uid://tqannp0nqjly"]
 
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_7cyuv"]
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
-[ext_resource type="Script" path="res://scripts/debug/DebugOutput.cs" id="2_ag3lc"]
 [ext_resource type="Script" path="res://scripts/TabManager.cs" id="2_hrvpk"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="Texture2D" uid="uid://4wgos1q8t8tv" path="res://icon.svg" id="5_xh7o5"]
 [ext_resource type="Script" path="res://scripts/Tab.cs" id="6_bv1uh"]
+[ext_resource type="Script" path="res://scripts/debug/Debugger.cs" id="7_xd05t"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_l0edh")
+metadata/_edit_horizontal_guides_ = []
 
 [node name="UI" type="Control" parent="." node_paths=PackedStringArray("projectsTab", "versionsTab", "documentationTab", "projectsButton", "versionsButton", "documentationButton")]
 layout_mode = 3
@@ -19,9 +20,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2_hrvpk")
-projectsTab = NodePath("Content/TabContainer/ProjectsTab")
-versionsTab = NodePath("Content/TabContainer/VersionsTab")
-documentationTab = NodePath("Content/TabContainer/DocumentationTab")
+projectsTab = NodePath("Content/VBoxContainer/TabContainer/ProjectsTab")
+versionsTab = NodePath("Content/VBoxContainer/TabContainer/VersionsTab")
+documentationTab = NodePath("Content/VBoxContainer/TabContainer/DocumentationTab")
 projectsButton = NodePath("Tabs/Button Container/ProjectsButton")
 versionsButton = NodePath("Tabs/Button Container/VersionsButton")
 documentationButton = NodePath("Tabs/Button Container/DocumentationButton")
@@ -108,6 +109,7 @@ expand_icon = true
 
 [node name="Content" type="Control" parent="UI"]
 layout_mode = 1
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 250.0
@@ -123,16 +125,19 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 
-[node name="TabContainer" type="Control" parent="UI/Content"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_bottom = -50.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ProjectsTab" type="Control" parent="UI/Content/TabContainer"]
+[node name="TabContainer" type="Control" parent="UI/Content/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -141,7 +146,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_bv1uh")
 
-[node name="Label" type="Label" parent="UI/Content/TabContainer/ProjectsTab"]
+[node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -159,7 +164,7 @@ text = "PROJECTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionsTab" type="Control" parent="UI/Content/TabContainer"]
+[node name="VersionsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -168,7 +173,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_bv1uh")
 
-[node name="Label" type="Label" parent="UI/Content/TabContainer/VersionsTab"]
+[node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -187,7 +192,7 @@ text = "VERSIONS
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DocumentationTab" type="Control" parent="UI/Content/TabContainer"]
+[node name="DocumentationTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -196,7 +201,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("6_bv1uh")
 
-[node name="Label" type="Label" parent="UI/Content/TabContainer/DocumentationTab"]
+[node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/DocumentationTab"]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -214,16 +219,13 @@ text = "DOCUMENTATON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DebugOutput" type="Control" parent="UI/Content"]
-layout_mode = 1
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = -50.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="DebugOutput" type="Control" parent="UI/Content/VBoxContainer" node_paths=PackedStringArray("label")]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+script = ExtResource("7_xd05t")
+label = NodePath("RichTextLabel")
 
-[node name="Background" type="ColorRect" parent="UI/Content/DebugOutput"]
+[node name="Background" type="ColorRect" parent="UI/Content/VBoxContainer/DebugOutput"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -232,7 +234,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.117647, 0.117647, 0.117647, 1)
 
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/Content/DebugOutput"]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Content/VBoxContainer/DebugOutput"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -245,10 +247,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_7cyuv")
 bbcode_enabled = true
+scroll_following = true
 autowrap_mode = 2
 shortcut_keys_enabled = false
-script = ExtResource("2_ag3lc")
-normalColor = Color(0.721569, 0.721569, 0.721569, 1)
-validationColor = Color(0.462745, 0.588235, 0.337255, 1)
-warningColor = Color(0.905882, 0.705882, 0.309804, 1)
-errorColor = Color(0.831373, 0.313726, 0.309804, 1)
