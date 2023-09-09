@@ -1,12 +1,44 @@
-[gd_scene load_steps=8 format=3 uid="uid://tqannp0nqjly"]
+[gd_scene load_steps=22 format=3 uid="uid://b15usol1g4scs"]
 
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_7cyuv"]
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/TabManager.cs" id="2_hrvpk"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
-[ext_resource type="Texture2D" uid="uid://4wgos1q8t8tv" path="res://icon.svg" id="5_xh7o5"]
 [ext_resource type="Script" path="res://scripts/Tab.cs" id="6_bv1uh"]
 [ext_resource type="Script" path="res://scripts/debug/Debugger.cs" id="7_xd05t"]
+[ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="8_gkm2k"]
+[ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes/style_box_bg_btn.tres" id="9_yqgqj"]
+[ext_resource type="Texture2D" uid="uid://cqahek5snvkfx" path="res://assets/sprites/themes/cross.png" id="10_fxlva"]
+[ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="11_e8uxm"]
+[ext_resource type="Texture2D" uid="uid://4v0f3326dtvv" path="res://assets/sprites/themes/box_checked.png" id="12_5gvuq"]
+[ext_resource type="StyleBox" uid="uid://c61jjqjdali6w" path="res://resources/style_boxes/style_box_normal.tres" id="12_7nw4k"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5en7"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6pln"]
+bg_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clju0"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aow5g"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c3ha7"]
+texture = ExtResource("10_fxlva")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4d55q"]
+texture = ExtResource("11_e8uxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d1xt8"]
+texture = ExtResource("11_e8uxm")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qwlxu"]
+texture = ExtResource("10_fxlva")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rd7yc"]
+texture = ExtResource("11_e8uxm")
 
 [node name="Main" type="Node"]
 script = ExtResource("1_l0edh")
@@ -19,6 +51,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("2_hrvpk")
 projectsTab = NodePath("Content/VBoxContainer/TabContainer/ProjectsTab")
 versionsTab = NodePath("Content/VBoxContainer/TabContainer/VersionsTab")
@@ -27,21 +60,14 @@ projectsButton = NodePath("Tabs/Button Container/ProjectsButton")
 versionsButton = NodePath("Tabs/Button Container/VersionsButton")
 documentationButton = NodePath("Tabs/Button Container/DocumentationButton")
 
-[node name="Tabs" type="Control" parent="UI"]
+[node name="Tabs" type="Panel" parent="UI"]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 250.0
 grow_vertical = 2
-
-[node name="Background" type="ColorRect" parent="UI/Tabs"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.117647, 0.117647, 0.117647, 1)
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_v5en7")
 
 [node name="Button Container" type="VBoxContainer" parent="UI/Tabs"]
 layout_mode = 1
@@ -103,11 +129,11 @@ offset_bottom = 70.0
 grow_horizontal = 0
 focus_mode = 0
 theme = ExtResource("1_7cyuv")
-icon = ExtResource("5_xh7o5")
+icon = ExtResource("12_5gvuq")
 icon_alignment = 1
 expand_icon = true
 
-[node name="Content" type="Control" parent="UI"]
+[node name="Content" type="Panel" parent="UI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -115,15 +141,8 @@ anchor_bottom = 1.0
 offset_left = 250.0
 grow_horizontal = 2
 grow_vertical = 2
-
-[node name="Background" type="ColorRect" parent="UI/Content"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_k6pln")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/Content"]
 layout_mode = 1
@@ -136,6 +155,7 @@ grow_vertical = 2
 [node name="TabContainer" type="Control" parent="UI/Content/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
 layout_mode = 1
@@ -144,6 +164,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("6_bv1uh")
 
 [node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab"]
@@ -171,6 +192,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("6_bv1uh")
 
 [node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab"]
@@ -199,6 +221,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 1
 script = ExtResource("6_bv1uh")
 
 [node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/DocumentationTab"]
@@ -219,22 +242,15 @@ text = "DOCUMENTATON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DebugOutput" type="Control" parent="UI/Content/VBoxContainer" node_paths=PackedStringArray("label")]
+[node name="Debugger" type="Panel" parent="UI/Content/VBoxContainer" node_paths=PackedStringArray("label")]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_clju0")
 script = ExtResource("7_xd05t")
 label = NodePath("RichTextLabel")
 
-[node name="Background" type="ColorRect" parent="UI/Content/VBoxContainer/DebugOutput"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.117647, 0.117647, 0.117647, 1)
-
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/Content/VBoxContainer/DebugOutput"]
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Content/VBoxContainer/Debugger"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -250,3 +266,151 @@ bbcode_enabled = true
 scroll_following = true
 autowrap_mode = 2
 shortcut_keys_enabled = false
+
+[node name="Settings" type="Control" parent="." node_paths=PackedStringArray("content", "openButton", "closeButton", "backgroundButton", "debugToggle")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("8_gkm2k")
+content = NodePath("Panel")
+openButton = NodePath("../UI/Tabs/ParameterButton")
+closeButton = NodePath("Panel/CloseButton")
+backgroundButton = NodePath("Background")
+debugToggle = NodePath("Panel/Content/DebugEnabling/CheckButton")
+
+[node name="Background" type="Button" parent="Settings"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_override_styles/normal = ExtResource("9_yqgqj")
+theme_override_styles/hover = ExtResource("9_yqgqj")
+theme_override_styles/pressed = ExtResource("9_yqgqj")
+theme_override_styles/disabled = ExtResource("9_yqgqj")
+theme_override_styles/focus = ExtResource("9_yqgqj")
+
+[node name="Panel" type="Panel" parent="Settings"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_right = 0.8
+anchor_bottom = 0.8
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_aow5g")
+
+[node name="CloseButton" type="Button" parent="Settings/Panel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -40.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 40.0
+grow_horizontal = 0
+focus_mode = 0
+theme_override_styles/normal = SubResource("StyleBoxTexture_c3ha7")
+theme_override_styles/hover = SubResource("StyleBoxTexture_4d55q")
+theme_override_styles/pressed = SubResource("StyleBoxTexture_d1xt8")
+theme_override_styles/disabled = SubResource("StyleBoxTexture_qwlxu")
+theme_override_styles/focus = SubResource("StyleBoxTexture_rd7yc")
+
+[node name="Content" type="VBoxContainer" parent="Settings/Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 50.0
+offset_right = -25.0
+offset_bottom = -25.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7cyuv")
+
+[node name="DebugEnabling" type="HBoxContainer" parent="Settings/Panel/Content"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="Label" parent="Settings/Panel/Content/DebugEnabling"]
+layout_mode = 2
+text = "Enable Debugging"
+
+[node name="CheckButton" type="CheckButton" parent="Settings/Panel/Content/DebugEnabling"]
+layout_mode = 2
+focus_mode = 0
+
+[node name="Space" type="Control" parent="Settings/Panel/Content"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="ProjectPath" type="VBoxContainer" parent="Settings/Panel/Content"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Settings/Panel/Content/ProjectPath"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Project Default Path:[/b]"
+fit_content = true
+
+[node name="Path" type="Button" parent="Settings/Panel/Content/ProjectPath"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = ExtResource("12_7nw4k")
+text = "C:\\Users\\thoma\\Documents\\Projects\\"
+icon = ExtResource("12_5gvuq")
+alignment = 0
+text_overrun_behavior = 3
+icon_alignment = 2
+expand_icon = true
+
+[node name="InstallPath" type="VBoxContainer" parent="Settings/Panel/Content"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Settings/Panel/Content/InstallPath"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Install Path:[/b]"
+fit_content = true
+
+[node name="Path" type="Button" parent="Settings/Panel/Content/InstallPath"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = ExtResource("12_7nw4k")
+text = "C:\\Users\\thoma\\Downloads\\"
+icon = ExtResource("12_5gvuq")
+alignment = 0
+text_overrun_behavior = 3
+icon_alignment = 2
+expand_icon = true
+
+[node name="DownloadPath" type="VBoxContainer" parent="Settings/Panel/Content"]
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Settings/Panel/Content/DownloadPath"]
+layout_mode = 2
+size_flags_vertical = 3
+bbcode_enabled = true
+text = "[b]Download Path:[/b]"
+fit_content = true
+
+[node name="Path" type="Button" parent="Settings/Panel/Content/DownloadPath"]
+layout_mode = 2
+focus_mode = 0
+theme_override_styles/normal = ExtResource("12_7nw4k")
+text = "C:\\Users\\thoma\\Downloads\\"
+icon = ExtResource("12_5gvuq")
+alignment = 0
+text_overrun_behavior = 3
+icon_alignment = 2
+expand_icon = true

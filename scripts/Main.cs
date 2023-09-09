@@ -31,6 +31,9 @@ namespace Com.Astral.GodotHub
 				case VersionInstaller.InstallationResult.Failed:
 					Debugger.PrintError($"Failed to download Godot {VERSION}");
 					break;
+				case VersionInstaller.InstallationResult.Cancelled:
+					Debugger.PrintWarning($"Godot {VERSION} already installed");
+					break;
 			}
 		}
 	}

@@ -217,6 +217,7 @@ ProgressBar/colors/font_color = Color(0.721569, 0.721569, 0.721569, 1)
 ProgressBar/fonts/font = SubResource("15")
 ProgressBar/styles/bg = SubResource("13")
 ProgressBar/styles/fg = SubResource("14")
+RichTextLabel/colors/default_color = Color(0.721569, 0.721569, 0.721569, 1)
 RichTextLabel/font_sizes/bold_font_size = 20
 RichTextLabel/font_sizes/bold_italics_font_size = 20
 RichTextLabel/font_sizes/italics_font_size = 20

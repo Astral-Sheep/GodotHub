@@ -16,6 +16,7 @@ namespace Com.Astral.GodotHub.Releases
 			Installed,
 			Downloaded,
 			Failed,
+			Cancelled,
 		}
 
 #if DEBUG
@@ -34,77 +35,25 @@ namespace Com.Astral.GodotHub.Releases
 				return InstallationResult.Failed;
 			}
 
-			string lZipName = GetAssetName(pVersion, pOS, pMono) + ".zip";
+			string lFileName = GetAssetName(pVersion, pOS, pMono);
+
+			if (Directory.Exists(installPath + @"\" + lFileName))
+			{
+				return InstallationResult.Cancelled;
+			}
+
+			lFileName += ".zip";
 
 			for (int i = 0; i < lRelease.Assets.Count; i++)
 			{
-				if (lRelease.Assets[i].Name == lZipName)
+				if (lRelease.Assets[i].Name == lFileName)
 				{
 					return await InstallAsset(lRelease.Assets[i], pMono);
 				}
 			}
 
-			Debugger.PrintError($"{lZipName} doesn't exists");
+			Debugger.PrintError($"{lFileName} doesn't exists");
 			return InstallationResult.Failed;
-
-			//if (lUri == null)
-			//{
-			//	Debugger.PrintError(GetAssetName(pVersion, pOS, pMono) + ".zip doesn't exists.");
-			//	return InstallationResult.Failed;
-			//}
-
-			//HttpResponseMessage lResponse = await lClient.GetAsync(lUri);
-
-			//if (lResponse.IsSuccessStatusCode)
-			//{
-			//	Debugger.PrintMessage("Http request validated");
-			//}
-			//else
-			//{
-			//	Debugger.PrintError("Failed to access url");
-			//	return InstallationResult.Failed;
-			//}
-
-			//lPath = installPath + @"\" + lPath;
-			//lZipName = lPath + ".zip";
-
-			//try
-			//{
-			//	FileStream lStream = new FileStream(
-			//		lZipName,
-			//		System.IO.FileMode.Create
-			//	);
-			//	await lResponse.Content.CopyToAsync(lStream);
-			//	lStream.Close();
-
-			//}
-			//catch (Exception e)
-			//{
-			//	Debugger.PrintError($"{e.GetType()}: {e.Message}");
-			//	return InstallationResult.Failed;
-			//}
-
-			//try
-			//{
-			//	ZipFile.ExtractToDirectory(lZipName, pMono ? installPath : lPath, true);
-			//}
-			//catch (Exception e)
-			//{
-			//	Debugger.PrintError($"{e.GetType()}: {e.Message}");
-			//	return InstallationResult.Downloaded;
-			//}
-
-			//try
-			//{
-			//	File.Delete(lZipName);
-			//}
-			//catch (Exception e)
-			//{
-			//	Debugger.PrintError($"{e.GetType()}: {e.Message}");
-			//	return InstallationResult.Installed;
-			//}
-
-			//return InstallationResult.Installed;
 		}
 
 		public static async Task<InstallationResult> InstallAsset(ReleaseAsset pAsset, bool pIsMono)

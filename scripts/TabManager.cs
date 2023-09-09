@@ -25,27 +25,6 @@ namespace Com.Astral.GodotHub
 			documentationTab.Visible = documentationButton.ButtonPressed;
 		}
 
-		protected override void Dispose(bool pDisposing)
-		{
-			if (!pDisposing)
-				return;
-
-			if (documentationButton != null)
-			{
-				documentationButton.Toggled -= OnDocumentationToggled;
-			}
-
-			if (versionsButton != null)
-			{
-				versionsButton.Toggled -= OnVersionsToggled;
-			}
-
-			if (projectsButton != null)
-			{
-				projectsButton.Toggled -= OnProjectsToggled;
-			}
-		}
-
 		protected void OnProjectsToggled(bool pToggle)
 		{
 			if (projectsTab.Visible || !pToggle)
