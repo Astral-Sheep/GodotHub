@@ -1,11 +1,254 @@
-[gd_scene format=3 uid="uid://dm1bwqahtni0i"]
+[gd_scene load_steps=8 format=3 uid="uid://dm1bwqahtni0i"]
+
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_7cyuv"]
+[ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
+[ext_resource type="Script" path="res://scripts/debug/DebugOutput.cs" id="2_ag3lc"]
+[ext_resource type="Script" path="res://scripts/TabManager.cs" id="2_hrvpk"]
+[ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
+[ext_resource type="Texture2D" uid="uid://4wgos1q8t8tv" path="res://icon.svg" id="5_xh7o5"]
+[ext_resource type="Script" path="res://scripts/Tab.cs" id="6_bv1uh"]
 
 [node name="Main" type="Node"]
+script = ExtResource("1_l0edh")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." node_paths=PackedStringArray("projectsTab", "versionsTab", "documentationTab", "projectsButton", "versionsButton", "documentationButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("2_hrvpk")
+projectsTab = NodePath("Content/TabContainer/ProjectsTab")
+versionsTab = NodePath("Content/TabContainer/VersionsTab")
+documentationTab = NodePath("Content/TabContainer/DocumentationTab")
+projectsButton = NodePath("Tabs/Button Container/ProjectsButton")
+versionsButton = NodePath("Tabs/Button Container/VersionsButton")
+documentationButton = NodePath("Tabs/Button Container/DocumentationButton")
+
+[node name="Tabs" type="Control" parent="UI"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 250.0
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="UI/Tabs"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[node name="Button Container" type="VBoxContainer" parent="UI/Tabs"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 100.0
+offset_right = -10.0
+offset_bottom = 250.0
+grow_horizontal = 2
+alignment = 1
+
+[node name="ProjectsButton" type="Button" parent="UI/Tabs/Button Container"]
+light_mask = 0
+layout_mode = 2
+size_flags_vertical = 6
+focus_mode = 0
+theme = ExtResource("1_7cyuv")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("3_tsmd8")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "Projects"
+
+[node name="VersionsButton" type="Button" parent="UI/Tabs/Button Container"]
+light_mask = 0
+layout_mode = 2
+size_flags_vertical = 6
+focus_mode = 0
+theme = ExtResource("1_7cyuv")
+toggle_mode = true
+button_group = ExtResource("3_tsmd8")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "Versions"
+
+[node name="DocumentationButton" type="Button" parent="UI/Tabs/Button Container"]
+light_mask = 0
+layout_mode = 2
+size_flags_vertical = 6
+focus_mode = 0
+theme = ExtResource("1_7cyuv")
+toggle_mode = true
+button_group = ExtResource("3_tsmd8")
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "Documentation"
+
+[node name="ParameterButton" type="Button" parent="UI/Tabs"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -70.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 70.0
+grow_horizontal = 0
+focus_mode = 0
+theme = ExtResource("1_7cyuv")
+icon = ExtResource("5_xh7o5")
+icon_alignment = 1
+expand_icon = true
+
+[node name="Content" type="Control" parent="UI"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Background" type="ColorRect" parent="UI/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+
+[node name="TabContainer" type="Control" parent="UI/Content"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = -50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProjectsTab" type="Control" parent="UI/Content/TabContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_bv1uh")
+
+[node name="Label" type="Label" parent="UI/Content/TabContainer/ProjectsTab"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -17.5
+offset_right = 75.0
+offset_bottom = 17.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7cyuv")
+text = "PROJECTS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VersionsTab" type="Control" parent="UI/Content/TabContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_bv1uh")
+
+[node name="Label" type="Label" parent="UI/Content/TabContainer/VersionsTab"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -17.5
+offset_right = 75.0
+offset_bottom = 17.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7cyuv")
+text = "VERSIONS
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DocumentationTab" type="Control" parent="UI/Content/TabContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("6_bv1uh")
+
+[node name="Label" type="Label" parent="UI/Content/TabContainer/DocumentationTab"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = -17.5
+offset_right = 75.0
+offset_bottom = 17.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7cyuv")
+text = "DOCUMENTATON"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DebugOutput" type="Control" parent="UI/Content"]
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -50.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Background" type="ColorRect" parent="UI/Content/DebugOutput"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/Content/DebugOutput"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = -5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_7cyuv")
+bbcode_enabled = true
+autowrap_mode = 2
+shortcut_keys_enabled = false
+script = ExtResource("2_ag3lc")
+normalColor = Color(0.721569, 0.721569, 0.721569, 1)
+validationColor = Color(0.462745, 0.588235, 0.337255, 1)
+warningColor = Color(0.905882, 0.705882, 0.309804, 1)
+errorColor = Color(0.831373, 0.313726, 0.309804, 1)
