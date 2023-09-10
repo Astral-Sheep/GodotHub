@@ -1,5 +1,6 @@
 ﻿using Com.Astral.GodotHub.Debug;
 using Godot;
+using System;
 using System.IO;
 using Environment = System.Environment;
 
@@ -14,6 +15,8 @@ namespace Com.Astral.GodotHub.Settings
 		private const string AUTO_DELETE_DOWNLOAD = "AutoDeleteDownload";
 		private const string INSTALL_DIR = "InstallDir";
 		private const string DOWNLOAD_DIR = "DownloadDir";
+
+		public static event Action Reset;
 
 		#region PARAMETERS
 
@@ -111,17 +114,21 @@ namespace Com.Astral.GodotHub.Settings
 
 		public static void ResetAll()
 		{
-			Debug = true;
 			ProjectDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			UseInstallDirForDownload = true;
 			AutoDeleteDownload = true;
+
 #if DEBUG
+			Debug = true;
 			InstallDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
 			DownloadDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
 #else
+			Debug = false;
 			InstallPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)";
 			DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)";
 #endif
+
+			Reset?.Invoke();
 		}
 
 		public static Variant GetValue(string pName)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://cg4jxq4lh1b5x"]
+[gd_scene load_steps=22 format=3 uid="uid://cg4jxq4lh1b5x"]
 
 [ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="1_jlf08"]
 [ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes/style_box_bg_btn.tres" id="2_luqpj"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/settings/buttons/DownloadDirButton.cs" id="12_8r0od"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/AutoDeleteToggle.cs" id="12_xjd5n"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/InstallDirButton.cs" id="13_3qjiy"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/ResetButton.cs" id="15_l0m3a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aow5g"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
@@ -45,7 +46,7 @@ script = ExtResource("1_jlf08")
 content = NodePath("Panel")
 closeButton = NodePath("Panel/CloseButton")
 backgroundButton = NodePath("Background")
-buttonsPath = Array[NodePath]([NodePath("Panel/Content/DebugEnabling"), NodePath("Panel/Content/ProjectDir"), NodePath("Panel/Content/InstallForDownload"), NodePath("Panel/Content/DownloadDelete"), NodePath("Panel/Content/InstallDir"), NodePath("Panel/Content/DownloadDir")])
+buttonsPath = Array[NodePath]([NodePath("Panel/Content/DebugEnabling"), NodePath("Panel/Content/ProjectDir"), NodePath("Panel/Content/InstallForDownload"), NodePath("Panel/Content/DownloadDelete"), NodePath("Panel/Content/InstallDir"), NodePath("Panel/Content/DownloadDir"), NodePath("Panel/Content/ResetButton")])
 
 [node name="Background" type="Button" parent="."]
 layout_mode = 1
@@ -223,3 +224,16 @@ icon = ExtResource("7_xy6p1")
 alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
+
+[node name="Space3" type="Control" parent="Panel/Content"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="Panel/Content"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+shortcut_feedback = false
+shortcut_in_tooltip = false
+text = "  Reset  "
+script = ExtResource("15_l0m3a")

@@ -4,11 +4,6 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 {
 	public partial class DebugToggle : SettingButton
 	{
-		public override void _Ready()
-		{
-			button.ButtonPressed = Config.Debug;
-		}
-
 		public override void Connect()
 		{
 			button.Toggled += OnToggled;
@@ -23,6 +18,11 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 		{
 			Config.Debug = pToggled;
 			Debugger.Enabled = pToggled;
+		}
+
+		protected override void Reset()
+		{
+			button.ButtonPressed = Config.Debug;
 		}
 	}
 }

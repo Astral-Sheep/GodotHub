@@ -6,11 +6,6 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 	{
 		[Export] protected DownloadDirButton downloadDirButton;
 
-		public override void _Ready()
-		{
-			button.ButtonPressed = Config.AutoDeleteDownload;
-		}
-
 		public override void Connect()
 		{
 			button.Toggled += OnToggled;
@@ -24,6 +19,11 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 		protected void OnToggled(bool pToggled)
 		{
 			Config.AutoDeleteDownload = pToggled;
+		}
+
+		protected override void Reset()
+		{
+			button.ButtonPressed = Config.AutoDeleteDownload;
 		}
 	}
 }

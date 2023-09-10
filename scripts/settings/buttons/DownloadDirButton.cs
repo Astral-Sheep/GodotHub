@@ -16,32 +16,16 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 		}
 		protected bool _enabled = true;
 
-		public override void _Ready()
-		{
-			button.Text = Config.InstallDir;
-			Enabled = !Config.UseInstallDirForDownload;
-		}
-
-		public override void Connect()
-		{
-			if (!_enabled)
-				return;
-
-			base.Connect();
-		}
-
-		public override void Disconnect()
-		{
-			if (!_enabled)
-				return;
-
-			base.Disconnect();
-		}
-
 		protected override void OnDirSelected(string pDir)
 		{
 			Config.DownloadDir = pDir;
 			base.OnDirSelected(pDir);
+		}
+
+		protected override void Reset()
+		{
+			button.Text = Config.DownloadDir;
+			Enabled = !Config.UseInstallDirForDownload;
 		}
 	}
 }

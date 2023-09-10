@@ -14,15 +14,15 @@ namespace Com.Astral.GodotHub.Settings
 		[Export] protected Button backgroundButton;
 		[ExportSubgroup("Settings buttons")]
 		[Export] protected Array<NodePath> buttonsPath;
-		protected List<SettingButton> buttons;
+		protected List<IConnecter> buttons;
 
 		public override void _Ready()
 		{
-			buttons = new List<SettingButton>();
+			buttons = new List<IConnecter>();
 
 			for (int i = 0; i < buttonsPath.Count; i++)
 			{
-				buttons.Add(GetNode<SettingButton>(buttonsPath[i]));
+				buttons.Add(GetNode<IConnecter>(buttonsPath[i]));
 			}
 
 			Resized += OnResized;

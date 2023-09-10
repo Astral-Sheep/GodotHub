@@ -6,11 +6,6 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 	{
 		[Export] protected DownloadDirButton downloadDirButton;
 
-		public override void _Ready()
-		{
-			button.Text = Config.InstallDir;
-		}
-
 		protected override void OnDirSelected(string pDir)
 		{
 			Config.InstallDir = pDir;
@@ -22,6 +17,11 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 			}
 
 			base.OnDirSelected(pDir);
+		}
+
+		protected override void Reset()
+		{
+			button.Text = Config.InstallDir;
 		}
 	}
 }
