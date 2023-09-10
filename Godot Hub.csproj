@@ -8,6 +8,6 @@
     <PackageReference Include="Octokit" Version="7.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="scripts\settings\" />
+    <Folder Include="scripts\settings\buttons\" />
   </ItemGroup>
 </Project>

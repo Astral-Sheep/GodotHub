@@ -1,5 +1,7 @@
-using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Settings.Buttons;
 using Godot;
+using Godot.Collections;
+using System.Collections.Generic;
 
 namespace Com.Astral.GodotHub.Settings
 {
@@ -10,14 +12,22 @@ namespace Com.Astral.GodotHub.Settings
 		[Export] protected Button openButton;
 		[Export] protected Button closeButton;
 		[Export] protected Button backgroundButton;
-		[Export] protected Button debugToggle;
+		[ExportSubgroup("Settings buttons")]
+		[Export] protected Array<NodePath> buttonsPath;
+		protected List<SettingButton> buttons;
 
 		public override void _Ready()
 		{
-			debugToggle.ButtonPressed = Debugger.Enabled;
+			buttons = new List<SettingButton>();
+
+			for (int i = 0; i < buttonsPath.Count; i++)
+			{
+				buttons.Add(GetNode<SettingButton>(buttonsPath[i]));
+			}
+
+			Resized += OnResized;
 			CloseInstant();
 			openButton.Pressed += OpenPressed;
-			debugToggle.Toggled += DebugToggled;
 		}
 
 		protected override void Dispose(bool pDisposing)
@@ -33,10 +43,14 @@ namespace Com.Astral.GodotHub.Settings
 
 		protected void OpenPressed()
 		{
-			Tween lTween = CreateTween().SetParallel().SetTrans(Tween.TransitionType.Quad).SetEase(Tween.EaseType.Out);
+			Tween lTween = CreateTween()
+				.SetParallel()
+				.SetTrans(Tween.TransitionType.Quad)
+				.SetEase(Tween.EaseType.Out);
 			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, 0), 0.1f);
 			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 1f), 0.1f);
-
+			
+			EnableButtons();
 			openButton.Pressed -= OpenPressed;
 			closeButton.Pressed += ClosePressed;
 			backgroundButton.Pressed += ClosePressed;
@@ -45,17 +59,20 @@ namespace Com.Astral.GodotHub.Settings
 
 		protected void ClosePressed()
 		{
+			Config.Save();
+
+			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
+			backgroundButton.Pressed -= ClosePressed;
+			closeButton.Pressed -= ClosePressed;
+			openButton.Pressed += OpenPressed;
+			DisableButtons();
+
 			Tween lTween = CreateTween()
 				.SetParallel()
 				.SetTrans(Tween.TransitionType.Quad)
 				.SetEase(Tween.EaseType.In);
 			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, -content.Size.Y), 0.1f);
 			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 0f), 0.1f);
-
-			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
-			backgroundButton.Pressed -= ClosePressed;
-			closeButton.Pressed -= ClosePressed;
-			openButton.Pressed += OpenPressed;
 		}
 
 		protected void CloseInstant()
@@ -65,9 +82,28 @@ namespace Com.Astral.GodotHub.Settings
 			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
 		}
 
-		protected void DebugToggled(bool pToggled)
+		protected void OnResized()
 		{
-			Debugger.Enabled = pToggled;
+			content.Position = new Vector2(
+				content.Position.X,
+				content.Position.Y == 0 ? content.Position.Y : -content.Size.Y
+			);
+		}
+
+		protected void EnableButtons()
+		{
+			for (int i = 0; i < buttons.Count; i++)
+			{
+				buttons[i].Connect();
+			}
+		}
+
+		protected void DisableButtons()
+		{
+			for (int i = 0; i < buttons.Count; i++)
+			{
+				buttons[i].Disconnect();
+			}
 		}
 	}
 }

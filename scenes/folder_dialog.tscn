@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://bj3pnma1xsjej"]
+
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_ye8vp"]
+
+[node name="FolderDialog" type="FileDialog"]
+transparent_bg = true
+title = "Open a Directory"
+position = Vector2i(125, 100)
+size = Vector2i(1000, 550)
+visible = true
+always_on_top = true
+popup_window = true
+min_size = Vector2i(600, 300)
+theme = ExtResource("1_ye8vp")
+ok_button_text = "Select This Folder"
+file_mode = 2
+access = 2

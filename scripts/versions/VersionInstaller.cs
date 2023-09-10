@@ -20,7 +20,7 @@ namespace Com.Astral.GodotHub.Releases
 		}
 
 #if DEBUG
-		public static string installPath = Environment.GetEnvironmentVariable("USERPROFILE") + @"\Downloads";
+		public static string installPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
 #else
 		public static string installPath = @"C:\Program Files";
 #endif

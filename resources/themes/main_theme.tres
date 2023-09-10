@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=58 format=3 uid="uid://b12sbcx567vcy"]
+[gd_resource type="Theme" load_steps=61 format=3 uid="uid://b12sbcx567vcy"]
 
 [ext_resource type="FontFile" path="res://resources/fonts/normal_font.tres" id="1"]
 [ext_resource type="FontFile" path="res://resources/fonts/large_font.tres" id="2"]
@@ -23,8 +23,10 @@
 [ext_resource type="StyleBox" uid="uid://b14nnxw8jyapl" path="res://resources/style_boxes/style_box_hscroll_bar.tres" id="17"]
 [ext_resource type="StyleBox" uid="uid://dnx7uv3y2neil" path="res://resources/style_boxes/style_box_hscroll_grab_highlight.tres" id="18"]
 [ext_resource type="StyleBox" uid="uid://c006g22m6kx4l" path="res://resources/style_boxes/style_box_hseparator.tres" id="19"]
+[ext_resource type="Texture2D" uid="uid://ck0fei3vii0gs" path="res://assets/sprites/themes/folder.png" id="19_2r50p"]
 [ext_resource type="Texture2D" uid="uid://do74hj6aewgif" path="res://assets/sprites/themes/box_unchecked_disabled.png" id="20"]
 [ext_resource type="Texture2D" uid="uid://bnwwd4smb6q7h" path="res://assets/sprites/themes/tab_btn_fg.png" id="21"]
+[ext_resource type="Texture2D" uid="uid://buy4vfi18sdga" path="res://assets/sprites/themes/arrow_up.png" id="21_13uqq"]
 [ext_resource type="Texture2D" uid="uid://cmrbnnr3hcyq2" path="res://assets/sprites/themes/box_checked_disabled.png" id="22"]
 [ext_resource type="StyleBox" uid="uid://b74jwm5gumexw" path="res://resources/style_boxes/style_box_hslider_bar.tres" id="23"]
 [ext_resource type="Texture2D" uid="uid://o3pjjd6eljh0" path="res://assets/sprites/themes/progress_bar_bg.png" id="24"]
@@ -46,6 +48,17 @@
 [ext_resource type="StyleBox" uid="uid://d04r4mhx36xd4" path="res://resources/style_boxes/style_box_vscroll_bar.tres" id="39"]
 [ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="40"]
 [ext_resource type="Texture2D" uid="uid://be2gnv6tr4e73" path="res://assets/sprites/themes/arrow_down.png" id="41_w2ibo"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4761c"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+border_width_left = 10
+border_width_top = 5
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.2, 0.2, 0.2, 1)
+corner_radius_bottom_right = 20
+corner_radius_bottom_left = 20
+anti_aliasing = false
 
 [sub_resource type="StyleBoxTexture" id="11"]
 texture = ExtResource("32")
@@ -132,6 +145,7 @@ region_rect = Rect2(0, 0, 100, 50)
 modulate_color = Color(0.2, 0.2, 0.2, 1)
 
 [resource]
+AcceptDialog/styles/panel = SubResource("StyleBoxFlat_4761c")
 Button/colors/font_color = Color(0.721569, 0.721569, 0.721569, 1)
 Button/colors/font_disabled_color = Color(0.2, 0.2, 0.2, 1)
 Button/colors/font_focus_color = Color(0.721569, 0.721569, 0.721569, 1)
@@ -141,7 +155,7 @@ Button/colors/font_pressed_color = Color(0.721569, 0.721569, 0.721569, 1)
 Button/font_sizes/font_size = 20
 Button/fonts/font = ExtResource("2")
 Button/styles/disabled = ExtResource("13")
-Button/styles/focus = ExtResource("15")
+Button/styles/focus = ExtResource("14")
 Button/styles/hover = ExtResource("15")
 Button/styles/normal = ExtResource("14")
 Button/styles/pressed = ExtResource("13")
@@ -161,6 +175,10 @@ CheckButton/styles/focus = ExtResource("15")
 CheckButton/styles/hover = ExtResource("15")
 CheckButton/styles/hover_pressed = ExtResource("15")
 CheckButton/styles/pressed = ExtResource("14")
+FileDialog/icons/back_folder = ExtResource("31_dd2dj")
+FileDialog/icons/folder = ExtResource("19_2r50p")
+FileDialog/icons/forward_folder = ExtResource("26")
+FileDialog/icons/parent_folder = ExtResource("21_13uqq")
 Fonts/fonts/large = ExtResource("31")
 Fonts/fonts/normal = ExtResource("31")
 HScrollBar/styles/grabber = SubResource("11")

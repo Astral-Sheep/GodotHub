@@ -1,3 +1,4 @@
+using Com.Astral.GodotHub.Settings;
 using Godot;
 using Godot.Collections;
 
@@ -67,7 +68,16 @@ namespace Com.Astral.GodotHub.Debug
 				label.BbcodeEnabled = true;
 			}
 
+			enabled = Config.Debug;
 			Visible = enabled;
+		}
+
+		protected override void Dispose(bool pDisposing)
+		{
+			if (pDisposing && instance == this)
+			{
+				instance = null;
+			}
 		}
 
 		public static void PrintMessage(string pMessage)
