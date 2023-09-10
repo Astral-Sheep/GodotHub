@@ -58,6 +58,7 @@ border_width_bottom = 10
 border_color = Color(0.2, 0.2, 0.2, 1)
 corner_radius_bottom_right = 20
 corner_radius_bottom_left = 20
+corner_detail = 15
 anti_aliasing = false
 
 [sub_resource type="StyleBoxTexture" id="11"]

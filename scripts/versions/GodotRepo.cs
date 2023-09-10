@@ -12,6 +12,8 @@ namespace Com.Astral.GodotHub.Releases
 		private const string REPO = "godot";
 		private const string PRODUCT_NAME = "GodotHub";
 
+		public static event Action RepoRetrieved;
+
 		private static GitHubClient client;
 		private static IReadOnlyList<Release> releases;
 
@@ -30,6 +32,7 @@ namespace Com.Astral.GodotHub.Releases
 				return false;
 			}
 
+			RepoRetrieved?.Invoke();
 			return true;
 		}
 

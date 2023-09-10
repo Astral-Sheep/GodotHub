@@ -1,4 +1,5 @@
 ﻿using Com.Astral.GodotHub.Debug;
+using Godot;
 using Octokit;
 using System;
 using System.IO;
@@ -6,17 +7,31 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 using HttpClient = System.Net.Http.HttpClient;
+using Environment = System.Environment;
 
 namespace Com.Astral.GodotHub.Releases
 {
 	public static class VersionInstaller
 	{
-		public enum InstallationResult
+		public enum Result
 		{
 			Installed,
 			Downloaded,
 			Failed,
 			Cancelled,
+		}
+
+		public enum OS
+		{
+			Windows = 0,
+			Linux = 1,
+			MacOS = 2,
+		}
+
+		public enum Bit
+		{
+			x32 = 0,
+			x64 = 1,
 		}
 
 #if DEBUG
@@ -25,43 +40,12 @@ namespace Com.Astral.GodotHub.Releases
 		public static string installPath = @"C:\Program Files";
 #endif
 
-		public static async Task<InstallationResult> InstallVersion(string pVersion, string pOS, bool pMono)
-		{
-			Release lRelease = GodotRepo.GetRelease(pVersion);
-
-			if (lRelease == null)
-			{
-				Debugger.PrintError($"Godot {pVersion} doesn't exists. Cancelling installation");
-				return InstallationResult.Failed;
-			}
-
-			string lFileName = GetAssetName(pVersion, pOS, pMono);
-
-			if (Directory.Exists(installPath + @"\" + lFileName))
-			{
-				return InstallationResult.Cancelled;
-			}
-
-			lFileName += ".zip";
-
-			for (int i = 0; i < lRelease.Assets.Count; i++)
-			{
-				if (lRelease.Assets[i].Name == lFileName)
-				{
-					return await InstallAsset(lRelease.Assets[i], pMono);
-				}
-			}
-
-			Debugger.PrintError($"{lFileName} doesn't exists");
-			return InstallationResult.Failed;
-		}
-
-		public static async Task<InstallationResult> InstallAsset(ReleaseAsset pAsset, bool pIsMono)
+		public static async Task<Result> InstallAsset(ReleaseAsset pAsset, bool pIsMono)
 		{
 			if (pAsset == null)
 			{
 				Debugger.PrintError($"No version passed in method {nameof(InstallAsset)}");
-				return InstallationResult.Failed;
+				return Result.Failed;
 			}
 
 			HttpClient lClient = new HttpClient();
@@ -74,10 +58,10 @@ namespace Com.Astral.GodotHub.Releases
 			else
 			{
 				Debugger.PrintError("Failed to access url");
-				return InstallationResult.Failed;
+				return Result.Failed;
 			}
 
-			string lPath = installPath + @"\" + pAsset.Name;
+			string lPath = installPath + "/" + pAsset.Name;
 			string lZip = lPath + ".zip";
 
 			try
@@ -89,7 +73,7 @@ namespace Com.Astral.GodotHub.Releases
 			catch (Exception lException)
 			{
 				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
-				return InstallationResult.Failed;
+				return Result.Failed;
 			}
 
 			try
@@ -99,7 +83,7 @@ namespace Com.Astral.GodotHub.Releases
 			catch (Exception lException)
 			{
 				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
-				return InstallationResult.Downloaded;
+				return Result.Downloaded;
 			}
 
 			try
@@ -109,15 +93,16 @@ namespace Com.Astral.GodotHub.Releases
 			catch (Exception lException)
 			{
 				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
-				return InstallationResult.Installed;
+				return Result.Installed;
 			}
 
-			return InstallationResult.Installed;
+			Debugger.PrintValidation($"{pAsset.Name[0..pAsset.Name.Find(".zip")]} installed successfully");
+			return Result.Installed;
 		}
 
-		public static string GetAssetName(string pVersion, string pOS, bool pMono)
+		public static bool IsInstalled(string pAsset)
 		{
-			return $"Godot_v{pVersion}_{(pMono ? "mono_" : "")}{pOS}";
+			return Directory.Exists(installPath + "/" + pAsset);
 		}
 	}
 }

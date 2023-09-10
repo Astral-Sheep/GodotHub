@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=3 uid="uid://hgabwlwhfcpq"]
+
+[ext_resource type="Script" path="res://scripts/versions/ReleaseItem.cs" id="1_ukbs0"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0sgs"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[node name="ReleaseItem" type="Panel" node_paths=PackedStringArray("versionLabel", "monoCheck", "osButton", "bitButton", "installButton")]
+custom_minimum_size = Vector2(0, 75)
+theme_override_styles/panel = SubResource("StyleBoxFlat_d0sgs")
+script = ExtResource("1_ukbs0")
+versionLabel = NodePath("Version")
+monoCheck = NodePath("MonoCheck")
+osButton = NodePath("OSOption")
+bitButton = NodePath("BitOption")
+installButton = NodePath("InstallButton")
+
+[node name="Version" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.2
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 5.0
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+text = " Godot 1.0.0"
+vertical_alignment = 1
+
+[node name="MonoCheck" type="CheckBox" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.25
+anchor_right = 0.25
+anchor_bottom = 1.0
+offset_top = 10.0
+offset_bottom = -10.0
+focus_mode = 0
+button_pressed = true
+text = "Mono"
+
+[node name="OSOption" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.4
+anchor_right = 0.55
+anchor_bottom = 1.0
+offset_top = 10.0
+offset_bottom = -10.0
+focus_mode = 0
+text_overrun_behavior = 3
+
+[node name="BitOption" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.6
+anchor_right = 0.7
+anchor_bottom = 1.0
+offset_top = 10.0
+offset_bottom = -10.0
+focus_mode = 0
+text_overrun_behavior = 3
+
+[node name="InstallButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 15.0
+offset_right = -25.0
+offset_bottom = -15.0
+grow_horizontal = 0
+focus_mode = 0
+text = "Install"

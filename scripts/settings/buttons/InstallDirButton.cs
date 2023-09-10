@@ -21,7 +21,7 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 
 		protected override void Reset()
 		{
-			button.Text = Config.InstallDir;
+			button.Text = " " + Config.InstallDir;
 		}
 	}
 }

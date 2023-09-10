@@ -1,11 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://b15usol1g4scs"]
+[gd_scene load_steps=14 format=3 uid="uid://b15usol1g4scs"]
 
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_7cyuv"]
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/TabManager.cs" id="2_hrvpk"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="Script" path="res://scripts/Tab.cs" id="6_bv1uh"]
+[ext_resource type="Script" path="res://scripts/versions/ReleasePanel.cs" id="7_4rcoa"]
 [ext_resource type="Script" path="res://scripts/debug/Debugger.cs" id="7_xd05t"]
+[ext_resource type="PackedScene" uid="uid://hgabwlwhfcpq" path="res://scenes/release_item.tscn" id="8_5vfbo"]
 [ext_resource type="PackedScene" uid="uid://cg4jxq4lh1b5x" path="res://scenes/settings.tscn" id="8_18qvi"]
 [ext_resource type="Texture2D" uid="uid://4v0f3326dtvv" path="res://assets/sprites/themes/box_checked.png" id="12_5gvuq"]
 
@@ -136,6 +138,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -171,28 +174,69 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
+theme = ExtResource("1_7cyuv")
 script = ExtResource("6_bv1uh")
 
-[node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab"]
+[node name="UpperButtons" type="Control" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -75.0
-offset_top = -17.5
-offset_right = 75.0
-offset_bottom = 17.5
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 120.0
+grow_horizontal = 2
+
+[node name="OrderButton" type="CheckBox" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -63.0
+offset_top = -39.0
+offset_right = -25.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="SortButton" type="OptionButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -91.0
+offset_top = -40.0
+offset_right = -75.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Releases" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab" node_paths=PackedStringArray("sortButton", "orderButton", "itemContainer")]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 120.0
+offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_7cyuv")
-text = "VERSIONS
-"
-horizontal_alignment = 1
-vertical_alignment = 1
+horizontal_scroll_mode = 3
+script = ExtResource("7_4rcoa")
+sortButton = NodePath("../UpperButtons/SortButton")
+orderButton = NodePath("../UpperButtons/OrderButton")
+releaseItemScene = ExtResource("8_5vfbo")
+itemContainer = NodePath("VBoxContainer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/Releases"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="DocumentationTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

@@ -1,4 +1,3 @@
-using Com.Astral.GodotHub.Debug;
 using Godot;
 
 namespace Com.Astral.GodotHub
@@ -30,8 +29,6 @@ namespace Com.Astral.GodotHub
 			if (projectsTab.Visible || !pToggle)
 				return;
 
-			Debugger.PrintMessage("Project tab clicked");
-
 			projectsTab.Visible = true;
 			versionsTab.Visible = false;
 			documentationTab.Visible = false;
@@ -41,8 +38,6 @@ namespace Com.Astral.GodotHub
 		{
 			if (versionsTab.Visible || !pToggle)
 				return;
-
-			Debugger.PrintMessage("Version tab clicked");
 			
 			versionsTab.Visible = true;
 			projectsTab.Visible = false;
@@ -53,8 +48,6 @@ namespace Com.Astral.GodotHub
 		{
 			if (documentationTab.Visible || !pToggle)
 				return;
-
-			Debugger.PrintMessage("Documentation tab clicked");
 
 			documentationTab.Visible = true;
 			projectsTab.Visible = false;

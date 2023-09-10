@@ -76,7 +76,7 @@ namespace Com.Astral.GodotHub.Settings
 
 		#endregion //PARAMETERS
 
-		private static readonly string configPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\Godot Hub";
+		private static readonly string configPath = GetEnvironmentPath(Environment.SpecialFolder.ApplicationData) + "/Godot Hub";
 		private static ConfigFile config;
 
 		static Config()
@@ -86,7 +86,7 @@ namespace Com.Astral.GodotHub.Settings
 				Directory.CreateDirectory(configPath);
 			}
 
-			configPath += @"\.config";
+			configPath += @"/.config";
 			config = new ConfigFile();
 			Error lError = config.Load(configPath);
 
@@ -97,12 +97,14 @@ namespace Com.Astral.GodotHub.Settings
 				case Error.FileNotFound:
 					ResetAll();
 					Save();
+					Debugger.PrintMessage("Config file created successfully");
 					break;
 				case Error.FileNoPermission:
 				case Error.Unauthorized:
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
 				case Error.Ok:
+					Debugger.PrintMessage("Config file loaded successfully");
 					break;
 			}
 		}
@@ -114,18 +116,18 @@ namespace Com.Astral.GodotHub.Settings
 
 		public static void ResetAll()
 		{
-			ProjectDir = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+			ProjectDir = GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
 			UseInstallDirForDownload = true;
 			AutoDeleteDownload = true;
 
 #if DEBUG
 			Debug = true;
-			InstallDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
-			DownloadDir = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
+			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
+			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
 #else
 			Debug = false;
-			InstallPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)";
-			DownloadPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)";
+			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
+			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
 #endif
 
 			Reset?.Invoke();
@@ -139,6 +141,11 @@ namespace Com.Astral.GodotHub.Settings
 		public static void SetValue(string pName, Variant pValue)
 		{
 			config.SetValue(SETTINGS, pName, pValue);
+		}
+
+		private static string GetEnvironmentPath(Environment.SpecialFolder pFolder)
+		{
+			return Environment.GetFolderPath(pFolder).Replace('\\', '/');
 		}
 	}
 }

@@ -82,34 +82,22 @@ namespace Com.Astral.GodotHub.Debug
 
 		public static void PrintMessage(string pMessage)
 		{
-			if (!instance.enabled)
-				return;
-
 			instance.label.Text += FormatMessage(pMessage, instance.normalColor);
 		}
 
 		public static void PrintValidation(string pMessage)
 		{
-			if (!instance.enabled)
-				return;
-
 			instance.label.Text += FormatMessage(pMessage, instance.validationColor);
 		}
 
 		public static void PrintWarning(string pMessage)
 		{
-			if (!instance.enabled)
-				return;
-
 			instance.label.Text += FormatMessage(pMessage, instance.warningColor);
 		}
 
 		public static void PrintError(string pMessage)
 		{
-			if (!instance.enabled)
-				return;
-
-			instance.label.Text += FormatMessage("[b]" + pMessage + "[/b]", instance.errorColor);
+			instance.label.Text += FormatMessage($"[b]{pMessage}[/b]", instance.errorColor);
 		}
 
 		private static string FormatMessage(string pMessage, Color pColor)

@@ -36,7 +36,7 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 
 		protected virtual void OnDirSelected(string pDir)
 		{
-			button.Text = pDir;
+			button.Text = " " + pDir;
 			button.Pressed += OnPressed;
 		}
 	}
