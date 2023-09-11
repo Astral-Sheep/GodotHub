@@ -21,19 +21,6 @@ namespace Com.Astral.GodotHub.Releases
 			Cancelled,
 		}
 
-		public enum OS
-		{
-			Windows = 0,
-			Linux = 1,
-			MacOS = 2,
-		}
-
-		public enum Bit
-		{
-			x32 = 0,
-			x64 = 1,
-		}
-
 #if DEBUG
 		public static string installPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
 #else
@@ -47,6 +34,8 @@ namespace Com.Astral.GodotHub.Releases
 				Debugger.PrintError($"No version passed in method {nameof(InstallAsset)}");
 				return Result.Failed;
 			}
+
+			Debugger.PrintMessage("Download started");
 
 			HttpClient lClient = new HttpClient();
 			HttpResponseMessage lResponse = await lClient.GetAsync(new Uri(pAsset.BrowserDownloadUrl));

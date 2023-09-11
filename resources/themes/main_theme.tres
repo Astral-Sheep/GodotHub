@@ -1,13 +1,12 @@
-[gd_resource type="Theme" load_steps=61 format=3 uid="uid://b12sbcx567vcy"]
+[gd_resource type="Theme" load_steps=71 format=3 uid="uid://b12sbcx567vcy"]
 
 [ext_resource type="FontFile" path="res://resources/fonts/normal_font.tres" id="1"]
-[ext_resource type="FontFile" path="res://resources/fonts/large_font.tres" id="2"]
+[ext_resource type="FontFile" uid="uid://dhdrf1ojhw8gn" path="res://resources/fonts/large_font.tres" id="2"]
 [ext_resource type="Texture2D" uid="uid://cbj3pc4lbjx64" path="res://assets/sprites/themes/vscroll_grab.png" id="3"]
 [ext_resource type="Texture2D" uid="uid://dyyryjs5s4reo" path="res://assets/sprites/themes/tab_btn_bg.png" id="4"]
 [ext_resource type="Texture2D" uid="uid://b5e3a807tgjxt" path="res://assets/sprites/themes/tab_btn_disabled.png" id="5"]
 [ext_resource type="Texture2D" uid="uid://bqnc4genw7pop" path="res://assets/sprites/themes/vscroll_bar.png" id="6"]
 [ext_resource type="Texture2D" uid="uid://dapx6vrjpiai6" path="res://assets/sprites/themes/btn_bg.png" id="7"]
-[ext_resource type="Texture2D" uid="uid://c3ryf05cjtu07" path="res://assets/sprites/themes/progress_bar_fg.png" id="8"]
 [ext_resource type="Texture2D" uid="uid://c3247vwu84qob" path="res://assets/sprites/themes/slider_grab_disabled.png" id="9"]
 [ext_resource type="Texture2D" uid="uid://4v0f3326dtvv" path="res://assets/sprites/themes/box_checked.png" id="10"]
 [ext_resource type="Texture2D" uid="uid://dklahbv7sporm" path="res://assets/sprites/themes/option_btn.png" id="11"]
@@ -29,7 +28,6 @@
 [ext_resource type="Texture2D" uid="uid://buy4vfi18sdga" path="res://assets/sprites/themes/arrow_up.png" id="21_13uqq"]
 [ext_resource type="Texture2D" uid="uid://cmrbnnr3hcyq2" path="res://assets/sprites/themes/box_checked_disabled.png" id="22"]
 [ext_resource type="StyleBox" uid="uid://b74jwm5gumexw" path="res://resources/style_boxes/style_box_hslider_bar.tres" id="23"]
-[ext_resource type="Texture2D" uid="uid://o3pjjd6eljh0" path="res://assets/sprites/themes/progress_bar_bg.png" id="24"]
 [ext_resource type="Texture2D" uid="uid://dg1ce2udp3ri" path="res://assets/sprites/themes/slider_grab.png" id="25"]
 [ext_resource type="Texture2D" uid="uid://jvyrvv8bmy4u" path="res://assets/sprites/themes/arrow_right.png" id="26"]
 [ext_resource type="FontFile" uid="uid://ykab4b3ximf0" path="res://assets/fonts/JetBrainsMono-Bold.ttf" id="27"]
@@ -61,6 +59,30 @@ corner_radius_bottom_left = 20
 corner_detail = 15
 anti_aliasing = false
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_sh2qt"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_kqo7q"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_r7ndv"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_l5is4"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_h0qe0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ct780"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_06q1n"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c8erw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gmfwr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c4qh8"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_entjr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_melr4"]
+
 [sub_resource type="StyleBoxTexture" id="11"]
 texture = ExtResource("32")
 texture_margin_left = 4.0
@@ -90,13 +112,10 @@ cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxTexture" id="13"]
-texture = ExtResource("24")
-region_rect = Rect2(0, 0, 30, 4)
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cl7ya"]
 
-[sub_resource type="StyleBoxTexture" id="14"]
-texture = ExtResource("8")
-region_rect = Rect2(0, 0, 30, 4)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4i0rx"]
+bg_color = Color(0.721569, 0.721569, 0.721569, 1)
 
 [sub_resource type="StyleBoxTexture" id="17"]
 texture = ExtResource("5")
@@ -151,7 +170,7 @@ Button/colors/font_color = Color(0.721569, 0.721569, 0.721569, 1)
 Button/colors/font_disabled_color = Color(0.2, 0.2, 0.2, 1)
 Button/colors/font_focus_color = Color(0.721569, 0.721569, 0.721569, 1)
 Button/colors/font_hover_color = Color(0.721569, 0.721569, 0.721569, 1)
-Button/colors/font_hover_pressed_color = Color(0.588235, 0.588235, 0.588235, 1)
+Button/colors/font_hover_pressed_color = Color(0.721569, 0.721569, 0.721569, 1)
 Button/colors/font_pressed_color = Color(0.721569, 0.721569, 0.721569, 1)
 Button/font_sizes/font_size = 20
 Button/fonts/font = ExtResource("2")
@@ -164,6 +183,12 @@ CheckBox/icons/checked = ExtResource("10")
 CheckBox/icons/checked_disabled = ExtResource("22")
 CheckBox/icons/unchecked = ExtResource("16")
 CheckBox/icons/unchecked_disabled = ExtResource("20")
+CheckBox/styles/disabled = SubResource("StyleBoxEmpty_sh2qt")
+CheckBox/styles/focus = SubResource("StyleBoxEmpty_kqo7q")
+CheckBox/styles/hover = SubResource("StyleBoxEmpty_r7ndv")
+CheckBox/styles/hover_pressed = SubResource("StyleBoxEmpty_l5is4")
+CheckBox/styles/normal = SubResource("StyleBoxEmpty_h0qe0")
+CheckBox/styles/pressed = SubResource("StyleBoxEmpty_ct780")
 CheckButton/icons/checked = ExtResource("35")
 CheckButton/icons/checked_disabled = ExtResource("34")
 CheckButton/icons/checked_disabled_mirrored = ExtResource("11_e20q3")
@@ -172,10 +197,12 @@ CheckButton/icons/unchecked = ExtResource("12")
 CheckButton/icons/unchecked_disabled = ExtResource("36")
 CheckButton/icons/unchecked_disabled_mirrored = ExtResource("15_o3t8a")
 CheckButton/icons/unchecked_mirrored = ExtResource("16_2v0rn")
-CheckButton/styles/focus = ExtResource("15")
-CheckButton/styles/hover = ExtResource("15")
-CheckButton/styles/hover_pressed = ExtResource("15")
-CheckButton/styles/pressed = ExtResource("14")
+CheckButton/styles/disabled = SubResource("StyleBoxEmpty_06q1n")
+CheckButton/styles/focus = SubResource("StyleBoxEmpty_c8erw")
+CheckButton/styles/hover = SubResource("StyleBoxEmpty_gmfwr")
+CheckButton/styles/hover_pressed = SubResource("StyleBoxEmpty_c4qh8")
+CheckButton/styles/normal = SubResource("StyleBoxEmpty_entjr")
+CheckButton/styles/pressed = SubResource("StyleBoxEmpty_melr4")
 FileDialog/icons/back_folder = ExtResource("31_dd2dj")
 FileDialog/icons/folder = ExtResource("19_2r50p")
 FileDialog/icons/forward_folder = ExtResource("26")
@@ -232,10 +259,10 @@ PopupMenu/styles/panel = ExtResource("14")
 PopupMenu/styles/panel_disabled = ExtResource("13")
 PopupMenu/styles/separator = ExtResource("19")
 PopupPanel/styles/panel = ExtResource("14")
-ProgressBar/colors/font_color = Color(0.721569, 0.721569, 0.721569, 1)
+ProgressBar/colors/font_color = Color(0.721569, 0.721569, 0.721569, 0)
 ProgressBar/fonts/font = SubResource("15")
-ProgressBar/styles/bg = SubResource("13")
-ProgressBar/styles/fg = SubResource("14")
+ProgressBar/styles/background = SubResource("StyleBoxEmpty_cl7ya")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_4i0rx")
 RichTextLabel/colors/default_color = Color(0.721569, 0.721569, 0.721569, 1)
 RichTextLabel/font_sizes/bold_font_size = 20
 RichTextLabel/font_sizes/bold_italics_font_size = 20

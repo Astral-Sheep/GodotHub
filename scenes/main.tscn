@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b15usol1g4scs"]
+[gd_scene load_steps=16 format=3 uid="uid://boiwhgtxlbcw2"]
 
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_7cyuv"]
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
@@ -6,9 +6,11 @@
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="Script" path="res://scripts/Tab.cs" id="6_bv1uh"]
 [ext_resource type="Script" path="res://scripts/versions/ReleasePanel.cs" id="7_4rcoa"]
+[ext_resource type="Texture2D" uid="uid://be2gnv6tr4e73" path="res://assets/sprites/themes/arrow_down.png" id="7_kehch"]
+[ext_resource type="Texture2D" uid="uid://buy4vfi18sdga" path="res://assets/sprites/themes/arrow_up.png" id="7_njnqi"]
 [ext_resource type="Script" path="res://scripts/debug/Debugger.cs" id="7_xd05t"]
 [ext_resource type="PackedScene" uid="uid://hgabwlwhfcpq" path="res://scenes/release_item.tscn" id="8_5vfbo"]
-[ext_resource type="PackedScene" uid="uid://cg4jxq4lh1b5x" path="res://scenes/settings.tscn" id="8_18qvi"]
+[ext_resource type="PackedScene" uid="uid://b5vda6lwv2sxx" path="res://scenes/settings.tscn" id="8_18qvi"]
 [ext_resource type="Texture2D" uid="uid://4v0f3326dtvv" path="res://assets/sprites/themes/box_checked.png" id="12_5gvuq"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5en7"]
@@ -184,7 +186,7 @@ anchor_right = 1.0
 offset_left = 10.0
 offset_top = 10.0
 offset_right = -10.0
-offset_bottom = 120.0
+offset_bottom = 110.0
 grow_horizontal = 2
 
 [node name="OrderButton" type="CheckBox" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons"]
@@ -196,9 +198,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -63.0
 offset_top = -39.0
-offset_right = -25.0
+offset_right = -44.0
 grow_horizontal = 0
 grow_vertical = 0
+focus_mode = 0
+theme_override_constants/h_separation = 0
+theme_override_constants/check_v_offset = 5
+theme_override_icons/checked = ExtResource("7_njnqi")
+theme_override_icons/unchecked = ExtResource("7_kehch")
 
 [node name="SortButton" type="OptionButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons"]
 layout_mode = 1
@@ -207,11 +214,12 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -91.0
+offset_left = -225.0
 offset_top = -40.0
 offset_right = -75.0
 grow_horizontal = 0
 grow_vertical = 0
+focus_mode = 0
 
 [node name="Releases" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab" node_paths=PackedStringArray("sortButton", "orderButton", "itemContainer")]
 layout_mode = 1
@@ -221,6 +229,7 @@ anchor_bottom = 1.0
 offset_left = 10.0
 offset_top = 120.0
 offset_right = -10.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3

@@ -1,18 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://hgabwlwhfcpq"]
+[gd_scene load_steps=4 format=3 uid="uid://hgabwlwhfcpq"]
 
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/style_boxes/main_theme.tres" id="1_fm773"]
 [ext_resource type="Script" path="res://scripts/versions/ReleaseItem.cs" id="1_ukbs0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0sgs"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 
-[node name="ReleaseItem" type="Panel" node_paths=PackedStringArray("versionLabel", "monoCheck", "osButton", "bitButton", "installButton")]
+[node name="ReleaseItem" type="Panel" node_paths=PackedStringArray("versionLabel", "dateLabel", "monoCheck", "osButton", "architectureButton", "installButton")]
 custom_minimum_size = Vector2(0, 75)
+offset_right = 850.0
+offset_bottom = 75.0
+theme = ExtResource("1_fm773")
 theme_override_styles/panel = SubResource("StyleBoxFlat_d0sgs")
 script = ExtResource("1_ukbs0")
 versionLabel = NodePath("Version")
+dateLabel = NodePath("Date")
 monoCheck = NodePath("MonoCheck")
 osButton = NodePath("OSOption")
-bitButton = NodePath("BitOption")
+architectureButton = NodePath("ArchitectureOption")
 installButton = NodePath("InstallButton")
 
 [node name="Version" type="Label" parent="."]
@@ -20,12 +25,27 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.2
 anchor_bottom = 1.0
-offset_left = 10.0
-offset_top = 5.0
-offset_bottom = -5.0
+offset_left = 25.0
+offset_top = 25.0
+offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 2
-text = " Godot 1.0.0"
+text = "Godot 1.0.0"
+vertical_alignment = 1
+
+[node name="Date" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.2
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = -25.0
+offset_bottom = -10.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.588235, 0.588235, 0.588235, 1)
+theme_override_font_sizes/font_size = 10
+text = "jj/mm/yyyy"
 vertical_alignment = 1
 
 [node name="MonoCheck" type="CheckBox" parent="."]
@@ -51,7 +71,7 @@ offset_bottom = -10.0
 focus_mode = 0
 text_overrun_behavior = 3
 
-[node name="BitOption" type="OptionButton" parent="."]
+[node name="ArchitectureOption" type="OptionButton" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.6

@@ -104,7 +104,6 @@ namespace Com.Astral.GodotHub.Settings
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
 				case Error.Ok:
-					Debugger.PrintMessage("Config file loaded successfully");
 					break;
 			}
 		}

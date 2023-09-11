@@ -1,3 +1,4 @@
+using Com.Astral.GodotHub.Debug;
 using Godot;
 using Octokit;
 using System;
@@ -15,33 +16,38 @@ namespace Com.Astral.GodotHub.Releases
 		public (int major, int minor, int patch) Version { get; protected set; }
 
 		[Export] protected Godot.Label versionLabel;
+		[Export] protected Godot.Label dateLabel;
 		[Export] protected CheckBox monoCheck;
 		[Export] protected OptionButton osButton;
-		[Export] protected OptionButton bitButton;
+		[Export] protected OptionButton architectureButton;
 		[Export] protected Button installButton;
 		protected List<ReleaseAsset> assets;
 		protected string assetNamePrefix;
 
 		public override void _Ready()
 		{
-			AddItem(osButton, VersionInstaller.OS.Windows);
-			AddItem(osButton, VersionInstaller.OS.Linux);
-			AddItem(osButton, VersionInstaller.OS.MacOS);
-			AddItem(bitButton, VersionInstaller.Bit.x32);
-			AddItem(bitButton, VersionInstaller.Bit.x64);
+			AddItem(osButton, OS.Windows);
+			AddItem(osButton, OS.Linux);
+			AddItem(osButton, OS.MacOS);
+			AddItem(architectureButton, Architecture.x32);
+			AddItem(architectureButton, Architecture.x64);
 
 			osButton.GetPopup().TransparentBg = true;
-			bitButton.GetPopup().TransparentBg = true;
+			architectureButton.GetPopup().TransparentBg = true;
 
 			monoCheck.Toggled += OnMonoChanged;
 			osButton.ItemSelected += OnOsChanged;
-			bitButton.ItemSelected += OnBitChanged;
+			architectureButton.ItemSelected += OnArchitectureChanged;
 			installButton.Pressed += OnInstallClicked;
+
+			osButton.Selected = (int)Main.Instance.OS;
+			architectureButton.Selected = (int)Main.Instance.Architecture;
 		}
 
 		public void Init(Release pRelease, int pIndex)
 		{
 			Index = pIndex;
+			assetNamePrefix = $"Godot_v{pRelease.Name}";
 			assets = new List<ReleaseAsset>();
 			ReleaseAsset lAsset;
 
@@ -65,8 +71,10 @@ namespace Com.Astral.GodotHub.Releases
 				int.Parse(lVersion[2].ToString()),
 				lVersion.Length > 3 ? int.Parse(lVersion[4].ToString()) : 0
 			);
-			versionLabel.Text = $" Godot {lVersion}";
-			assetNamePrefix = $"Godot_v{pRelease.Name}";
+
+			versionLabel.Text = $"Godot {lVersion}";
+			dateLabel.Text = $"{pRelease.CreatedAt.Day:D2}/{pRelease.CreatedAt.Month:D2}/{pRelease.CreatedAt.Year:D4}";
+			SetInstallButton();
 		}
 
 		protected void OnMonoChanged(bool _)
@@ -76,11 +84,11 @@ namespace Com.Astral.GodotHub.Releases
 
 		protected void OnOsChanged(long pOS)
 		{
-			bitButton.Visible = pOS != (long)VersionInstaller.OS.MacOS;
+			architectureButton.Visible = pOS != (long)OS.MacOS;
 			SetInstallButton();
 		}
 
-		protected void OnBitChanged(long _)
+		protected void OnArchitectureChanged(long _)
 		{
 			SetInstallButton();
 		}
@@ -94,8 +102,11 @@ namespace Com.Astral.GodotHub.Releases
 				if (asset.Name == lAssetName)
 				{
 					await VersionInstaller.InstallAsset(asset, monoCheck.ButtonPressed);
+					return;
 				}
 			}
+
+			Debugger.PrintError($"No asset named {lAssetName}");
 		}
 
 		protected void AddItem(OptionButton pButton, Enum pItem)
@@ -124,23 +135,23 @@ namespace Com.Astral.GodotHub.Releases
 
 		protected string GetOS()
 		{
-			if (osButton.Selected == (int)VersionInstaller.OS.MacOS)
+			if (osButton.Selected == (int)OS.MacOS)
 			{
-				return "macos.universal";
+				return "_macos.universal";
 			}
 
 			string lOS;
 
-			if (osButton.Selected == (int)VersionInstaller.OS.Linux)
+			if (osButton.Selected == (int)OS.Linux)
 			{
 				lOS = $"_linux";
-				lOS += monoCheck.ButtonPressed ? "_86" : ".86";
-				lOS += bitButton.Selected == (int)VersionInstaller.Bit.x32 ? "_32" : "_64";
+				lOS += monoCheck.ButtonPressed ? "_x86" : ".x86";
+				lOS += architectureButton.Selected == (int)Architecture.x32 ? "_32" : "_64";
 			}
 			else
 			{
 				lOS = $"_win";
-				lOS += bitButton.Selected == (int)VersionInstaller.Bit.x32 ? "32" : "64";
+				lOS += architectureButton.Selected == (int)Architecture.x32 ? "32" : "64";
 
 				if (!monoCheck.ButtonPressed)
 				{
