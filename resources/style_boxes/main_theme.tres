@@ -1,4 +1,4 @@
-[gd_resource type="Theme" load_steps=73 format=3 uid="uid://b12sbcx567vcy"]
+[gd_resource type="Theme" load_steps=71 format=3 uid="uid://b12sbcx567vcy"]
 
 [ext_resource type="FontFile" uid="uid://dhdrf1ojhw8gn" path="res://resources/fonts/large_font.tres" id="1_tuhn2"]
 [ext_resource type="StyleBox" uid="uid://opxang1fx2oq" path="res://resources/style_boxes/style_box_pressed.tres" id="2_ppd37"]
@@ -34,8 +34,6 @@
 [ext_resource type="Texture2D" uid="uid://dapx6vrjpiai6" path="res://assets/sprites/themes/btn_bg.png" id="32_gsbel"]
 [ext_resource type="FontFile" path="res://resources/fonts/normal_font.tres" id="33_xrvr2"]
 [ext_resource type="FontFile" uid="uid://ykab4b3ximf0" path="res://assets/fonts/JetBrainsMono-Bold.ttf" id="34_m0lwd"]
-[ext_resource type="Texture2D" uid="uid://o3pjjd6eljh0" path="res://assets/sprites/themes/progress_bar_bg.png" id="35_801q4"]
-[ext_resource type="Texture2D" uid="uid://c3ryf05cjtu07" path="res://assets/sprites/themes/progress_bar_fg.png" id="36_ipova"]
 [ext_resource type="FontFile" path="res://resources/fonts/bold_font.tres" id="37_64evw"]
 [ext_resource type="FontFile" path="res://resources/fonts/bold_italic.tres" id="38_8r7pl"]
 [ext_resource type="FontFile" path="res://resources/fonts/italic_font.tres" id="39_apwcn"]
@@ -113,14 +111,20 @@ cache/0/16/0/underline_position = 0.0
 cache/0/16/0/underline_thickness = 0.0
 cache/0/16/0/scale = 1.0
 cache/0/16/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/16/0/kerning_overrides/2/0 = Vector2(0, 0)
+cache/0/2/0/ascent = 0.0
+cache/0/2/0/descent = 0.0
+cache/0/2/0/underline_position = 0.0
+cache/0/2/0/underline_thickness = 0.0
+cache/0/2/0/scale = 1.0
+cache/0/2/0/kerning_overrides/16/0 = Vector2(0, 0)
+cache/0/2/0/kerning_overrides/2/0 = Vector2(0, 0)
 
-[sub_resource type="StyleBoxTexture" id="13"]
-texture = ExtResource("35_801q4")
-region_rect = Rect2(0, 0, 30, 4)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a2rk8"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 
-[sub_resource type="StyleBoxTexture" id="14"]
-texture = ExtResource("36_ipova")
-region_rect = Rect2(0, 0, 30, 4)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ifnrj"]
+bg_color = Color(0.721569, 0.721569, 0.721569, 1)
 
 [sub_resource type="StyleBoxTexture" id="17"]
 texture = ExtResource("40_62rx3")
@@ -264,10 +268,10 @@ PopupMenu/styles/panel = ExtResource("3_m6e87")
 PopupMenu/styles/panel_disabled = ExtResource("2_ppd37")
 PopupMenu/styles/separator = ExtResource("25_dgr2g")
 PopupPanel/styles/panel = ExtResource("3_m6e87")
-ProgressBar/colors/font_color = Color(0.721569, 0.721569, 0.721569, 1)
+ProgressBar/colors/font_color = Color(0.721569, 0.721569, 0.721569, 0)
 ProgressBar/fonts/font = SubResource("15")
-ProgressBar/styles/bg = SubResource("13")
-ProgressBar/styles/fg = SubResource("14")
+ProgressBar/styles/background = SubResource("StyleBoxFlat_a2rk8")
+ProgressBar/styles/fill = SubResource("StyleBoxFlat_ifnrj")
 RichTextLabel/colors/default_color = Color(0.721569, 0.721569, 0.721569, 1)
 RichTextLabel/font_sizes/bold_font_size = 20
 RichTextLabel/font_sizes/bold_italics_font_size = 20

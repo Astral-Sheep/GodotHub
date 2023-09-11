@@ -1,0 +1,70 @@
+[gd_scene load_steps=6 format=3 uid="uid://yl27v2657l8a"]
+
+[ext_resource type="Script" path="res://scripts/versions/Installer.cs" id="1_ke4qi"]
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/style_boxes/main_theme.tres" id="1_vqxyd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8jxo"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2k8il"]
+bg_color = Color(0.0823529, 0.0823529, 0.0901961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omuyo"]
+bg_color = Color(0.215686, 0.615686, 0.65098, 1)
+
+[node name="Installer" type="Panel" node_paths=PackedStringArray("versionLabel", "statusLabel", "loadingBar")]
+custom_minimum_size = Vector2(0, 100)
+offset_right = 270.0
+offset_bottom = 100.0
+theme = ExtResource("1_vqxyd")
+theme_override_styles/panel = SubResource("StyleBoxFlat_i8jxo")
+script = ExtResource("1_ke4qi")
+closeDuration = 0.2
+versionLabel = NodePath("VersionLabel")
+statusLabel = NodePath("StatusLabel")
+loadingBar = NodePath("ProgressBar")
+
+[node name="VersionLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 5.0
+offset_right = -10.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.588235, 0.588235, 0.588235, 1)
+theme_override_font_sizes/font_size = 14
+text = "Godot 4.0.4 Mono Windows x64"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StatusLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.19
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_right = -10.0
+offset_bottom = 12.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Downloading..."
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -14.0
+offset_right = -20.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0, 0, 0, 0)
+theme_override_font_sizes/font_size = 1
+theme_override_styles/background = SubResource("StyleBoxFlat_2k8il")
+theme_override_styles/fill = SubResource("StyleBoxFlat_omuyo")

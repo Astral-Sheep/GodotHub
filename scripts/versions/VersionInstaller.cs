@@ -8,6 +8,9 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using HttpClient = System.Net.Http.HttpClient;
 using Environment = System.Environment;
+using System.Collections.Generic;
+using Com.Astral.GodotHub.Settings;
+using System.Threading;
 
 namespace Com.Astral.GodotHub.Releases
 {
@@ -24,8 +27,11 @@ namespace Com.Astral.GodotHub.Releases
 #if DEBUG
 		public static string installPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\Downloads";
 #else
-		public static string installPath = @"C:\Program Files";
+		public static string installPath = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
 #endif
+
+		private static List<Task<Result>> installs = new List<Task<Result>>();
+		private static CancellationTokenSource cts = new CancellationTokenSource();
 
 		public static async Task<Result> InstallAsset(ReleaseAsset pAsset, bool pIsMono)
 		{
@@ -36,13 +42,17 @@ namespace Com.Astral.GodotHub.Releases
 			}
 
 			Debugger.PrintMessage("Download started");
+			LoadingBar.Instance.Ratio = 0.1f;
+
+			#region DOWNLOAD
 
 			HttpClient lClient = new HttpClient();
 			HttpResponseMessage lResponse = await lClient.GetAsync(new Uri(pAsset.BrowserDownloadUrl));
+			LoadingBar.Instance.Ratio = 0.75f;
 
 			if (lResponse.IsSuccessStatusCode)
 			{
-				Debugger.PrintMessage("Http request validated");
+				Debugger.PrintMessage("Http request validated: asset successfully downloaded");
 			}
 			else
 			{
@@ -50,43 +60,72 @@ namespace Com.Astral.GodotHub.Releases
 				return Result.Failed;
 			}
 
+			#endregion //DOWNLOAD
+
+			#region WRITE_FILE
+
 			string lPath = installPath + "/" + pAsset.Name;
 			string lZip = lPath + ".zip";
 
 			try
 			{
 				FileStream lStream = new FileStream(lZip, System.IO.FileMode.Create);
+				LoadingBar.Instance.Ratio = 0.8f;
+
 				await lResponse.Content.CopyToAsync(lStream);
+				LoadingBar.Instance.Ratio = 0.85f;
+
 				lStream.Close();
 			}
 			catch (Exception lException)
 			{
-				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
+				Debugger.PrintError($"Can't write file because of {lException.GetType()}: {lException.Message}");
 				return Result.Failed;
 			}
+
+			#endregion //WRITE_FILE
+
+			#region INSTALL
 
 			try
 			{
 				ZipFile.ExtractToDirectory(lZip, pIsMono ? installPath : lPath, true);
+				LoadingBar.Instance.Ratio = 0.95f;
 			}
 			catch (Exception lException)
 			{
-				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
+				Debugger.PrintError($"Can't extract files because of {lException.GetType()}: {lException.Message}");
 				return Result.Downloaded;
 			}
 
-			try
+			if (Config.AutoDeleteDownload)
 			{
-				File.Delete(lZip);
+				try
+				{
+					File.Delete(lZip);
+				}
+				catch (Exception lException)
+				{
+					Debugger.PrintError($"Can't delete zip file because of {lException.GetType()}: {lException.Message}");
+					return Result.Installed;
+				}
 			}
-			catch (Exception lException)
-			{
-				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
-				return Result.Installed;
-			}
+
+			#endregion //INSTALL
+
+			LoadingBar.Instance.Ratio = 1f;
+			LoadingBar.Instance.Complete();
 
 			Debugger.PrintValidation($"{pAsset.Name[0..pAsset.Name.Find(".zip")]} installed successfully");
 			return Result.Installed;
+		}
+
+		public static void CancelInstall(int pIndex)
+		{
+			if (pIndex >= installs.Count)
+				return;
+
+
 		}
 
 		public static bool IsInstalled(string pAsset)

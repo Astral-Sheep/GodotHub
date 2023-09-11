@@ -1,6 +1,7 @@
 using Com.Astral.GodotHub.Settings;
 using Godot;
 using Godot.Collections;
+using System;
 
 namespace Com.Astral.GodotHub.Debug
 {
@@ -98,6 +99,11 @@ namespace Com.Astral.GodotHub.Debug
 		public static void PrintError(string pMessage)
 		{
 			instance.label.Text += FormatMessage($"[b]{pMessage}[/b]", instance.errorColor);
+		}
+
+		public static void PrintException(Exception pException)
+		{
+			PrintError($"{pException.GetType()}: {pException.Message}");
 		}
 
 		private static string FormatMessage(string pMessage, Color pColor)

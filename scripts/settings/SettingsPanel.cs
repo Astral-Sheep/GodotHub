@@ -45,10 +45,10 @@ namespace Com.Astral.GodotHub.Settings
 		{
 			Tween lTween = CreateTween()
 				.SetParallel()
-				.SetTrans(Tween.TransitionType.Quad)
+				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, 0), 0.1f);
-			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 1f), 0.1f);
+			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, 0), 0.2f);
+			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 1f), 0.2f);
 			
 			EnableButtons();
 			openButton.Pressed -= OpenPressed;
@@ -69,10 +69,10 @@ namespace Com.Astral.GodotHub.Settings
 
 			Tween lTween = CreateTween()
 				.SetParallel()
-				.SetTrans(Tween.TransitionType.Quad)
+				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.In);
-			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, -content.Size.Y), 0.1f);
-			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 0f), 0.1f);
+			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, -content.Size.Y), 0.2f);
+			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 0f), 0.2f);
 		}
 
 		protected void CloseInstant()

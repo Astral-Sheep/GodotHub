@@ -11,6 +11,8 @@ namespace Com.Astral.GodotHub
 	{
 		public static Main Instance { get; private set; }
 
+		public event Action Initialized;
+
 		public OS OS { get; protected set; }
 		public Architecture Architecture { get; protected set; }
 
@@ -60,24 +62,7 @@ namespace Com.Astral.GodotHub
 		protected async void Init()
 		{
 			await GodotRepo.Init();
-
-			//const string VERSION = "4.0.4";
-
-			//switch (await VersionInstaller.InstallVersion($"{VERSION}-stable", "win64", true))
-			//{
-			//	case VersionInstaller.InstallationResult.Installed:
-			//		Debugger.PrintValidation($"Godot {VERSION} installed successfully");
-			//		break;
-			//	case VersionInstaller.InstallationResult.Downloaded:
-			//		Debugger.PrintWarning($"Godot {VERSION} downloaded but failed to install");
-			//		break;
-			//	case VersionInstaller.InstallationResult.Failed:
-			//		Debugger.PrintError($"Failed to download Godot {VERSION}");
-			//		break;
-			//	case VersionInstaller.InstallationResult.Cancelled:
-			//		Debugger.PrintWarning($"Godot {VERSION} already installed");
-			//		break;
-			//}
+			Initialized?.Invoke();
 		}
 	}
 }

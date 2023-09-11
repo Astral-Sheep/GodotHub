@@ -3,6 +3,7 @@ using Godot;
 using Octokit;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Com.Astral.GodotHub.Releases
 {
@@ -11,6 +12,8 @@ namespace Com.Astral.GodotHub.Releases
 		protected const string RELEASE_NAME_SUFFIX = "-stable";
 		protected const string ASSET_NAME_PREFIX = "Godot_v";
 		protected const string FILE_TYPE = ".zip";
+
+		public static event Action<Asset> InstallClicked;
 
 		public int Index { get; protected set; }
 		public (int major, int minor, int patch) Version { get; protected set; }
@@ -21,7 +24,8 @@ namespace Com.Astral.GodotHub.Releases
 		[Export] protected OptionButton osButton;
 		[Export] protected OptionButton architectureButton;
 		[Export] protected Button installButton;
-		protected List<ReleaseAsset> assets;
+		//protected List<ReleaseAsset> assets;
+		protected List<Asset> assets;
 		protected string assetNamePrefix;
 
 		public override void _Ready()
@@ -48,30 +52,33 @@ namespace Com.Astral.GodotHub.Releases
 		{
 			Index = pIndex;
 			assetNamePrefix = $"Godot_v{pRelease.Name}";
-			assets = new List<ReleaseAsset>();
-			ReleaseAsset lAsset;
-
-			for (int i = 0; i < pRelease.Assets.Count; i++)
-			{
-				lAsset = pRelease.Assets[i];
-
-				if (lAsset.Name[0] != ASSET_NAME_PREFIX[0])
-					continue;
-
-				if (lAsset.Name[^4..^0] != FILE_TYPE)
-					continue;
-
-				assets.Add(lAsset);
-			}
-
-			//I hate it
 			string lVersion = pRelease.Name[0..pRelease.Name.Find(RELEASE_NAME_SUFFIX)];
 			Version = (
 				int.Parse(lVersion[0].ToString()),
 				int.Parse(lVersion[2].ToString()),
 				lVersion.Length > 3 ? int.Parse(lVersion[4].ToString()) : 0
 			);
+			Asset.GetVersion(pRelease);
 
+			//assets = new List<ReleaseAsset>();
+			assets = new List<Asset>();
+			ReleaseAsset lReleaseAsset;
+
+			for (int i = 0; i < pRelease.Assets.Count; i++)
+			{
+				lReleaseAsset = pRelease.Assets[i];
+
+				if (lReleaseAsset.Name[0] != ASSET_NAME_PREFIX[0])
+					continue;
+
+				if (lReleaseAsset.Name[^4..^0] != FILE_TYPE)
+					continue;
+
+				//assets.Add(lReleaseAsset);
+				assets.Add(GetAsset(lReleaseAsset));
+			}
+
+			//I hate it
 			versionLabel.Text = $"Godot {lVersion}";
 			dateLabel.Text = $"{pRelease.CreatedAt.Day:D2}/{pRelease.CreatedAt.Month:D2}/{pRelease.CreatedAt.Year:D4}";
 			SetInstallButton();
@@ -93,15 +100,16 @@ namespace Com.Astral.GodotHub.Releases
 			SetInstallButton();
 		}
 
-		protected async void OnInstallClicked()
+		protected void OnInstallClicked()
 		{
 			string lAssetName = GetAssetName(true);
 
-			foreach (ReleaseAsset asset in assets)
+			foreach (Asset asset in assets)
 			{
-				if (asset.Name == lAssetName)
+				if (asset.asset.Name == lAssetName)
 				{
-					await VersionInstaller.InstallAsset(asset, monoCheck.ButtonPressed);
+					SetInstalling();
+					InstallClicked?.Invoke(asset);
 					return;
 				}
 			}
@@ -112,6 +120,17 @@ namespace Com.Astral.GodotHub.Releases
 		protected void AddItem(OptionButton pButton, Enum pItem)
 		{
 			pButton.AddItem(pItem.ToString(), Convert.ToInt32(pItem));
+		}
+
+		protected Asset GetAsset(ReleaseAsset pAsset)
+		{
+			return new Asset(
+				pAsset,
+				Version,
+				Asset.IsMono(pAsset),
+				Asset.GetOS(pAsset),
+				Asset.GetArchitecture(pAsset)
+			);
 		}
 
 		protected string GetAssetName(bool pIsFile)
@@ -166,6 +185,12 @@ namespace Com.Astral.GodotHub.Releases
 		{
 			installButton.Disabled = VersionInstaller.IsInstalled(GetAssetName(false));
 			installButton.Text = installButton.Disabled ? "Installed" : "Install";
+		}
+
+		protected void SetInstalling()
+		{
+			installButton.Disabled = true;
+			installButton.Text = "Installing...";
 		}
 	}
 }

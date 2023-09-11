@@ -20,19 +20,24 @@ namespace Com.Astral.GodotHub.Releases
 		public async static Task<bool> Init()
 		{
 			client = new GitHubClient(new ProductHeaderValue(PRODUCT_NAME));
-			
+			LoadingBar.Instance.Ratio = 0f;
+
 			try
 			{
 				await UpdateRepository();
+				LoadingBar.Instance.Ratio = 0.9f;
 				Debugger.PrintMessage($"{releases.Count} releases found");
 			}
 			catch (Exception lException)
 			{
 				Debugger.PrintError($"{lException.GetType()}: {lException.Message}");
+				LoadingBar.Instance.Cancel();
 				return false;
 			}
 
 			RepoRetrieved?.Invoke();
+			LoadingBar.Instance.Ratio = 1f;
+			LoadingBar.Instance.Complete();
 			return true;
 		}
 

@@ -49,6 +49,8 @@ backgroundButton = NodePath("Background")
 buttonsPath = Array[NodePath]([NodePath("Panel/Content/DebugEnabling"), NodePath("Panel/Content/ProjectDir"), NodePath("Panel/Content/InstallForDownload"), NodePath("Panel/Content/DownloadDelete"), NodePath("Panel/Content/InstallDir"), NodePath("Panel/Content/DownloadDir"), NodePath("Panel/Content/ResetButton")])
 
 [node name="Background" type="Button" parent="."]
+z_index = 2
+z_as_relative = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,6 +65,8 @@ theme_override_styles/disabled = ExtResource("2_luqpj")
 theme_override_styles/focus = ExtResource("2_luqpj")
 
 [node name="Panel" type="Panel" parent="."]
+z_index = 3
+z_as_relative = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.25
