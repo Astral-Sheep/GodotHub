@@ -2,7 +2,7 @@ using Godot;
 
 namespace Com.Astral.GodotHub.Settings.Buttons
 {
-	public abstract partial class SettingButton : Control, IConnecter
+	public abstract partial class SettingButton : Control, ISettingButton
 	{
 		[Export] protected Button button;
 

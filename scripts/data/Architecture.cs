@@ -1,4 +1,4 @@
-﻿namespace Com.Astral.GodotHub
+﻿namespace Com.Astral.GodotHub.Data
 {
 	public enum Architecture
 	{

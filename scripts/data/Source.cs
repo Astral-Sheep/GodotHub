@@ -1,17 +1,21 @@
 ﻿using Godot;
+using Newtonsoft.Json;
 using Octokit;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Data
 {
-	public class Asset
+	public class Source
 	{
-		public ReleaseAsset asset;
-		public (int major, int minor, int patch) version;
-		public bool mono;
-		public OS os;
-		public Architecture? architecture;
+		public ReleaseAsset asset { get; private set; }
+		public (int major, int minor, int patch) version { get; private set; }
+		public bool mono { get; private set; }
+		public OS os { get; private set; }
+		public Architecture? architecture { get; private set; }
 
-		public Asset(ReleaseAsset pAsset, (int major, int minor, int patch) pVersion, bool pMono, OS pOS, Architecture? pArchitecture = null)
+		public Source() { }
+
+		[JsonConstructor]
+		public Source(ReleaseAsset pAsset, (int major, int minor, int patch) pVersion, bool pMono, OS pOS, Architecture? pArchitecture = null)
 		{
 			asset = pAsset;
 			version = pVersion;
@@ -23,7 +27,11 @@ namespace Com.Astral.GodotHub
 		public static (int, int, int) GetVersion(Release pRelease)
 		{
 			string lVersion = pRelease.Name[0..pRelease.Name.Find("-")];
-			return (lVersion[0], lVersion[2], lVersion.Length > 3 ? lVersion[4] : 0);
+			return (
+				int.Parse(lVersion[0].ToString()),
+				int.Parse(lVersion[2].ToString()),
+				lVersion.Length > 3 ? int.Parse(lVersion[4].ToString()) : 0
+			);
 		}
 
 		public static bool IsMono(ReleaseAsset pAsset)

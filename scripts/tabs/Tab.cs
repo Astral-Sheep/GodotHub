@@ -1,7 +1,6 @@
 using Godot;
-using System;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Tabs
 {
 	public partial class Tab : Control
 	{

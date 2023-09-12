@@ -1,7 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://hgabwlwhfcpq"]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/style_boxes/main_theme.tres" id="1_fm773"]
-[ext_resource type="Script" path="res://scripts/versions/ReleaseItem.cs" id="1_ukbs0"]
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_fm773"]
+[ext_resource type="Script" path="res://scripts/tabs/installs/ReleaseItem.cs" id="1_ukbs0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0sgs"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)

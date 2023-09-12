@@ -76,17 +76,18 @@ namespace Com.Astral.GodotHub.Settings
 
 		#endregion //PARAMETERS
 
-		private static readonly string configPath = GetEnvironmentPath(Environment.SpecialFolder.ApplicationData) + "/Godot Hub";
+		public static readonly string dataPath = GetEnvironmentPath(Environment.SpecialFolder.ApplicationData) + "/Godot Hub";
+		private static readonly string configPath;
 		private static ConfigFile config;
 
 		static Config()
 		{
-			if (!Directory.Exists(configPath))
+			if (!Directory.Exists(dataPath))
 			{
-				Directory.CreateDirectory(configPath);
+				Directory.CreateDirectory(dataPath);
 			}
 
-			configPath += @"/.config";
+			configPath = dataPath + "/config.ini";
 			config = new ConfigFile();
 			Error lError = config.Load(configPath);
 
@@ -115,7 +116,6 @@ namespace Com.Astral.GodotHub.Settings
 
 		public static void ResetAll()
 		{
-			ProjectDir = GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
 			UseInstallDirForDownload = true;
 			AutoDeleteDownload = true;
 
@@ -129,6 +129,7 @@ namespace Com.Astral.GodotHub.Settings
 			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
 #endif
 
+			ProjectDir = GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
 			Reset?.Invoke();
 		}
 

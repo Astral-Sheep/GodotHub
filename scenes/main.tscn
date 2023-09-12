@@ -1,25 +1,24 @@
-[gd_scene load_steps=35 format=3 uid="uid://boiwhgtxlbcw2"]
+[gd_scene load_steps=33 format=3 uid="uid://cf45rric6gmx5"]
 
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_7cyuv"]
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
-[ext_resource type="Script" path="res://scripts/TabManager.cs" id="2_hrvpk"]
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/style_boxes/main_theme.tres" id="3_gh8ej"]
+[ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
+[ext_resource type="Script" path="res://scripts/tabs/Tab.cs" id="3_c4g4o"]
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="3_gh8ej"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="Texture2D" uid="uid://qoq1yljgu7" path="res://assets/sprites/themes/box_unchecked.png" id="5_hsohc"]
-[ext_resource type="Script" path="res://scripts/Tab.cs" id="6_bv1uh"]
-[ext_resource type="Script" path="res://scripts/versions/ReleasePanel.cs" id="7_4rcoa"]
+[ext_resource type="Script" path="res://scripts/tabs/installs/InstallsTab.cs" id="5_s1nr3"]
+[ext_resource type="Script" path="res://scripts/tabs/installs/ReleasePanel.cs" id="7_07w4y"]
 [ext_resource type="Texture2D" uid="uid://be2gnv6tr4e73" path="res://assets/sprites/themes/arrow_down.png" id="7_kehch"]
 [ext_resource type="Texture2D" uid="uid://buy4vfi18sdga" path="res://assets/sprites/themes/arrow_up.png" id="7_njnqi"]
-[ext_resource type="Script" path="res://scripts/debug/Debugger.cs" id="7_xd05t"]
-[ext_resource type="PackedScene" uid="uid://hgabwlwhfcpq" path="res://scenes/release_item.tscn" id="8_5vfbo"]
-[ext_resource type="PackedScene" uid="uid://b5vda6lwv2sxx" path="res://scenes/settings.tscn" id="8_18qvi"]
+[ext_resource type="PackedScene" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
+[ext_resource type="PackedScene" uid="uid://dp6av5va5ym14" path="res://scenes/installs/installer.tscn" id="10_e5igd"]
+[ext_resource type="Script" path="res://scripts/tabs/installs/DownloadPanel.cs" id="10_mj2qp"]
 [ext_resource type="Texture2D" uid="uid://4v0f3326dtvv" path="res://assets/sprites/themes/box_checked.png" id="12_5gvuq"]
-[ext_resource type="Script" path="res://scripts/LoadingBar.cs" id="13_pmcf6"]
 [ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="14_5457w"]
-[ext_resource type="Script" path="res://scripts/versions/InstallPanel.cs" id="14_hh22l"]
+[ext_resource type="PackedScene" uid="uid://bn4kcqddex1d2" path="res://scenes/debug/debugger.tscn" id="14_cqlha"]
 [ext_resource type="Texture2D" uid="uid://cqahek5snvkfx" path="res://assets/sprites/themes/cross.png" id="14_kulin"]
 [ext_resource type="Script" path="res://scripts/SplashScreen.cs" id="15_14etp"]
-[ext_resource type="PackedScene" uid="uid://yl27v2657l8a" path="res://scenes/installer.tscn" id="16_i0e64"]
+[ext_resource type="PackedScene" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k6pln"]
 bg_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
@@ -57,9 +56,6 @@ texture = ExtResource("14_kulin")
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6ffob"]
 texture = ExtResource("14_5457w")
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_clju0"]
-bg_color = Color(0.117647, 0.117647, 0.117647, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v5en7"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 
@@ -67,19 +63,19 @@ bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 script = ExtResource("1_l0edh")
 metadata/_edit_horizontal_guides_ = [-163.0]
 
-[node name="UI" type="VBoxContainer" parent="." node_paths=PackedStringArray("projectsTab", "versionsTab", "documentationTab", "projectsButton", "versionsButton", "documentationButton")]
+[node name="UI" type="VBoxContainer" parent="." node_paths=PackedStringArray("projectsTab", "installsTab", "documentationTab", "projectsButton", "installsButton", "documentationButton")]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 0
-script = ExtResource("2_hrvpk")
+script = ExtResource("2_mi5hl")
 projectsTab = NodePath("Control/Content/VBoxContainer/TabContainer/ProjectsTab")
-versionsTab = NodePath("Control/Content/VBoxContainer/TabContainer/VersionsTab")
+installsTab = NodePath("Control/Content/VBoxContainer/TabContainer/InstallsTab")
 documentationTab = NodePath("Control/Content/VBoxContainer/TabContainer/DocumentationTab")
 projectsButton = NodePath("Control/Tabs/TabButtonContainer/ProjectsButton")
-versionsButton = NodePath("Control/Tabs/TabButtonContainer/VersionsButton")
+installsButton = NodePath("Control/Tabs/TabButtonContainer/InstallsButton")
 documentationButton = NodePath("Control/Tabs/TabButtonContainer/DocumentationButton")
 
 [node name="Control" type="Control" parent="UI"]
@@ -119,7 +115,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("6_bv1uh")
+script = ExtResource("3_c4g4o")
 
 [node name="Label" type="Label" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
@@ -134,12 +130,12 @@ offset_right = 75.0
 offset_bottom = 17.5
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 text = "PROJECTS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer"]
+[node name="InstallsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("releasesPanel")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -147,10 +143,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-theme = ExtResource("1_7cyuv")
-script = ExtResource("6_bv1uh")
+theme = ExtResource("3_gh8ej")
+script = ExtResource("5_s1nr3")
+releasesPanel = NodePath("Releases")
 
-[node name="UpperButtons" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer/VersionsTab"]
+[node name="UpperButtons" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -160,7 +157,7 @@ offset_right = -10.0
 offset_bottom = 110.0
 grow_horizontal = 2
 
-[node name="OrderButton" type="CheckBox" parent="UI/Control/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons"]
+[node name="OrderButton" type="CheckBox" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -178,7 +175,7 @@ theme_override_constants/check_v_offset = 5
 theme_override_icons/checked = ExtResource("7_njnqi")
 theme_override_icons/unchecked = ExtResource("7_kehch")
 
-[node name="SortButton" type="OptionButton" parent="UI/Control/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons"]
+[node name="SortButton" type="OptionButton" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -192,7 +189,7 @@ grow_horizontal = 0
 grow_vertical = 0
 focus_mode = 0
 
-[node name="Releases" type="ScrollContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/VersionsTab" node_paths=PackedStringArray("sortButton", "orderButton", "itemContainer")]
+[node name="Releases" type="ScrollContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("sortButton", "orderButton", "itemContainer")]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -204,13 +201,13 @@ offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
-script = ExtResource("7_4rcoa")
+script = ExtResource("7_07w4y")
 sortButton = NodePath("../UpperButtons/SortButton")
 orderButton = NodePath("../UpperButtons/OrderButton")
-releaseItemScene = ExtResource("8_5vfbo")
+releaseItemScene = ExtResource("8_8lusi")
 itemContainer = NodePath("VBoxContainer")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/VersionsTab/Releases"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab/Releases"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -223,7 +220,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("6_bv1uh")
+script = ExtResource("3_c4g4o")
 
 [node name="Label" type="Label" parent="UI/Control/Content/VBoxContainer/TabContainer/DocumentationTab"]
 layout_mode = 1
@@ -238,12 +235,12 @@ offset_right = 75.0
 offset_bottom = 17.5
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 text = "DOCUMENTATON"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="InstallationPanel" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
+[node name="DownloadPanel" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -251,15 +248,15 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("14_hh22l")
+script = ExtResource("10_mj2qp")
 panel = NodePath("Panel")
 background = NodePath("Background")
-installerScene = ExtResource("16_i0e64")
+installerScene = ExtResource("10_e5igd")
 installerContainer = NodePath("Panel/ScrollContainer/InstallerContainer")
 openButton = NodePath("../../../../Tabs/MiscButtonContainer/InstallButton")
 closeButton = NodePath("Panel/CloseButton")
 
-[node name="Background" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallationPanel"]
+[node name="Background" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/DownloadPanel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -273,7 +270,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_oswk6")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_5kpsu")
 theme_override_styles/focus = SubResource("StyleBoxFlat_jvrkp")
 
-[node name="Panel" type="Panel" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallationPanel"]
+[node name="Panel" type="Panel" parent="UI/Control/Content/VBoxContainer/TabContainer/DownloadPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_bottom = 1.0
@@ -281,7 +278,7 @@ offset_right = 350.0
 theme = ExtResource("3_gh8ej")
 theme_override_styles/panel = SubResource("StyleBoxFlat_5k0ft")
 
-[node name="Label" type="Label" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallationPanel/Panel"]
+[node name="Label" type="Label" parent="UI/Control/Content/VBoxContainer/TabContainer/DownloadPanel/Panel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -295,7 +292,7 @@ text = "Installations"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CloseButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallationPanel/Panel"]
+[node name="CloseButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/DownloadPanel/Panel"]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 30.0
@@ -309,7 +306,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_2e5an")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_6lyap")
 theme_override_styles/focus = SubResource("StyleBoxTexture_6ffob")
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallationPanel/Panel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/DownloadPanel/Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -321,36 +318,14 @@ offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="InstallerContainer" type="VBoxContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallationPanel/Panel/ScrollContainer"]
+[node name="InstallerContainer" type="VBoxContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/DownloadPanel/Panel/ScrollContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/separation = 10
 
-[node name="Debugger" type="Panel" parent="UI/Control/Content/VBoxContainer" node_paths=PackedStringArray("label")]
-custom_minimum_size = Vector2(0, 100)
+[node name="Debugger" parent="UI/Control/Content/VBoxContainer" instance=ExtResource("14_cqlha")]
 layout_mode = 2
-mouse_filter = 1
-theme_override_styles/panel = SubResource("StyleBoxFlat_clju0")
-script = ExtResource("7_xd05t")
-label = NodePath("RichTextLabel")
-
-[node name="RichTextLabel" type="RichTextLabel" parent="UI/Control/Content/VBoxContainer/Debugger"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = 5.0
-offset_right = -5.0
-offset_bottom = -5.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("1_7cyuv")
-bbcode_enabled = true
-scroll_following = true
-autowrap_mode = 2
-shortcut_keys_enabled = false
 
 [node name="Tabs" type="Panel" parent="UI/Control"]
 layout_mode = 1
@@ -377,7 +352,7 @@ light_mask = 0
 layout_mode = 2
 size_flags_vertical = 6
 focus_mode = 0
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 toggle_mode = true
 button_pressed = true
 button_group = ExtResource("3_tsmd8")
@@ -385,24 +360,24 @@ shortcut_feedback = false
 shortcut_in_tooltip = false
 text = "Projects"
 
-[node name="VersionsButton" type="Button" parent="UI/Control/Tabs/TabButtonContainer"]
+[node name="InstallsButton" type="Button" parent="UI/Control/Tabs/TabButtonContainer"]
 light_mask = 0
 layout_mode = 2
 size_flags_vertical = 6
 focus_mode = 0
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 toggle_mode = true
 button_group = ExtResource("3_tsmd8")
 shortcut_feedback = false
 shortcut_in_tooltip = false
-text = "Versions"
+text = "Installs"
 
 [node name="DocumentationButton" type="Button" parent="UI/Control/Tabs/TabButtonContainer"]
 light_mask = 0
 layout_mode = 2
 size_flags_vertical = 6
 focus_mode = 0
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 toggle_mode = true
 button_group = ExtResource("3_tsmd8")
 shortcut_feedback = false
@@ -424,7 +399,7 @@ theme_override_constants/separation = 25
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 icon = ExtResource("12_5gvuq")
 icon_alignment = 1
 expand_icon = true
@@ -433,24 +408,12 @@ expand_icon = true
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 focus_mode = 0
-theme = ExtResource("1_7cyuv")
+theme = ExtResource("3_gh8ej")
 icon = ExtResource("5_hsohc")
 icon_alignment = 1
 expand_icon = true
 
-[node name="ProgressBar" type="ProgressBar" parent="UI"]
-z_index = 1
-z_as_relative = false
-custom_minimum_size = Vector2(0, 5)
-layout_mode = 2
-size_flags_vertical = 8
-theme = ExtResource("3_gh8ej")
-theme_override_font_sizes/font_size = 2
-value = 33.33
-script = ExtResource("13_pmcf6")
-
-[node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("8_18qvi")]
-visible = false
+[node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("18_bwlxg")]
 openButton = NodePath("../UI/Control/Tabs/MiscButtonContainer/ParameterButton")
 
 [node name="SplashScreen" type="ColorRect" parent="."]

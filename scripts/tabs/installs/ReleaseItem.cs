@@ -1,11 +1,16 @@
+using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Settings;
 using Godot;
 using Octokit;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.IO;
 
-namespace Com.Astral.GodotHub.Releases
+using Label = Godot.Label;
+using OS = Com.Astral.GodotHub.Data.OS;
+
+namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class ReleaseItem : Control
 	{
@@ -13,20 +18,24 @@ namespace Com.Astral.GodotHub.Releases
 		protected const string ASSET_NAME_PREFIX = "Godot_v";
 		protected const string FILE_TYPE = ".zip";
 
-		public static event Action<Asset> InstallClicked;
+		public static event Action<ReleaseItem, Source> InstallClicked;
 
 		public int Index { get; protected set; }
 		public (int major, int minor, int patch) Version { get; protected set; }
 
-		[Export] protected Godot.Label versionLabel;
-		[Export] protected Godot.Label dateLabel;
+		[Export] protected Label versionLabel;
+		[Export] protected Label dateLabel;
 		[Export] protected CheckBox monoCheck;
 		[Export] protected OptionButton osButton;
 		[Export] protected OptionButton architectureButton;
 		[Export] protected Button installButton;
-		//protected List<ReleaseAsset> assets;
-		protected List<Asset> assets;
+
+		protected List<Source> sources;
+		protected List<Installer> installers;
 		protected string assetNamePrefix;
+
+		protected string assetName = "";
+		protected bool nameIsValid = false;
 
 		public override void _Ready()
 		{
@@ -51,52 +60,47 @@ namespace Com.Astral.GodotHub.Releases
 		public void Init(Release pRelease, int pIndex)
 		{
 			Index = pIndex;
-			assetNamePrefix = $"Godot_v{pRelease.Name}";
+			assetNamePrefix = $"{ASSET_NAME_PREFIX}{pRelease.Name}";
 			string lVersion = pRelease.Name[0..pRelease.Name.Find(RELEASE_NAME_SUFFIX)];
-			Version = (
-				int.Parse(lVersion[0].ToString()),
-				int.Parse(lVersion[2].ToString()),
-				lVersion.Length > 3 ? int.Parse(lVersion[4].ToString()) : 0
-			);
-			Asset.GetVersion(pRelease);
+			Version = Source.GetVersion(pRelease);
 
-			//assets = new List<ReleaseAsset>();
-			assets = new List<Asset>();
+			installers = new List<Installer>();
+			sources = new List<Source>();
 			ReleaseAsset lReleaseAsset;
 
 			for (int i = 0; i < pRelease.Assets.Count; i++)
 			{
 				lReleaseAsset = pRelease.Assets[i];
 
-				if (lReleaseAsset.Name[0] != ASSET_NAME_PREFIX[0])
+				if (lReleaseAsset.Name[0] != ASSET_NAME_PREFIX[0] || lReleaseAsset.Name[^4..^0] != FILE_TYPE)
 					continue;
 
-				if (lReleaseAsset.Name[^4..^0] != FILE_TYPE)
-					continue;
-
-				//assets.Add(lReleaseAsset);
-				assets.Add(GetAsset(lReleaseAsset));
+				sources.Add(GetSource(lReleaseAsset));
 			}
 
-			//I hate it
 			versionLabel.Text = $"Godot {lVersion}";
 			dateLabel.Text = $"{pRelease.CreatedAt.Day:D2}/{pRelease.CreatedAt.Month:D2}/{pRelease.CreatedAt.Year:D4}";
 			SetInstallButton();
 		}
 
+		#region EVENT_HANDLING
+
 		protected void OnMonoChanged(bool _)
 		{
+			nameIsValid = false;
 			SetInstallButton();
 		}
 
 		protected void OnOsChanged(long pOS)
 		{
+			nameIsValid = false;
 			architectureButton.Visible = pOS != (long)OS.MacOS;
 			SetInstallButton();
 		}
 
 		protected void OnArchitectureChanged(long _)
 		{
+			nameIsValid = false;
 			SetInstallButton();
 		}
 
@@ -104,12 +108,12 @@ namespace Com.Astral.GodotHub.Releases
 		{
 			string lAssetName = GetAssetName(true);
 
-			foreach (Asset asset in assets)
+			foreach (Source source in sources)
 			{
-				if (asset.asset.Name == lAssetName)
+				if (source.asset.Name == lAssetName)
 				{
 					SetInstalling();
-					InstallClicked?.Invoke(asset);
+					InstallClicked?.Invoke(this, source);
 					return;
 				}
 			}
@@ -117,39 +121,99 @@ namespace Com.Astral.GodotHub.Releases
 			Debugger.PrintError($"No asset named {lAssetName}");
 		}
 
+		#endregion //EVENT_HANDLING
+
+		#region INSTALLATION
+
+		public void Connect(Installer pInstaller)
+		{
+			if (installers.Contains(pInstaller))
+				return;
+
+			installers.Add(pInstaller);
+			pInstaller.Completed += OnInstallationCompleted;
+		}
+
+		protected void OnInstallationCompleted(Installer pInstaller, Installer.Result pResult)
+		{
+			if (!installers.Contains(pInstaller))
+				return;
+
+			installers.Remove(pInstaller);
+			pInstaller.Completed -= OnInstallationCompleted;
+
+			if (GetAssetName(true) == pInstaller.AssetName)
+			{
+				installButton.Disabled = true;
+				installButton.Text = "Installed";
+			}
+		}
+
+		protected bool IsInstalled()
+		{
+			return Directory.Exists(Config.InstallDir + "/" + GetAssetName(false));
+		}
+
+		protected void SetInstallButton()
+		{
+			if (installers.Count > 0)
+			{
+				string lAssetName = GetAssetName(true);
+
+				for (int i = 0; i < installers.Count; i++)
+				{
+					if (installers[i].AssetName == lAssetName)
+					{
+						SetInstalling();
+						return;
+					}
+				}
+			}
+
+			installButton.Disabled = IsInstalled();
+			installButton.Text = installButton.Disabled ? "Installed" : "Install";
+		}
+
+		protected void SetInstalling()
+		{
+			installButton.Disabled = true;
+			installButton.Text = "Installing...";
+		}
+
+		#endregion //INSTALLATION
+
 		protected void AddItem(OptionButton pButton, Enum pItem)
 		{
 			pButton.AddItem(pItem.ToString(), Convert.ToInt32(pItem));
 		}
 
-		protected Asset GetAsset(ReleaseAsset pAsset)
+		protected Source GetSource(ReleaseAsset pAsset)
 		{
-			return new Asset(
+			return new Source(
 				pAsset,
 				Version,
-				Asset.IsMono(pAsset),
-				Asset.GetOS(pAsset),
-				Asset.GetArchitecture(pAsset)
+				Source.IsMono(pAsset),
+				Source.GetOS(pAsset),
+				Source.GetArchitecture(pAsset)
 			);
 		}
 
 		protected string GetAssetName(bool pIsFile)
 		{
-			string lName = assetNamePrefix;
-
-			if (monoCheck.ButtonPressed)
+			if (!nameIsValid)
 			{
-				lName += "_mono";
+				assetName = assetNamePrefix;
+
+				if (monoCheck.ButtonPressed)
+				{
+					assetName += "_mono";
+				}
+
+				assetName += GetOS() + FILE_TYPE;
+				nameIsValid = true;
 			}
 
-			lName += GetOS();
-
-			if (pIsFile)
-			{
-				lName += FILE_TYPE;
-			}
-
-			return lName;
+			return pIsFile ? assetName : assetName[0..^4];
 		}
 
 		protected string GetOS()
@@ -179,18 +243,6 @@ namespace Com.Astral.GodotHub.Releases
 			}
 
 			return lOS;
-		}
-
-		protected void SetInstallButton()
-		{
-			installButton.Disabled = VersionInstaller.IsInstalled(GetAssetName(false));
-			installButton.Text = installButton.Disabled ? "Installed" : "Install";
-		}
-
-		protected void SetInstalling()
-		{
-			installButton.Disabled = true;
-			installButton.Text = "Installing...";
 		}
 	}
 }

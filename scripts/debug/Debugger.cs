@@ -1,6 +1,5 @@
 using Com.Astral.GodotHub.Settings;
 using Godot;
-using Godot.Collections;
 using System;
 
 namespace Com.Astral.GodotHub.Debug
@@ -9,38 +8,17 @@ namespace Com.Astral.GodotHub.Debug
 	{
 		public static bool Enabled
 		{
-			get => instance.enabled;
+			get => instance.Visible;
 			set
 			{
-				if (instance.enabled == value)
+				if (instance.Visible == value)
 					return;
 
-				instance.enabled = value;
 				instance.Visible = value;
 			}
 		}
 
 		private static Debugger instance;
-		private static readonly Dictionary<int, char> decimalToHexa = new Dictionary<int, char>() {
-			{ 0, '0' },
-			{ 1, '1' },
-			{ 2, '2' },
-			{ 3, '3' },
-			{ 4, '4' },
-			{ 5, '5' },
-			{ 6, '6' },
-			{ 7, '7' },
-			{ 8, '8' },
-			{ 9, '9' },
-			{ 10, 'a' },
-			{ 11, 'b' },
-			{ 12, 'c' },
-			{ 13, 'd' },
-			{ 14, 'e' },
-			{ 15, 'f' },
-		};
-
-		[Export] private bool enabled = true;
 
 		[ExportGroup("Parameters")]
 		[Export] private RichTextLabel label;
@@ -69,8 +47,7 @@ namespace Com.Astral.GodotHub.Debug
 				label.BbcodeEnabled = true;
 			}
 
-			enabled = Config.Debug;
-			Visible = enabled;
+			Enabled = Config.Debug;
 		}
 
 		protected override void Dispose(bool pDisposing)
@@ -108,17 +85,7 @@ namespace Com.Astral.GodotHub.Debug
 
 		private static string FormatMessage(string pMessage, Color pColor)
 		{
-			return $"[color=#{RGBToHexa(pColor)}]{pMessage}[/color]\n";
-		}
-
-		private static string RGBToHexa(Color pColor)
-		{
-			return DecToHexa(pColor.R8) + DecToHexa(pColor.G8) + DecToHexa(pColor.B8);
-		}
-
-		private static string DecToHexa(int pComponent)
-		{
-			return $"{decimalToHexa[pComponent / 16]}{decimalToHexa[pComponent % 16]}";
+			return $"[color=#{pColor.R8:x2}{pColor.G8:x2}{pColor.B8:x2}]{pMessage}[/color]\n";
 		}
 	}
 }

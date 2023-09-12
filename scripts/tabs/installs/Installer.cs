@@ -1,4 +1,5 @@
-﻿using Com.Astral.GodotHub.Debug;
+﻿using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Debug;
 using Com.Astral.GodotHub.Settings;
 using Godot;
 using Octokit;
@@ -9,13 +10,16 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
 using HttpClient = System.Net.Http.HttpClient;
 using Label = Godot.Label;
 
-namespace Com.Astral.GodotHub.Releases
+namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class Installer : Control
 	{
+		protected const float POINT_PIXEL_SIZE = 6f;
+
 		public enum Result
 		{
 			Installed,
@@ -24,7 +28,9 @@ namespace Com.Astral.GodotHub.Releases
 			Cancelled,
 		}
 
-		public event Action<Result> Completed;
+		public event Action<Installer, Result> Completed;
+
+		public string AssetName { get; protected set; }
 
 		[Export] protected float closeDuration = 0.25f;
 		[Export] protected Label versionLabel;
@@ -33,52 +39,63 @@ namespace Com.Astral.GodotHub.Releases
 		[Export] protected Button cancelButton;
 
 		protected CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
-		protected bool completed = false;
 
-		public async void Install(Asset pAsset)
+		public async void Install(Source pSource)
 		{
-			if (pAsset.asset == null)
+			if (pSource.asset == null)
 			{
-				Debugger.PrintError("Invalid asset passed: [code]null[/code] asset");
-				Completed?.Invoke(Result.Cancelled);
+				Debugger.PrintError("Invalid asset passed: [i]null[/i] asset");
+				Completed?.Invoke(this, Result.Cancelled);
 				return;
 			}
 
-			versionLabel.Text = $"Godot {pAsset.version.major}.{pAsset.version.minor}";
+			AssetName = pSource.asset.Name;
+			versionLabel.Text = $"Godot {pSource.version.major}.{pSource.version.minor}";
 
-			if (pAsset.version.patch == 0)
+			if (pSource.version.patch != 0)
 			{
-				versionLabel.Text += $".{pAsset.version.patch}";
+				versionLabel.Text += $".{pSource.version.patch}";
 			}
 
-			if (pAsset.mono)
+			if (pSource.mono)
 			{
 				versionLabel.Text += " Mono";
 			}
 
-			versionLabel.Text += $" {pAsset.os}";
+			versionLabel.Text += $" {pSource.os}";
 
-			if (pAsset.architecture != null)
+			if (pSource.architecture != null)
 			{
-				versionLabel.Text += $" {pAsset.architecture}";
+				versionLabel.Text += $" {pSource.architecture}";
 			}
 
-			await InstallInternal(pAsset.asset, pAsset.mono, cancellationTokenSource.Token);
+			Result lResult = await InstallInternal(
+				pSource.asset,
+				pSource.mono,
+				cancellationTokenSource.Token
+			);
+			Completed?.Invoke(this, lResult);
+			//Close();
 		}
 
-		protected async Task InstallInternal(ReleaseAsset pAsset, bool pMono, CancellationToken pToken)
+		protected async Task<Result> InstallInternal(ReleaseAsset pAsset, bool pMono, CancellationToken pToken)
 		{
+			Vector2 lStatusPosition = statusLabel.Position;
+
 			#region DOWNLOAD
 
 			loadingBar.Ratio = 0f;
-			CancellationTokenSource lSource = new CancellationTokenSource();
-			AnimateStatus("Downloading", lSource.Token);
+			CancellationTokenSource lTokenSource = new CancellationTokenSource();
+			AnimateStatus("Downloading", lTokenSource.Token);
 			HttpClient lClient = new HttpClient();
 			HttpResponseMessage lResponse = await lClient.GetAsync(new Uri(pAsset.BrowserDownloadUrl));
-			lSource.Cancel();
+			lTokenSource.Cancel();
+			statusLabel.Position = lStatusPosition;
 
-			if (CheckToken(pToken))
-				return;
+			if (pToken.IsCancellationRequested)
+			{
+				return Result.Cancelled;
+			}
 
 			loadingBar.Ratio = 1f;
 			Thread.Sleep(50);
@@ -88,8 +105,8 @@ namespace Com.Astral.GodotHub.Releases
 			#region INSTALL
 
 			loadingBar.Ratio = 0f;
-			lSource = new CancellationTokenSource();
-			AnimateStatus("Installing", lSource.Token);
+			lTokenSource = new CancellationTokenSource();
+			AnimateStatus("Installing", lTokenSource.Token);
 			string lZip = Config.DownloadDir + "/" + pAsset.Name;
 
 			#region WRITE_FILE
@@ -102,17 +119,16 @@ namespace Com.Astral.GodotHub.Releases
 				lStream.Close();
 				loadingBar.Ratio = Config.AutoDeleteDownload ? 0.6f : 0.75f;
 
-				if (CheckToken(pToken))
+				if (pToken.IsCancellationRequested)
 				{
 					File.Delete(lZip);
-					return;
+					return Result.Cancelled;
 				}
 			}
 			catch (Exception lException)
 			{
 				Debugger.PrintException(lException);
-				Completed?.Invoke(Result.Failed);
-				return;
+				return Result.Failed;
 			}
 
 			#endregion //WRITE_FILE
@@ -125,18 +141,17 @@ namespace Com.Astral.GodotHub.Releases
 				ZipFile.ExtractToDirectory(lZip, lDir);
 				loadingBar.Ratio = Config.AutoDeleteDownload ? 0.8f : 1f;
 
-				if (CheckToken(pToken))
+				if (pToken.IsCancellationRequested)
 				{
 					Directory.Delete(lDir);
 					File.Delete(lZip);
-					return;
+					return Result.Cancelled;
 				}
 			}
 			catch (Exception lException)
 			{
 				Debugger.PrintException(lException);
-				Completed?.Invoke(Result.Downloaded);
-				return;
+				return Result.Downloaded;
 			}
 
 			if (Config.AutoDeleteDownload)
@@ -149,8 +164,7 @@ namespace Com.Astral.GodotHub.Releases
 				catch (Exception lException)
 				{
 					Debugger.PrintException(lException);
-					Completed?.Invoke(Result.Installed);
-					return;
+					return Result.Installed;
 				}
 			}
 
@@ -158,9 +172,10 @@ namespace Com.Astral.GodotHub.Releases
 
 			#endregion //INSTALL
 
-			lSource.Cancel();
-			Completed?.Invoke(Result.Installed);
-			Close();
+			lTokenSource.Cancel();
+			statusLabel.Position = lStatusPosition;
+			statusLabel.Text = "Completed";
+			return Result.Installed;
 		}
 
 		protected async void AnimateStatus(string pPrefix, CancellationToken pToken)
@@ -169,28 +184,23 @@ namespace Com.Astral.GodotHub.Releases
 				".", "..", "...",
 			};
 			int lIndex = 0;
+			float lInitPosition = statusLabel.Position.X;
 
 			await Task.Run(
 				() => {
 					while (!pToken.IsCancellationRequested)
 					{
 						statusLabel.Text = $"{pPrefix}{lIcons[lIndex]}";
+						statusLabel.Position = new Vector2(
+							lInitPosition + (lIndex + 1) * POINT_PIXEL_SIZE,
+							statusLabel.Position.Y
+						);
 						lIndex = (lIndex + 1) % lIcons.Count;
 						Thread.Sleep(250);
 					}
 				},
 				pToken
 			);
-		}
-
-		protected bool CheckToken(CancellationToken pToken)
-		{
-			if (!pToken.IsCancellationRequested)
-				return false;
-
-			Completed?.Invoke(Result.Cancelled);
-			//Close();
-			return true;
 		}
 
 		protected void OnCancelButtonPressed()
@@ -200,18 +210,16 @@ namespace Com.Astral.GodotHub.Releases
 
 		protected void Close()
 		{
-			Debugger.PrintMessage("Closing");
 			CreateTween()
 				.SetTrans(Tween.TransitionType.Quad)
 				.SetEase(Tween.EaseType.Out)
-				.TweenProperty(this, "size:y", 0f, closeDuration)
+				.TweenProperty(this, "custom_minimum_size:y", 0f, closeDuration)
 				.SetDelay(0.75f)
 				.Finished += OnClosed;
 		}
 
 		protected void OnClosed()
 		{
-			Debugger.PrintMessage("Closed");
 			QueueFree();
 		}
 	}

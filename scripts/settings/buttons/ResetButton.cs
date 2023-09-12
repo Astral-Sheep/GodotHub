@@ -2,7 +2,7 @@ using Godot;
 
 namespace Com.Astral.GodotHub.Settings.Buttons
 {
-	public partial class ResetButton : Button, IConnecter
+	public partial class ResetButton : Button, ISettingButton
 	{
 		public void Connect()
 		{

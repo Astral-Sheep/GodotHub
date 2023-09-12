@@ -5,6 +5,7 @@
     <RootNamespace>GodotHub</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="Octokit" Version="7.1.0" />
   </ItemGroup>
 </Project>

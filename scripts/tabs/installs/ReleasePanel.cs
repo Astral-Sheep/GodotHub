@@ -1,8 +1,9 @@
+using Com.Astral.GodotHub.Data;
 using Godot;
 using Octokit;
 using System.Collections.Generic;
 
-namespace Com.Astral.GodotHub.Releases
+namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class ReleasePanel : Control
 	{
@@ -17,6 +18,7 @@ namespace Com.Astral.GodotHub.Releases
 		[ExportGroup("Release item")]
 		[Export] protected PackedScene releaseItemScene;
 		[Export] protected Control itemContainer;
+
 		protected List<ReleaseItem> items = new List<ReleaseItem>();
 
 		public override void _Ready()
@@ -30,7 +32,7 @@ namespace Com.Astral.GodotHub.Releases
 		protected void OnRepoRetrieved()
 		{
 			GodotRepo.RepoRetrieved -= OnRepoRetrieved;
-			IReadOnlyList<Release> lReleases = GodotRepo.GetReleases();
+			List<Release> lReleases = GodotRepo.GetReleases();
 
 			for (int i = 0; i < lReleases.Count; i++)
 			{
@@ -62,24 +64,10 @@ namespace Com.Astral.GodotHub.Releases
 
 		protected void Sort()
 		{
-			if (sortButton.Selected == (long)SortType.Date)
-			{
-				SortLatest();
-			}
-			else
-			{
-				SortVersion();
-			}
-		}
-
-		protected void SortLatest()
-		{
-			SortItems(new DateSorter(), orderButton.ButtonPressed);
-		}
-
-		protected void SortVersion()
-		{
-			SortItems(new VersionSorter(), orderButton.ButtonPressed);
+			SortItems(
+				sortButton.Selected == (long)SortType.Date ? new DateSorter() : new VersionSorter(),
+				orderButton.ButtonPressed
+			);
 		}
 
 		protected void SortItems(IComparer<ReleaseItem> pComparer, bool pReversed)

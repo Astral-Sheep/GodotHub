@@ -1,6 +1,6 @@
 ﻿namespace Com.Astral.GodotHub.Settings.Buttons
 {
-	public interface IConnecter
+	public interface ISettingButton
 	{
 		void Connect();
 		void Disconnect();

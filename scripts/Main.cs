@@ -1,9 +1,11 @@
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Releases;
+using Com.Astral.GodotHub.Data;
 using Godot;
 using System;
 using System.Runtime.InteropServices;
+
+using Architecture = Com.Astral.GodotHub.Data.Architecture;
 using Environment = System.Environment;
+using OS = Com.Astral.GodotHub.Data.OS;
 
 namespace Com.Astral.GodotHub
 {

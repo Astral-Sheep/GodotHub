@@ -1,13 +1,13 @@
-using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Data;
 using Godot;
 
-namespace Com.Astral.GodotHub.Releases
+namespace Com.Astral.GodotHub.Tabs.Installs
 {
-	public partial class InstallPanel : Control
+	public partial class DownloadPanel : Control
 	{
+		[Export] protected float openDuration = 0.2f;
 		[Export] protected Control panel;
 		[Export] protected Button background;
-		[Export] protected float openDuration = 0.2f;
 		[ExportGroup("Installation")]
 		[Export] protected PackedScene installerScene;
 		[Export] protected Control installerContainer;
@@ -19,10 +19,10 @@ namespace Com.Astral.GodotHub.Releases
 
 		public override void _Ready()
 		{
-			Debugger.PrintMessage("Panel ready");
 			panel.Position = new Vector2(-panel.Size.X, panel.Position.Y);
 			background.MouseFilter = MouseFilterEnum.Ignore;
 			background.SelfModulate = new Color(background.SelfModulate, 0f);
+
 			CreateCustomTween(Tween.EaseType.Out);
 			ReleaseItem.InstallClicked += Install;
 			openButton.Pressed += Open;
@@ -36,10 +36,11 @@ namespace Com.Astral.GodotHub.Releases
 			}
 		}
 
-		public void Install(Asset pAsset)
+		public void Install(ReleaseItem pItem, Source pAsset)
 		{
 			Installer lInstaller = installerScene.Instantiate<Installer>();
 			installerContainer.AddChild(lInstaller);
+			pItem.Connect(lInstaller);
 			lInstaller.Install(pAsset);
 		}
 

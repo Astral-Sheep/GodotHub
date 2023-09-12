@@ -1,7 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://yl27v2657l8a"]
+[gd_scene load_steps=6 format=3 uid="uid://dp6av5va5ym14"]
 
-[ext_resource type="Script" path="res://scripts/versions/Installer.cs" id="1_ke4qi"]
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/style_boxes/main_theme.tres" id="1_vqxyd"]
+[ext_resource type="Script" path="res://scripts/tabs/installs/Installer.cs" id="1_ke4qi"]
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_vqxyd"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8jxo"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
@@ -13,6 +13,7 @@ bg_color = Color(0.0823529, 0.0823529, 0.0901961, 1)
 bg_color = Color(0.215686, 0.615686, 0.65098, 1)
 
 [node name="Installer" type="Panel" node_paths=PackedStringArray("versionLabel", "statusLabel", "loadingBar")]
+clip_contents = true
 custom_minimum_size = Vector2(0, 100)
 offset_right = 270.0
 offset_bottom = 100.0
@@ -41,15 +42,17 @@ vertical_alignment = 1
 [node name="StatusLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.19
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_right = -10.0
-offset_bottom = 12.5
+offset_left = 25.0
+offset_top = -10.0
+offset_right = -25.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Downloading..."
+text = "Downloading"
+horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ProgressBar" type="ProgressBar" parent="."]

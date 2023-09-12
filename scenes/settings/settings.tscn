@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://b5vda6lwv2sxx"]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="1_jlf08"]
 [ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes/style_box_bg_btn.tres" id="2_luqpj"]
@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://scripts/settings/buttons/DebugToggle.cs" id="6_nrp83"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/ProjectDirButton.cs" id="7_anv72"]
 [ext_resource type="Texture2D" uid="uid://ck0fei3vii0gs" path="res://assets/sprites/themes/folder.png" id="7_xy6p1"]
-[ext_resource type="PackedScene" path="res://scenes/folder_dialog.tscn" id="8_v2fuc"]
+[ext_resource type="PackedScene" path="res://scenes/settings/folder_dialog.tscn" id="8_v2fuc"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/SameDirToggle.cs" id="11_kt2rs"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/DownloadDirButton.cs" id="12_8r0od"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/AutoDeleteToggle.cs" id="12_xjd5n"]
