@@ -1,20 +1,18 @@
 ﻿using Godot;
-using Newtonsoft.Json;
 using Octokit;
 
 namespace Com.Astral.GodotHub.Data
 {
 	public class Source
 	{
-		public ReleaseAsset asset { get; private set; }
-		public (int major, int minor, int patch) version { get; private set; }
-		public bool mono { get; private set; }
-		public OS os { get; private set; }
-		public Architecture? architecture { get; private set; }
+		public ReleaseAsset asset;
+		public (int major, int minor, int patch) version;
+		public bool mono;
+		public OS os;
+		public Architecture? architecture;
 
 		public Source() { }
 
-		[JsonConstructor]
 		public Source(ReleaseAsset pAsset, (int major, int minor, int patch) pVersion, bool pMono, OS pOS, Architecture? pArchitecture = null)
 		{
 			asset = pAsset;

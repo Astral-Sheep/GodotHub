@@ -28,6 +28,7 @@ namespace Com.Astral.GodotHub.Settings
 			Resized += OnResized;
 			CloseInstant();
 			openButton.Pressed += OpenPressed;
+			Visible = true;
 		}
 
 		protected override void Dispose(bool pDisposing)

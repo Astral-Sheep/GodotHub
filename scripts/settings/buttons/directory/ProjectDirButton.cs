@@ -1,4 +1,4 @@
-namespace Com.Astral.GodotHub.Settings.Buttons
+namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 {
 	public partial class ProjectDirButton : DirButton
 	{

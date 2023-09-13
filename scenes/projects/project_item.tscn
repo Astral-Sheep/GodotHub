@@ -1,0 +1,109 @@
+[gd_scene load_steps=4 format=3 uid="uid://bqbsr5iermvuw"]
+
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_0g1rf"]
+[ext_resource type="Script" path="res://scripts/tabs/projects/ProjectItem.cs" id="2_uxxbh"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gi7kc"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 1)
+
+[node name="ProjectItem" type="Panel" node_paths=PackedStringArray("favoriteToggle", "nameLabel", "pathLabel", "lastOpenedLabel", "versionButton", "openButton", "removeButton")]
+custom_minimum_size = Vector2(0, 75)
+offset_right = 1000.0
+offset_bottom = 75.0
+theme = ExtResource("1_0g1rf")
+theme_override_styles/panel = SubResource("StyleBoxFlat_gi7kc")
+script = ExtResource("2_uxxbh")
+favoriteToggle = NodePath("FavoriteButton")
+nameLabel = NodePath("Name")
+pathLabel = NodePath("Path")
+lastOpenedLabel = NodePath("LastOpened")
+versionButton = NodePath("VersionButton")
+openButton = NodePath("OpenButton")
+removeButton = NodePath("RemoveButton")
+
+[node name="FavoriteButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.038
+anchor_top = 0.5
+anchor_right = 0.038
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+focus_mode = 0
+toggle_mode = true
+
+[node name="Name" type="RichTextLabel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_right = 0.35
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 15.0
+offset_bottom = -35.0
+bbcode_enabled = true
+text = "Godot Hub"
+scroll_active = false
+
+[node name="Path" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.05
+anchor_top = 1.0
+anchor_right = 0.35
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = -35.0
+offset_bottom = -20.0
+theme_override_colors/font_color = Color(0.588235, 0.588235, 0.588235, 1)
+theme_override_font_sizes/font_size = 10
+text = "C:/Users/thoma/Documents/Projects/Godot Hub"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="LastOpened" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.375
+anchor_top = 0.2
+anchor_right = 0.55
+anchor_bottom = 0.8
+text = "11 months ago"
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="VersionButton" type="OptionButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.575
+anchor_top = 0.2
+anchor_right = 0.725
+anchor_bottom = 0.8
+focus_mode = 0
+
+[node name="OpenButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.2
+anchor_right = 0.85
+anchor_bottom = 0.8
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "Open"
+
+[node name="RemoveButton" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.875
+anchor_top = 0.2
+anchor_right = 0.975
+anchor_bottom = 0.8
+grow_horizontal = 0
+grow_vertical = 2
+focus_mode = 0
+text = "Remove"

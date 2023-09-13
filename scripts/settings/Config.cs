@@ -8,73 +8,105 @@ namespace Com.Astral.GodotHub.Settings
 {
 	public static class Config
 	{
-		private const string SETTINGS = "Settings";
-		private const string DEBUG = "Debug";
-		private const string PROJECT_DIR = "ProjectDir";
-		private const string USE_INSTALL_DIR_FOR_DOWNLOAD = "UseInstallDirForDownload";
-		private const string AUTO_DELETE_DOWNLOAD = "AutoDeleteDownload";
-		private const string INSTALL_DIR = "InstallDir";
-		private const string DOWNLOAD_DIR = "DownloadDir";
+		public enum Settings
+		{
+			AutoCloseDownload,
+			AutoCreateShortcut,
+			AutoDeleteZip,
+			AutoRefreshRepos,
+			Debug,
+			DownloadDir,
+			InstallDir,
+			ProjectDir,
+			UseInstallDirForZip,
+		}
 
 		public static event Action Reset;
 
-		#region PARAMETERS
+		#region PROPERTIES
 
-		public static bool Debug
+		public static bool AutoCloseDownload
 		{
-			get => (bool)GetValue(DEBUG);
+			get => (bool)GetValue(Settings.AutoCloseDownload);
 			set
 			{
-				SetValue(DEBUG, value);
+				SetValue(Settings.AutoCloseDownload, value);
 			}
 		}
 
-		public static string ProjectDir
+		public static bool AutoCreateShortcut
 		{
-			get => (string)GetValue(PROJECT_DIR);
+			get => (bool)GetValue(Settings.AutoCreateShortcut);
 			set
 			{
-				SetValue(PROJECT_DIR, value);
-			}
-		}
-
-		public static bool UseInstallDirForDownload
-		{
-			get => (bool)GetValue(USE_INSTALL_DIR_FOR_DOWNLOAD);
-			set
-			{
-				SetValue(USE_INSTALL_DIR_FOR_DOWNLOAD, value);
+				SetValue(Settings.AutoCreateShortcut, value);
 			}
 		}
 
 		public static bool AutoDeleteDownload
 		{
-			get => (bool)GetValue(AUTO_DELETE_DOWNLOAD);
+			get => (bool)GetValue(Settings.AutoDeleteZip);
 			set
 			{
-				SetValue(AUTO_DELETE_DOWNLOAD, value);
+				SetValue(Settings.AutoDeleteZip, value);
 			}
 		}
 
-		public static string InstallDir
+		public static bool AutoRefreshRepos
 		{
-			get => (string)GetValue(INSTALL_DIR);
+			get => (bool)GetValue(Settings.AutoRefreshRepos);
 			set
 			{
-				SetValue(INSTALL_DIR, value);
+				SetValue(Settings.AutoRefreshRepos, value);
+			}
+		}
+
+		public static bool Debug
+		{
+			get => (bool)GetValue(Settings.Debug);
+			set
+			{
+				SetValue(Settings.Debug, value);
 			}
 		}
 
 		public static string DownloadDir
 		{
-			get => (string)GetValue(DOWNLOAD_DIR);
+			get => (string)GetValue(Settings.DownloadDir);
 			set
 			{
-				SetValue(DOWNLOAD_DIR, value);
+				SetValue(Settings.DownloadDir, value);
 			}
 		}
 
-		#endregion //PARAMETERS
+		public static string InstallDir
+		{
+			get => (string)GetValue(Settings.InstallDir);
+			set
+			{
+				SetValue(Settings.InstallDir, value);
+			}
+		}
+
+		public static string ProjectDir
+		{
+			get => (string)GetValue(Settings.ProjectDir);
+			set
+			{
+				SetValue(Settings.ProjectDir, value);
+			}
+		}
+
+		public static bool UseInstallDirForDownload
+		{
+			get => (bool)GetValue(Settings.UseInstallDirForZip);
+			set
+			{
+				SetValue(Settings.UseInstallDirForZip, value);
+			}
+		}
+
+		#endregion //PROPERTIES
 
 		public static readonly string dataPath = GetEnvironmentPath(Environment.SpecialFolder.ApplicationData) + "/Godot Hub";
 		private static readonly string configPath;
@@ -87,7 +119,7 @@ namespace Com.Astral.GodotHub.Settings
 				Directory.CreateDirectory(dataPath);
 			}
 
-			configPath = dataPath + "/config.ini";
+			configPath = dataPath + "/config.cfg";
 			config = new ConfigFile();
 			Error lError = config.Load(configPath);
 
@@ -112,35 +144,39 @@ namespace Com.Astral.GodotHub.Settings
 		public static void Save()
 		{
 			config.Save(configPath);
+			Debugger.PrintMessage("Config saved");
 		}
 
 		public static void ResetAll()
 		{
-			UseInstallDirForDownload = true;
+			AutoCloseDownload = true;
+			AutoCreateShortcut = true;
 			AutoDeleteDownload = true;
+			AutoRefreshRepos = true;
 
 #if DEBUG
 			Debug = true;
-			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
 			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
+			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
 #else
 			Debug = false;
-			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
 			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
+			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
 #endif
 
 			ProjectDir = GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
+			UseInstallDirForDownload = true;
 			Reset?.Invoke();
 		}
 
-		public static Variant GetValue(string pName)
+		public static Variant GetValue(Settings pSetting)
 		{
-			return config.GetValue(SETTINGS, pName);
+			return config.GetValue(nameof(Settings), pSetting.ToString());
 		}
 
-		public static void SetValue(string pName, Variant pValue)
+		public static void SetValue(Settings pSetting, Variant pValue)
 		{
-			config.SetValue(SETTINGS, pName, pValue);
+			config.SetValue(nameof(Settings), pSetting.ToString(), pValue);
 		}
 
 		private static string GetEnvironmentPath(Environment.SpecialFolder pFolder)

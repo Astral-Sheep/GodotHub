@@ -15,6 +15,10 @@ run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.0", "C#", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+Colors="*res://scripts/Colors.cs"
+
 [display]
 
 window/size/viewport_width=1280

@@ -11,8 +11,10 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
+using Environment = System.Environment;
 using HttpClient = System.Net.Http.HttpClient;
 using Label = Godot.Label;
+using OS = Com.Astral.GodotHub.Data.OS;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
@@ -38,9 +40,19 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		[Export] protected ProgressBar loadingBar;
 		[Export] protected Button cancelButton;
 
-		protected CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+		protected Source source;
+		protected CancellationTokenSource installationSource = new CancellationTokenSource();
+		protected CancellationTokenSource animationSource;
+		protected bool autoThrowCancel = false;
+		protected bool downloading = false;
+		protected Vector2 statusPosition;
 
-		public async void Install(Source pSource)
+		public override void _Ready()
+		{
+			statusPosition = statusLabel.Position;
+		}
+
+		public void Init(Source pSource)
 		{
 			if (pSource.asset == null)
 			{
@@ -49,6 +61,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				return;
 			}
 
+			source = pSource;
 			AssetName = pSource.asset.Name;
 			versionLabel.Text = $"Godot {pSource.version.major}.{pSource.version.minor}";
 
@@ -69,45 +82,82 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				versionLabel.Text += $" {pSource.architecture}";
 			}
 
-			Result lResult = await InstallInternal(
-				pSource.asset,
-				pSource.mono,
-				cancellationTokenSource.Token
-			);
-			Completed?.Invoke(this, lResult);
-			//Close();
+			statusLabel.Text = "In Queue";
+			cancelButton.Pressed += OnCancelPressed;
 		}
 
-		protected async Task<Result> InstallInternal(ReleaseAsset pAsset, bool pMono, CancellationToken pToken)
+		public async void Install()
 		{
-			Vector2 lStatusPosition = statusLabel.Position;
+			if (source == null)
+				return;
+
+			Result lResult = await InstallInternal(installationSource.Token);
+
+			if (lResult == Result.Cancelled)
+			{
+				statusLabel.Text = "Cancelled";
+			}
+			else
+			{
+				cancelButton.Pressed -= OnCancelPressed;
+			}
+
+			Completed?.Invoke(this, lResult);
+
+			if (Config.AutoCloseDownload)
+			{
+				Close();
+			}
+		}
+
+		protected async Task<Result> InstallInternal(CancellationToken pToken)
+		{
+			downloading = true;
+			animationSource = new CancellationTokenSource();
 
 			#region DOWNLOAD
 
 			loadingBar.Ratio = 0f;
-			CancellationTokenSource lTokenSource = new CancellationTokenSource();
-			AnimateStatus("Downloading", lTokenSource.Token);
-			HttpClient lClient = new HttpClient();
-			HttpResponseMessage lResponse = await lClient.GetAsync(new Uri(pAsset.BrowserDownloadUrl));
-			lTokenSource.Cancel();
-			statusLabel.Position = lStatusPosition;
+			AnimateStatus("Downloading", animationSource.Token);
+			HttpResponseMessage lResponse = null;
 
-			if (pToken.IsCancellationRequested)
+			try
 			{
+				autoThrowCancel = true;
+				HttpClient lClient = new HttpClient();
+				lResponse = await lClient.GetAsync(new Uri(source.asset.BrowserDownloadUrl), installationSource.Token);
+				autoThrowCancel = false;
+			}
+			catch (OperationCanceledException)
+			{
+				CancelInstallation(false);
 				return Result.Cancelled;
 			}
+			catch (Exception lException)
+			{
+				Debugger.PrintException(lException);
+				CancelInstallation(true);
+				return Result.Failed;
+			}
 
+			CancelAnimation();
 			loadingBar.Ratio = 1f;
-			Thread.Sleep(50);
+			Thread.Sleep(100);
+
+			if (installationSource.Token.IsCancellationRequested)
+			{
+				CancelInstallation(true);
+				return Result.Cancelled;
+			}
 
 			#endregion //DOWNLOAD
 
 			#region INSTALL
 
 			loadingBar.Ratio = 0f;
-			lTokenSource = new CancellationTokenSource();
-			AnimateStatus("Installing", lTokenSource.Token);
-			string lZip = Config.DownloadDir + "/" + pAsset.Name;
+			animationSource = new CancellationTokenSource();
+			AnimateStatus("Installing", animationSource.Token);
+			string lZip = Config.DownloadDir + "/" + source.asset.Name;
 
 			#region WRITE_FILE
 
@@ -115,19 +165,29 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			{
 				FileStream lStream = new FileStream(lZip, System.IO.FileMode.Create);
 				loadingBar.Ratio = 0.2f;
-				await lResponse.Content.CopyToAsync(lStream);
+
+				autoThrowCancel = true;
+				await lResponse.Content.CopyToAsync(lStream, installationSource.Token);
+				autoThrowCancel = false;
+
 				lStream.Close();
 				loadingBar.Ratio = Config.AutoDeleteDownload ? 0.6f : 0.75f;
 
-				if (pToken.IsCancellationRequested)
+				if (installationSource.Token.IsCancellationRequested)
 				{
-					File.Delete(lZip);
+					CancelInstallation(true, lZip);
 					return Result.Cancelled;
 				}
+			}
+			catch (OperationCanceledException)
+			{
+				CancelInstallation(true, lZip);
+				return Result.Cancelled;
 			}
 			catch (Exception lException)
 			{
 				Debugger.PrintException(lException);
+				CancelInstallation(false, lException is UnauthorizedAccessException ? null : lZip);
 				return Result.Failed;
 			}
 
@@ -135,22 +195,35 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			#region UNZIP
 
+			string lDir = Config.InstallDir;
+			string lFile = source.asset.Name[0..^4];
+			Debugger.PrintMessage(lFile);
+
+			if (!source.mono && source.os != OS.MacOS)
+			{
+				if (source.os == OS.Windows)
+				{
+					lFile = lFile[0..^4];
+				}
+
+				lDir += "/" + lFile;
+			}
+
 			try
 			{
-				string lDir = pMono ? Config.InstallDir : Config.InstallDir + "/" + pAsset.Name[0..^4];
 				ZipFile.ExtractToDirectory(lZip, lDir);
 				loadingBar.Ratio = Config.AutoDeleteDownload ? 0.8f : 1f;
 
-				if (pToken.IsCancellationRequested)
+				if (installationSource.Token.IsCancellationRequested)
 				{
-					Directory.Delete(lDir);
-					File.Delete(lZip);
+					CancelInstallation(true, lZip, lDir);
 					return Result.Cancelled;
 				}
 			}
 			catch (Exception lException)
 			{
 				Debugger.PrintException(lException);
+				CancelInstallation(false, lZip, lException is UnauthorizedAccessException ? null : lDir);
 				return Result.Downloaded;
 			}
 
@@ -164,24 +237,115 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				catch (Exception lException)
 				{
 					Debugger.PrintException(lException);
+					CancelAnimation();
 					return Result.Installed;
 				}
 			}
 
 			#endregion //UNZIP
 
+			if (Config.AutoCreateShortcut)
+			{
+				string lShortcutPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/Godot {source.version.major}.{source.version.minor}";
+
+				if (source.version.patch != 0)
+				{
+					lShortcutPath += $".{source.version.patch}";
+				}
+
+				lShortcutPath += ".url";
+
+				StreamWriter lWriter = new StreamWriter(lShortcutPath, true);
+				string lAppPath = lDir;
+					
+				if (source.os == OS.MacOS)
+				{
+					lAppPath += "/Godot";
+
+					if (source.mono)
+					{
+						lAppPath += "_mono";
+					}
+
+					lAppPath += ".app/Contents/MacOS/Godot";
+				}
+				else
+				{
+					if (source.mono)
+					{
+						lAppPath += $"/{lFile}/{lFile}";
+
+						if (source.os == OS.Linux)
+						{
+							lAppPath = lAppPath[0..^7] + "." + lAppPath[^6..^0];
+						}
+					}
+
+					if (source.os == OS.Windows)
+					{
+						lAppPath += ".exe";
+					}
+				}
+					
+				lWriter.WriteLine("[InternetShortcut]");
+				lWriter.WriteLine($"URL=file:///{lAppPath}");
+				lWriter.WriteLine("IconIndex=0");
+				lWriter.WriteLine($"IconFile={lAppPath}");
+				lWriter.Close();
+			}
+
 			#endregion //INSTALL
 
-			lTokenSource.Cancel();
-			statusLabel.Position = lStatusPosition;
+			CancelAnimation();
 			statusLabel.Text = "Completed";
+			downloading = false;
 			return Result.Installed;
+		}
+
+		protected void CancelInstallation(bool pIsError, string pFile = null, string pDirectory = null)
+		{
+			CancelAnimation();
+
+			if (!pIsError)
+			{
+				statusLabel.Text = "Cancelled";
+			}
+
+			if (!string.IsNullOrEmpty(pFile))
+			{
+				try
+				{
+					File.Delete(pFile);
+				}
+				catch (Exception lException)
+				{
+					Debugger.PrintException(lException);
+				}
+			}
+
+			if (!string.IsNullOrEmpty(pDirectory))
+			{
+				try
+				{
+					Directory.Delete(pDirectory);
+				}
+				catch (Exception lException)
+				{
+					Debugger.PrintException(lException);
+				}
+			}
+		}
+
+		protected void CancelAnimation()
+		{
+			animationSource.Cancel();
+			statusLabel.Position = statusPosition;
 		}
 
 		protected async void AnimateStatus(string pPrefix, CancellationToken pToken)
 		{
 			List<string> lIcons = new List<string>() {
-				".", "..", "...",
+				"", ".", "..", "...",
 			};
 			int lIndex = 0;
 			float lInitPosition = statusLabel.Position.X;
@@ -196,16 +360,26 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 							statusLabel.Position.Y
 						);
 						lIndex = (lIndex + 1) % lIcons.Count;
-						Thread.Sleep(250);
+						Thread.Sleep(200);
 					}
 				},
 				pToken
 			);
 		}
 
-		protected void OnCancelButtonPressed()
+		protected void OnCancelPressed()
 		{
-			cancellationTokenSource.Cancel();
+			cancelButton.Pressed -= OnCancelPressed;
+
+			if (downloading)
+			{
+				installationSource.Cancel(autoThrowCancel);
+			}
+			else
+			{
+				statusLabel.Text = "Cancelled";
+				Completed?.Invoke(this, Result.Cancelled);
+			}
 		}
 
 		protected void Close()

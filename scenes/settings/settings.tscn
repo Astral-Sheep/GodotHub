@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=25 format=3 uid="uid://cmcj15j7iau6d"]
 
 [ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="1_jlf08"]
 [ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes/style_box_bg_btn.tres" id="2_luqpj"]
@@ -6,15 +6,18 @@
 [ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="4_gxq57"]
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="5_nxppr"]
 [ext_resource type="StyleBox" uid="uid://c61jjqjdali6w" path="res://resources/style_boxes/style_box_normal.tres" id="6_j3c4n"]
-[ext_resource type="Script" path="res://scripts/settings/buttons/DebugToggle.cs" id="6_nrp83"]
-[ext_resource type="Script" path="res://scripts/settings/buttons/ProjectDirButton.cs" id="7_anv72"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/directory/ProjectDirButton.cs" id="6_k8lve"]
 [ext_resource type="Texture2D" uid="uid://ck0fei3vii0gs" path="res://assets/sprites/themes/folder.png" id="7_xy6p1"]
 [ext_resource type="PackedScene" path="res://scenes/settings/folder_dialog.tscn" id="8_v2fuc"]
-[ext_resource type="Script" path="res://scripts/settings/buttons/SameDirToggle.cs" id="11_kt2rs"]
-[ext_resource type="Script" path="res://scripts/settings/buttons/DownloadDirButton.cs" id="12_8r0od"]
-[ext_resource type="Script" path="res://scripts/settings/buttons/AutoDeleteToggle.cs" id="12_xjd5n"]
-[ext_resource type="Script" path="res://scripts/settings/buttons/InstallDirButton.cs" id="13_3qjiy"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/toggles/SameDirToggle.cs" id="10_3qbg1"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/directory/InstallDirButton.cs" id="11_x4rcq"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/directory/DownloadDirButton.cs" id="12_plh22"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/toggles/AutoShortcutToggle.cs" id="13_78762"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/toggles/AutoDeleteToggle.cs" id="13_itbmk"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/toggles/DebugToggle.cs" id="14_jw0pr"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/toggles/AutoCloseDLToggle.cs" id="15_acma8"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/ResetButton.cs" id="15_l0m3a"]
+[ext_resource type="Script" path="res://scripts/settings/buttons/toggles/AutoUpdateToggle.cs" id="16_5cqv7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aow5g"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
@@ -41,12 +44,14 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 mouse_filter = 2
 script = ExtResource("1_jlf08")
 content = NodePath("Panel")
 closeButton = NodePath("Panel/CloseButton")
 backgroundButton = NodePath("Background")
-buttonsPath = Array[NodePath]([NodePath("Panel/Content/DebugEnabling"), NodePath("Panel/Content/ProjectDir"), NodePath("Panel/Content/InstallForDownload"), NodePath("Panel/Content/DownloadDelete"), NodePath("Panel/Content/InstallDir"), NodePath("Panel/Content/DownloadDir"), NodePath("Panel/Content/ResetButton")])
+buttonsPath = Array[NodePath]([NodePath("Panel/ScrollContainer/Content/ProjectDir"), NodePath("Panel/ScrollContainer/Content/UseInstallForDownload"), NodePath("Panel/ScrollContainer/Content/InstallDir"), NodePath("Panel/ScrollContainer/Content/DownloadDir"), NodePath("Panel/ScrollContainer/Content/AutoCreateShortcut"), NodePath("Panel/ScrollContainer/Content/DownloadDelete"), NodePath("Panel/ScrollContainer/Content/AutoCloseDownload"), NodePath("Panel/ScrollContainer/Content/AutoUpdate"), NodePath("Panel/ScrollContainer/Content/DebugEnabling"), NodePath("Panel/ScrollContainer/Content/ResetButton")])
 
 [node name="Background" type="Button" parent="."]
 z_index = 2
@@ -76,6 +81,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_aow5g")
+metadata/_edit_use_anchors_ = true
 
 [node name="CloseButton" type="Button" parent="Panel"]
 layout_mode = 1
@@ -94,7 +100,7 @@ theme_override_styles/pressed = SubResource("StyleBoxTexture_d1xt8")
 theme_override_styles/disabled = SubResource("StyleBoxTexture_qwlxu")
 theme_override_styles/focus = SubResource("StyleBoxTexture_rd7yc")
 
-[node name="Content" type="VBoxContainer" parent="Panel"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -105,40 +111,27 @@ offset_right = -25.0
 offset_bottom = -25.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme = ExtResource("5_nxppr")
 
-[node name="DebugEnabling" type="HBoxContainer" parent="Panel/Content" node_paths=PackedStringArray("button")]
+[node name="ProjectDir" type="VBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
 layout_mode = 2
-script = ExtResource("6_nrp83")
-button = NodePath("CheckButton")
-
-[node name="Label" type="Label" parent="Panel/Content/DebugEnabling"]
-layout_mode = 2
-text = "Enable Debugging"
-
-[node name="CheckButton" type="CheckButton" parent="Panel/Content/DebugEnabling"]
-layout_mode = 2
-size_flags_horizontal = 10
-focus_mode = 0
-
-[node name="Space" type="Control" parent="Panel/Content"]
-custom_minimum_size = Vector2(0, 20)
-layout_mode = 2
-
-[node name="ProjectDir" type="VBoxContainer" parent="Panel/Content" node_paths=PackedStringArray("button")]
-layout_mode = 2
-script = ExtResource("7_anv72")
+script = ExtResource("6_k8lve")
 folderDialogScene = ExtResource("8_v2fuc")
 button = NodePath("Path")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/Content/ProjectDir"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/ScrollContainer/Content/ProjectDir"]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "[b]Project Default Directory:[/b]"
 fit_content = true
 
-[node name="Path" type="Button" parent="Panel/Content/ProjectDir"]
+[node name="Path" type="Button" parent="Panel/ScrollContainer/Content/ProjectDir"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/normal = ExtResource("6_j3c4n")
@@ -148,55 +141,40 @@ alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
 
-[node name="Space2" type="Control" parent="Panel/Content"]
+[node name="Space" type="Control" parent="Panel/ScrollContainer/Content"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="InstallForDownload" type="HBoxContainer" parent="Panel/Content" node_paths=PackedStringArray("downloadDirButton", "button")]
+[node name="UseInstallForDownload" type="HBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("downloadDirButton", "button")]
 layout_mode = 2
-script = ExtResource("11_kt2rs")
+script = ExtResource("10_3qbg1")
 downloadDirButton = NodePath("../DownloadDir")
 button = NodePath("CheckButton")
 
-[node name="Label" type="Label" parent="Panel/Content/InstallForDownload"]
+[node name="Label" type="Label" parent="Panel/ScrollContainer/Content/UseInstallForDownload"]
 layout_mode = 2
-text = "Use install directory for downloads"
+text = "Use install directory for .zip"
 
-[node name="CheckButton" type="CheckButton" parent="Panel/Content/InstallForDownload"]
+[node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/UseInstallForDownload"]
 layout_mode = 2
 size_flags_horizontal = 10
 focus_mode = 0
 
-[node name="DownloadDelete" type="HBoxContainer" parent="Panel/Content" node_paths=PackedStringArray("downloadDirButton", "button")]
+[node name="InstallDir" type="VBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("downloadDirButton", "button")]
 layout_mode = 2
-script = ExtResource("12_xjd5n")
-downloadDirButton = NodePath("../DownloadDir")
-button = NodePath("CheckButton")
-
-[node name="Label" type="Label" parent="Panel/Content/DownloadDelete"]
-layout_mode = 2
-text = "Delete download after install"
-
-[node name="CheckButton" type="CheckButton" parent="Panel/Content/DownloadDelete"]
-layout_mode = 2
-size_flags_horizontal = 10
-focus_mode = 0
-
-[node name="InstallDir" type="VBoxContainer" parent="Panel/Content" node_paths=PackedStringArray("downloadDirButton", "button")]
-layout_mode = 2
-script = ExtResource("13_3qjiy")
+script = ExtResource("11_x4rcq")
 downloadDirButton = NodePath("../DownloadDir")
 folderDialogScene = ExtResource("8_v2fuc")
 button = NodePath("Path")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/Content/InstallDir"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/ScrollContainer/Content/InstallDir"]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "[b]Install Directory:[/b]"
 fit_content = true
 
-[node name="Path" type="Button" parent="Panel/Content/InstallDir"]
+[node name="Path" type="Button" parent="Panel/ScrollContainer/Content/InstallDir"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/normal = ExtResource("6_j3c4n")
@@ -206,20 +184,20 @@ alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
 
-[node name="DownloadDir" type="VBoxContainer" parent="Panel/Content" node_paths=PackedStringArray("button")]
+[node name="DownloadDir" type="VBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
 layout_mode = 2
-script = ExtResource("12_8r0od")
+script = ExtResource("12_plh22")
 folderDialogScene = ExtResource("8_v2fuc")
 button = NodePath("Path")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/Content/DownloadDir"]
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/ScrollContainer/Content/DownloadDir"]
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
 text = "[b]Download Directory:[/b]"
 fit_content = true
 
-[node name="Path" type="Button" parent="Panel/Content/DownloadDir"]
+[node name="Path" type="Button" parent="Panel/ScrollContainer/Content/DownloadDir"]
 layout_mode = 2
 focus_mode = 0
 theme_override_styles/normal = ExtResource("6_j3c4n")
@@ -229,11 +207,89 @@ alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
 
-[node name="Space3" type="Control" parent="Panel/Content"]
+[node name="Space2" type="Control" parent="Panel/ScrollContainer/Content"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="ResetButton" type="Button" parent="Panel/Content"]
+[node name="AutoCreateShortcut" type="HBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
+layout_mode = 2
+script = ExtResource("13_78762")
+button = NodePath("CheckButton")
+
+[node name="Label" type="Label" parent="Panel/ScrollContainer/Content/AutoCreateShortcut"]
+layout_mode = 2
+text = "Auto create shortcut"
+
+[node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/AutoCreateShortcut"]
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+
+[node name="DownloadDelete" type="HBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
+layout_mode = 2
+script = ExtResource("13_itbmk")
+button = NodePath("CheckButton")
+
+[node name="Label" type="Label" parent="Panel/ScrollContainer/Content/DownloadDelete"]
+layout_mode = 2
+text = "Delete zip after completion"
+
+[node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/DownloadDelete"]
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+
+[node name="AutoCloseDownload" type="HBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
+layout_mode = 2
+script = ExtResource("15_acma8")
+button = NodePath("CheckButton")
+
+[node name="Label" type="Label" parent="Panel/ScrollContainer/Content/AutoCloseDownload"]
+layout_mode = 2
+text = "Close download after completion"
+
+[node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/AutoCloseDownload"]
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+
+[node name="Space3" type="Control" parent="Panel/ScrollContainer/Content"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="AutoUpdate" type="HBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
+layout_mode = 2
+script = ExtResource("16_5cqv7")
+button = NodePath("CheckButton")
+
+[node name="Label" type="Label" parent="Panel/ScrollContainer/Content/AutoUpdate"]
+layout_mode = 2
+text = "Auto update repository on open"
+
+[node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/AutoUpdate"]
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+
+[node name="DebugEnabling" type="HBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
+layout_mode = 2
+script = ExtResource("14_jw0pr")
+button = NodePath("CheckButton")
+
+[node name="Label" type="Label" parent="Panel/ScrollContainer/Content/DebugEnabling"]
+layout_mode = 2
+text = "Enable Debugging"
+
+[node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/DebugEnabling"]
+layout_mode = 2
+size_flags_horizontal = 10
+focus_mode = 0
+
+[node name="Space4" type="Control" parent="Panel/ScrollContainer/Content"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="ResetButton" type="Button" parent="Panel/ScrollContainer/Content"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 8

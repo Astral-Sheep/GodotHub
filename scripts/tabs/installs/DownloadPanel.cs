@@ -1,5 +1,7 @@
 using Com.Astral.GodotHub.Data;
 using Godot;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
@@ -15,6 +17,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		[Export] protected Button openButton;
 		[Export] protected Button closeButton;
 
+		protected List<Installer> installers = new List<Installer>();
 		protected Tween tween;
 
 		public override void _Ready()
@@ -26,6 +29,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			CreateCustomTween(Tween.EaseType.Out);
 			ReleaseItem.InstallClicked += Install;
 			openButton.Pressed += Open;
+			Visible = true;
 		}
 
 		protected override void Dispose(bool pDisposing)
@@ -36,12 +40,31 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 		}
 
-		public void Install(ReleaseItem pItem, Source pAsset)
+		public void Install(ReleaseItem pItem, Source pSource)
 		{
 			Installer lInstaller = installerScene.Instantiate<Installer>();
 			installerContainer.AddChild(lInstaller);
+			installers.Add(lInstaller);
 			pItem.Connect(lInstaller);
-			lInstaller.Install(pAsset);
+			lInstaller.Init(pSource);
+			lInstaller.Completed += OnInstallerCompleted;
+
+			if (installers.Count < 2)
+			{
+				lInstaller.Install();
+			}
+		}
+
+		protected void OnInstallerCompleted(Installer pInstaller, Installer.Result _)
+		{
+			pInstaller.Completed -= OnInstallerCompleted;
+			installers.Remove(pInstaller);
+
+			if (installers.Count > 0)
+			{
+				Installer lInstaller = installers[0];
+				lInstaller.Install();
+			}
 		}
 
 		protected void Open()

@@ -144,8 +144,16 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			if (GetAssetName(true) == pInstaller.AssetName)
 			{
-				installButton.Disabled = true;
-				installButton.Text = "Installed";
+				if (pResult == Installer.Result.Installed)
+				{
+					installButton.Disabled = true;
+					installButton.Text = "Installed";
+				}
+				else
+				{
+					installButton.Disabled = false;
+					installButton.Text = "Install";
+				}
 			}
 		}
 
@@ -189,12 +197,14 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected Source GetSource(ReleaseAsset pAsset)
 		{
+			OS lOS = Source.GetOS(pAsset);
+
 			return new Source(
 				pAsset,
 				Version,
 				Source.IsMono(pAsset),
-				Source.GetOS(pAsset),
-				Source.GetArchitecture(pAsset)
+				lOS,
+				lOS == OS.MacOS ? null : Source.GetArchitecture(pAsset)
 			);
 		}
 

@@ -29,9 +29,11 @@ namespace Com.Astral.GodotHub.Data
 			try
 			{
 				LoadReleases();
-				int lCount = releases == null ? 0 : releases.Count;
-				await UpdateRepository();
-				Debugger.PrintMessage($"{releases.Count - lCount} new releases found");
+
+				if (Config.AutoRefreshRepos || releases == null)
+				{
+					await UpdateRepository();
+				}
 			}
 			catch (Exception lException)
 			{
@@ -48,13 +50,16 @@ namespace Com.Astral.GodotHub.Data
 			if (releases == null)
 			{
 				releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
+				Debugger.PrintMessage($"{releases.Count} new releases found");
 				return;
 			}
 
 			if (releases[0] == await client.Repository.Release.GetLatest(USER, REPO))
 				return;
 
+			int lCount = releases.Count;
 			releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
+			Debugger.PrintMessage($"{releases.Count - lCount} new releases found");
 			SaveReleases();
 		}
 

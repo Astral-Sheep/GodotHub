@@ -22,11 +22,6 @@ namespace Com.Astral.GodotHub.Debug
 
 		[ExportGroup("Parameters")]
 		[Export] private RichTextLabel label;
-		[ExportSubgroup("Colors")]
-		[Export] private Color normalColor = new Color(184f / 255f, 184f / 255f, 184f / 255f);
-		[Export] private Color validationColor = new Color(118f / 255f, 150f / 255f, 86f / 255f);
-		[Export] private Color warningColor = new Color(231f / 255f, 180f / 255f, 79f / 255f);
-		[Export] private Color errorColor = new Color(212f / 255f, 80f / 255f, 79f / 255f);
 
 		private Debugger() : base()
 		{
@@ -60,22 +55,22 @@ namespace Com.Astral.GodotHub.Debug
 
 		public static void PrintMessage(string pMessage)
 		{
-			instance.label.Text += FormatMessage(pMessage, instance.normalColor);
+			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.White);
 		}
 
 		public static void PrintValidation(string pMessage)
 		{
-			instance.label.Text += FormatMessage(pMessage, instance.validationColor);
+			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.Green);
 		}
 
 		public static void PrintWarning(string pMessage)
 		{
-			instance.label.Text += FormatMessage(pMessage, instance.warningColor);
+			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.Yellow);
 		}
 
 		public static void PrintError(string pMessage)
 		{
-			instance.label.Text += FormatMessage($"[b]{pMessage}[/b]", instance.errorColor);
+			instance.label.Text += FormatMessage($"[b]{pMessage}[/b]", Colors.Singleton.Red);
 		}
 
 		public static void PrintException(Exception pException)
@@ -85,7 +80,7 @@ namespace Com.Astral.GodotHub.Debug
 
 		private static string FormatMessage(string pMessage, Color pColor)
 		{
-			return $"[color=#{pColor.R8:x2}{pColor.G8:x2}{pColor.B8:x2}]{pMessage}[/color]\n";
+			return $"[color=#{Colors.ToHexa(pColor)}]{pMessage}[/color]\n";
 		}
 	}
 }
