@@ -1,12 +1,17 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Settings;
 using Godot;
 using System;
 
 namespace Com.Astral.GodotHub.Debug
 {
+	/// <summary>
+	/// In-app console
+	/// </summary>
 	public sealed partial class Debugger : Control
 	{
+		/// <summary>
+		/// Whether or not the console is visible
+		/// </summary>
 		public static bool Enabled
 		{
 			get => instance.Visible;
@@ -54,31 +59,49 @@ namespace Com.Astral.GodotHub.Debug
 			}
 		}
 
+		/// <summary>
+		/// Print an <see cref="object"/> in <see cref="Colors.White"/>
+		/// </summary>
 		public static void PrintObject(object pObject)
 		{
 			PrintMessage(pObject.ToString());
 		}
 
+		/// <summary>
+		/// Print a message in <see cref="Colors.White"/>
+		/// </summary>
 		public static void PrintMessage(string pMessage)
 		{
 			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.White);
 		}
 
+		/// <summary>
+		/// Print a message in <see cref="Colors.Green"/>
+		/// </summary>
 		public static void PrintValidation(string pMessage)
 		{
 			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.Green);
 		}
 
+		/// <summary>
+		/// Print a message in <see cref="Colors.Yellow"/>
+		/// </summary>
 		public static void PrintWarning(string pMessage)
 		{
 			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.Yellow);
 		}
 
+		/// <summary>
+		/// Print a message in bold <see cref="Colors.Red"/>
+		/// </summary>
 		public static void PrintError(string pMessage)
 		{
 			instance.label.Text += FormatMessage($"[b]{pMessage}[/b]", Colors.Singleton.Red);
 		}
 
+		/// <summary>
+		/// Print an <see cref="Exception"/> in bold <see cref="Colors.Red"/>
+		/// </summary>
 		public static void PrintException(Exception pException)
 		{
 			PrintError($"{pException.GetType()}: {pException.Message}");

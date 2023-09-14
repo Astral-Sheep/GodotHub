@@ -2,7 +2,7 @@ using Godot;
 
 namespace Com.Astral.GodotHub.Tabs
 {
-	public partial class Tab : Control
+	public abstract partial class Tab : Control
 	{
 		public virtual void Toggle(bool pToggled)
 		{
@@ -21,7 +21,7 @@ namespace Com.Astral.GodotHub.Tabs
 			}
 		}
 
-		protected virtual void Connect() { }
-		protected virtual void Disconnect() { }
+		protected abstract void Connect();
+		protected abstract void Disconnect();
 	}
 }

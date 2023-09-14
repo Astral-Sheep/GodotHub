@@ -13,13 +13,13 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		public override void _Ready()
 		{
-			GodotRepo.RepoRetrieved += OnRepoRetrieved;
+			GDRepository.Loaded += OnRepoRetrieved;
 		}
 
 		protected void OnRepoRetrieved()
 		{
-			GodotRepo.RepoRetrieved -= OnRepoRetrieved;
-			List<Release> lReleases = GodotRepo.GetReleases();
+			GDRepository.Loaded -= OnRepoRetrieved;
+			List<Release> lReleases = GDRepository.Releases;
 
 			for (int i = 0; i < lReleases.Count; i++)
 			{

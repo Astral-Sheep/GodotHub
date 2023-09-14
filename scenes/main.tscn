@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
 [ext_resource type="Script" path="res://scripts/tabs/projects/ProjectsTabs.cs" id="3_047ry"]
-[ext_resource type="Script" path="res://scripts/tabs/Tab.cs" id="3_c4g4o"]
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="3_gh8ej"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="PackedScene" uid="uid://bqbsr5iermvuw" path="res://scenes/projects/project_item.tscn" id="4_ftw23"]
@@ -21,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="14_5457w"]
 [ext_resource type="PackedScene" uid="uid://bn4kcqddex1d2" path="res://scenes/debug/debugger.tscn" id="14_cqlha"]
 [ext_resource type="Texture2D" uid="uid://cqahek5snvkfx" path="res://assets/sprites/themes/cross.png" id="14_kulin"]
+[ext_resource type="Script" path="res://scripts/tabs/documentation/DocumentationTab.cs" id="14_tou5o"]
 [ext_resource type="Script" path="res://scripts/SplashScreen.cs" id="15_14etp"]
 [ext_resource type="Texture2D" uid="uid://bb3io508mycug" path="res://assets/sprites/themes/download_btn.png" id="17_agoap"]
 [ext_resource type="PackedScene" uid="uid://cmcj15j7iau6d" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
@@ -270,7 +270,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("3_c4g4o")
+script = ExtResource("14_tou5o")
 
 [node name="Label" type="Label" parent="UI/Control/Content/VBoxContainer/TabContainer/DocumentationTab"]
 layout_mode = 1

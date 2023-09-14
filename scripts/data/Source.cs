@@ -1,19 +1,36 @@
-﻿using Godot;
-using Octokit;
+﻿using Octokit;
 
 namespace Com.Astral.GodotHub.Data
 {
+	/// <summary>
+	/// Struct representing a <see cref="ReleaseAsset"/> with additional data
+	/// </summary>
 	public class Source
 	{
+		/// <summary>
+		/// The github release
+		/// </summary>
 		public ReleaseAsset asset;
-		public (int major, int minor, int patch) version;
+		/// <summary>
+		/// The <see cref="Version"/> of the release
+		/// </summary>
+		public Version version;
+		/// <summary>
+		/// Whether or not it has C# support
+		/// </summary>
 		public bool mono;
+		/// <summary>
+		/// The target <see cref="OS"/> of the release
+		/// </summary>
 		public OS os;
+		/// <summary>
+		/// The target <see cref="Architecture"/> of the release
+		/// </summary>
 		public Architecture? architecture;
 
 		public Source() { }
 
-		public Source(ReleaseAsset pAsset, (int major, int minor, int patch) pVersion, bool pMono, OS pOS, Architecture? pArchitecture = null)
+		public Source(ReleaseAsset pAsset, Version pVersion, bool pMono, OS pOS, Architecture? pArchitecture = null)
 		{
 			asset = pAsset;
 			version = pVersion;
@@ -22,21 +39,25 @@ namespace Com.Astral.GodotHub.Data
 			architecture = pArchitecture;
 		}
 
-		public static (int, int, int) GetVersion(Release pRelease)
+		/// <summary>
+		/// Return version of the given release
+		/// </summary>
+		public static Version GetVersion(Release pRelease)
 		{
-			string lVersion = pRelease.Name[0..pRelease.Name.Find("-")];
-			return (
-				int.Parse(lVersion[0].ToString()),
-				int.Parse(lVersion[2].ToString()),
-				lVersion.Length > 3 ? int.Parse(lVersion[4].ToString()) : 0
-			);
+			return (Version)pRelease.Name;
 		}
 
+		/// <summary>
+		/// Whether or not the given <see cref="Release"/> has C# support
+		/// </summary>
 		public static bool IsMono(ReleaseAsset pAsset)
 		{
 			return pAsset.Name.Contains("mono");
 		}
 
+		/// <summary>
+		/// Return the target <see cref="OS"/> of the given <see cref="ReleaseAsset"/>
+		/// </summary>
 		public static OS GetOS(ReleaseAsset pAsset)
 		{
 			if (pAsset.Name.Contains("win"))
@@ -53,6 +74,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// Return the target <see cref="Architecture"/> of the <see cref="ReleaseAsset"/>
+		/// </summary>
 		public static Architecture GetArchitecture(ReleaseAsset pAsset)
 		{
 			if (pAsset.Name.Contains("64"))

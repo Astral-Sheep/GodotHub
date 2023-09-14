@@ -19,6 +19,9 @@ namespace Com.Astral.GodotHub.Data
 			patch = pPatch;
 		}
 
+		/// <summary>
+		/// Whether or not both <see cref="major"/> and <see cref="minor"/> are the same
+		/// </summary>
 		public bool IsCompatible(Version pOther)
 		{
 			return major == pOther.major && minor == pOther.minor;

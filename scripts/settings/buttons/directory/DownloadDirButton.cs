@@ -26,7 +26,7 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 
 		protected override void Reset()
 		{
-			button.Text = " " + Config.DownloadDir;
+			button.Text = $" {Config.DownloadDir}";
 			Enabled = !Config.UseInstallDirForDownload;
 		}
 	}

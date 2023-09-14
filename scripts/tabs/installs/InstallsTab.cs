@@ -1,6 +1,6 @@
 using Godot;
+using System;
 using SortType = Com.Astral.GodotHub.Tabs.SortedPanel.SortType;
-
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
@@ -20,8 +20,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		public override void _Ready()
 		{
-			sortButton.AddItem(SortType.Version.ToString(), (int)SortType.Version);
-			sortButton.AddItem(SortType.Date.ToString(), (int)SortType.Date);
+			AddItem(sortButton, SortType.Version);
+			AddItem(sortButton, SortType.Date);
 			sortButton.GetPopup().TransparentBg = true;
 
 			installsPanel.Visible = true;
@@ -76,6 +76,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		protected void SortCurrent()
 		{
 			currentPanel.Sort((SortType)sortButton.Selected, orderButton.ButtonPressed);
+		}
+
+		protected void AddItem(OptionButton pButton, Enum pEnum)
+		{
+			pButton.AddItem(pEnum.ToString(), Convert.ToInt32(pEnum));
 		}
 	}
 }

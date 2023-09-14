@@ -21,7 +21,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		[Export] protected Button openButton;
 		[Export] protected Button uninstallButton;
 
-		public void Init(Project pInstall, int pIndex)
+		public void Init(GDFile pInstall, int pIndex)
 		{
 			Version = pInstall.Version;
 			Index = pIndex;

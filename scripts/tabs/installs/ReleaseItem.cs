@@ -8,6 +8,7 @@ using System.IO;
 
 using Label = Godot.Label;
 using OS = Com.Astral.GodotHub.Data.OS;
+using Version = Com.Astral.GodotHub.Data.Version;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
@@ -20,7 +21,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		public static event Action<ReleaseItem, Source> InstallClicked;
 
 		public int Index { get; protected set; }
-		public (int major, int minor, int patch) Version { get; protected set; }
+		public Version Version { get; protected set; }
 
 		[Export] protected Label versionLabel;
 		[Export] protected Label dateLabel;

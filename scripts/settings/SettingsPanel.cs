@@ -9,16 +9,22 @@ namespace Com.Astral.GodotHub.Settings
 	public partial class SettingsPanel : Control
 	{
 		[Export] protected Control content;
+
 		[ExportGroup("Buttons")]
 		[Export] protected Button openButton;
 		[Export] protected Button closeButton;
 		[Export] protected Button backgroundButton;
 		[ExportSubgroup("Settings buttons")]
 		[Export] protected Array<NodePath> buttonsPath;
+
 		protected List<ISettingButton> buttons;
 
 		public override void _Ready()
 		{
+#if DEBUG
+			Visible = true;
+#endif //DEBUG
+
 			buttons = new List<ISettingButton>();
 
 			for (int i = 0; i < buttonsPath.Count; i++)
@@ -26,10 +32,8 @@ namespace Com.Astral.GodotHub.Settings
 				buttons.Add(GetNode<ISettingButton>(buttonsPath[i]));
 			}
 
-			Resized += OnResized;
 			CloseInstant();
 			openButton.Pressed += OpenPressed;
-			Visible = true;
 		}
 
 		protected override void Dispose(bool pDisposing)
@@ -40,6 +44,22 @@ namespace Com.Astral.GodotHub.Settings
 			if (openButton != null)
 			{
 				openButton.Pressed -= OpenPressed;
+			}
+		}
+
+		protected void EnableButtons()
+		{
+			for (int i = 0; i < buttons.Count; i++)
+			{
+				buttons[i].Connect();
+			}
+		}
+
+		protected void DisableButtons()
+		{
+			for (int i = 0; i < buttons.Count; i++)
+			{
+				buttons[i].Disconnect();
 			}
 		}
 
@@ -82,30 +102,6 @@ namespace Com.Astral.GodotHub.Settings
 			content.Position = new Vector2(content.Position.X, -content.Size.Y);
 			backgroundButton.SelfModulate = new Color(backgroundButton.SelfModulate, 0f);
 			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
-		}
-
-		protected void OnResized()
-		{
-			content.Position = new Vector2(
-				content.Position.X,
-				content.Position.Y == 0 ? content.Position.Y : -content.Size.Y
-			);
-		}
-
-		protected void EnableButtons()
-		{
-			for (int i = 0; i < buttons.Count; i++)
-			{
-				buttons[i].Connect();
-			}
-		}
-
-		protected void DisableButtons()
-		{
-			for (int i = 0; i < buttons.Count; i++)
-			{
-				buttons[i].Disconnect();
-			}
 		}
 	}
 }

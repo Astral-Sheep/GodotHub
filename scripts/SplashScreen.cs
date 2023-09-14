@@ -8,6 +8,10 @@ namespace Com.Astral.GodotHub
 
 		public override void _Ready()
 		{
+#if DEBUG
+			Visible = true;
+#endif //DEBUG
+
 			Main.Instance.Initialized += FadeOut;
 		}
 

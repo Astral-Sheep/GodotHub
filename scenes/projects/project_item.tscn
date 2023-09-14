@@ -65,16 +65,16 @@ text = "E:/Path/69/ProjectName"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
-[node name="LastOpened" type="Label" parent="."]
+[node name="LastOpened" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.375
-anchor_top = 0.2
+anchor_top = 0.3
 anchor_right = 0.55
-anchor_bottom = 0.8
+anchor_bottom = 0.7
+bbcode_enabled = true
 text = "69 months ago"
-vertical_alignment = 1
-text_overrun_behavior = 3
+scroll_active = false
 
 [node name="VersionButton" type="OptionButton" parent="."]
 layout_mode = 1

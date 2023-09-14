@@ -12,7 +12,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		public override void _Ready()
 		{
-			List<Project> lVersions = InstallsData.GetAllVersions();
+			List<GDFile> lVersions = InstallsData.GetAllVersions();
 
 			for (int i = 0; i < lVersions.Count; i++)
 			{
@@ -20,7 +20,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 		}
 
-		protected InstallItem CreateItem(Project pInstall, int pIndex)
+		protected InstallItem CreateItem(GDFile pInstall, int pIndex)
 		{
 			InstallItem lItem = installItemScene.Instantiate<InstallItem>();
 			itemContainer.AddChild(lItem);

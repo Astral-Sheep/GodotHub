@@ -28,6 +28,9 @@ namespace Com.Astral.GodotHub
 			Singleton = null;
 		}
 
+		/// <summary>
+		/// Return a string of the color converted to hexadecimal
+		/// </summary>
 		public static string ToHexa(Color pColor)
 		{
 			return $"{pColor.R8:x2}{pColor.G8:x2}{pColor.B8:x2}";

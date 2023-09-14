@@ -1,6 +1,5 @@
 using Com.Astral.GodotHub.Data;
 using Godot;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
@@ -10,9 +9,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		[Export] protected float openDuration = 0.2f;
 		[Export] protected Control panel;
 		[Export] protected Button background;
+
 		[ExportGroup("Installation")]
 		[Export] protected PackedScene installerScene;
 		[Export] protected Control installerContainer;
+
 		[ExportGroup("Buttons")]
 		[Export] protected Button openButton;
 		[Export] protected Button closeButton;

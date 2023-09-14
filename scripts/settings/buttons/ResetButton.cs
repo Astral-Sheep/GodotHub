@@ -7,17 +7,12 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 	{
 		public void Connect()
 		{
-			Pressed += OnPressed;
+			Pressed += Config.ResetAll;
 		}
 
 		public void Disconnect()
 		{
-			Pressed -= OnPressed;
-		}
-
-		protected void OnPressed()
-		{
-			Config.ResetAll();
+			Pressed -= Config.ResetAll;
 		}
 	}
 }

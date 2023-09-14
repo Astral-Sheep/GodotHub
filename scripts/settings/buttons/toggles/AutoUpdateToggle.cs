@@ -6,12 +6,12 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
 	{
 		protected override void OnToggled(bool pToggled)
 		{
-			Config.AutoRefreshRepos = pToggled;
+			Config.AutoUpdateRepository = pToggled;
 		}
 
 		protected override void Reset()
 		{
-			button.ButtonPressed = Config.AutoRefreshRepos;
+			button.ButtonPressed = Config.AutoUpdateRepository;
 		}
 	}
 }

@@ -33,6 +33,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		public string AssetName { get; protected set; }
 
 		[Export] protected float closeDuration = 0.25f;
+
+		[ExportGroup("Data")]
 		[Export] protected Label versionLabel;
 		[Export] protected Label statusLabel;
 		[Export] protected ProgressBar loadingBar;
@@ -61,12 +63,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			source = pSource;
 			AssetName = pSource.asset.Name;
-			versionLabel.Text = $"Godot {pSource.version.major}.{pSource.version.minor}";
-
-			if (pSource.version.patch != 0)
-			{
-				versionLabel.Text += $".{pSource.version.patch}";
-			}
+			versionLabel.Text = $"Godot {pSource.version}";
 
 			if (pSource.mono)
 			{
@@ -169,7 +166,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				autoThrowCancel = false;
 
 				lStream.Close();
-				loadingBar.Ratio = Config.AutoDeleteDownload ? 0.6f : 0.75f;
+				loadingBar.Ratio = Config.AutoDeleteZip ? 0.6f : 0.75f;
 
 				if (installationSource.Token.IsCancellationRequested)
 				{
@@ -210,7 +207,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			try
 			{
 				ZipFile.ExtractToDirectory(lZip, lDir);
-				loadingBar.Ratio = Config.AutoDeleteDownload ? 0.8f : 1f;
+				loadingBar.Ratio = Config.AutoDeleteZip ? 0.8f : 1f;
 
 				if (installationSource.Token.IsCancellationRequested)
 				{
@@ -225,7 +222,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				return Result.Downloaded;
 			}
 
-			if (Config.AutoDeleteDownload)
+			if (Config.AutoDeleteZip)
 			{
 				try
 				{
@@ -386,6 +383,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 		}
 
+		protected void OnClosed()
+		{
+			QueueFree();
+		}
+
 		protected void Close()
 		{
 			CreateTween()
@@ -394,11 +396,6 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				.TweenProperty(this, "custom_minimum_size:y", 0f, closeDuration)
 				.SetDelay(0.75f)
 				.Finished += OnClosed;
-		}
-
-		protected void OnClosed()
-		{
-			QueueFree();
 		}
 	}
 }

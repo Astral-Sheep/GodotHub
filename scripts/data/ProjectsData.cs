@@ -35,29 +35,43 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
-		public static void AddProject(string pProject, bool pFavorite, Version pVersion)
+		/// <summary>
+		/// Add project to the project.cfg file
+		/// </summary>
+		public static void AddProject(GDFile pProject)
 		{
-			file.SetValue(pProject, VERSION, (string)pVersion);
-			file.SetValue(pProject, FAVORITE, pFavorite);
+			file.SetValue(pProject.Path, VERSION, (string)pProject.Version);
+			file.SetValue(pProject.Path, FAVORITE, pProject.IsFavorite);
 			Save();
 		}
 
+		/// <summary>
+		/// Whether or not the given project is marked as favorite by the user
+		/// </summary>
+		/// <param name="pProject"></param>
+		/// <returns></returns>
 		public static bool IsFavorite(string pProject)
 		{
 			return (bool)file.GetValue(pProject, FAVORITE);
 		}
 
+		/// <summary>
+		/// Return the <see cref="Version"/> of the given project 
+		/// </summary>
 		public static Version GetVersion(string pProject)
 		{
 			return (Version)(string)file.GetValue(pProject, VERSION);
 		}
 
+		/// <summary>
+		/// Mark given project as favorite (or not depending on the value of <paramref name="pFavorite"/>)
+		/// </summary>
 		public static void SetFavorite(string pProject, bool pFavorite)
 		{
 			file.SetValue(pProject, FAVORITE, pFavorite);
 		}
 
-		public static string GetVersionFromFolder(string pPath)
+		private static string GetVersionFromFolder(string pPath)
 		{
 			//Godot 4.0 and above
 			if (Directory.Exists($"{pPath}/.godot"))
@@ -76,13 +90,16 @@ namespace Com.Astral.GodotHub.Data
 			return "";
 		}
 
-		public static List<Project> GetProjects()
+		/// <summary>
+		/// Return all saved projects
+		/// </summary>
+		public static List<GDFile> GetProjects()
 		{
-			List<Project> lProjects = new List<Project>();
+			List<GDFile> lProjects = new List<GDFile>();
 
 			foreach (string project in file.GetSections())
 			{
-				lProjects.Add(new Project(
+				lProjects.Add(new GDFile(
 					project,
 					(bool)file.GetValue(project, FAVORITE),
 					(Version)(string)file.GetValue(project, VERSION)
@@ -92,6 +109,9 @@ namespace Com.Astral.GodotHub.Data
 			return lProjects;
 		}
 
+		/// <summary>
+		/// Save the projects.cfg file
+		/// </summary>
 		public static void Save()
 		{
 			file.Save(filePath);

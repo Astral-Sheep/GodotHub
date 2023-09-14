@@ -1,8 +1,6 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
 using Godot;
 using System;
-using System.Text.RegularExpressions;
 
 namespace Com.Astral.GodotHub
 {
@@ -26,6 +24,7 @@ namespace Com.Astral.GodotHub
 
 		public override void _Ready()
 		{
+			//Hardcoded values because they're completely arbitrary
 			DisplayServer.WindowSetMinSize(new Vector2I(1100, 600));
 			Init();
 		}
@@ -40,7 +39,7 @@ namespace Com.Astral.GodotHub
 
 		protected async void Init()
 		{
-			await GodotRepo.Init();
+			await GDRepository.Init();
 			Initialized?.Invoke();
 		}
 	}

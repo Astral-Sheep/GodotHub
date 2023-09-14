@@ -12,7 +12,7 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 
 		protected override void Reset()
 		{
-			button.Text = " " + Config.ProjectDir;
+			button.Text = $" {Config.ProjectDir}";
 		}
 	}
 }

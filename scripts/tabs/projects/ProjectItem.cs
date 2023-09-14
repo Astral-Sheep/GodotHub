@@ -12,19 +12,22 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 {
 	public partial class ProjectItem : Control
 	{
+		protected const string APPLICATION_SECTION = "application";
+		protected const string NAME_KEY = "config/name";
+
 		[Export] protected Button favoriteToggle;
 		[Export] protected RichTextLabel nameLabel;
 		[Export] protected Label pathLabel;
-		[Export] protected Label lastOpenedLabel;
+		[Export] protected RichTextLabel lastOpenedLabel;
 		[Export] protected OptionButton versionButton;
 		[Export] protected Button openButton;
 		[Export] protected Button removeButton;
 
-		protected Project project;
+		protected GDFile project;
 		protected string projectPath = "";
 		protected string enginePath = "";
 
-		public void Init(Project pProject)
+		public void Init(GDFile pProject)
 		{
 			project = pProject;
 			versionButton.GetPopup().TransparentBg = true;
@@ -36,7 +39,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			if (lError == Error.Ok)
 			{
-				nameLabel.Text = $"[b]{lProject.GetValue("application", "config/name")}[/b]";
+				nameLabel.Text = $"[b]{lProject.GetValue(APPLICATION_SECTION, NAME_KEY)}[/b]";
 				lastOpenedLabel.Text = GetElapsedTime(
 					new FileInfo(projectPath).LastAccessTimeUtc
 				);
@@ -44,12 +47,11 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				if (SetVersion(pProject.Version))
 				{
 					openButton.Pressed += OnOpenPressed;
-					
 				}
 				else
 				{
 					Disable(false);
-					Debugger.PrintError($"Can't find version of project {lProject.GetValue("application", "config/name")}");
+					Debugger.PrintError($"Can't find compatible engine for project {lProject.GetValue(APPLICATION_SECTION, NAME_KEY)}");
 				}
 			}
 			else
@@ -58,20 +60,10 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 		}
 
-		protected void Disable(bool pMissing)
+		protected string GetElapsedTime(DateTime pTime)
 		{
-			if (pMissing)
-			{
-				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}][b]Missing project[/b][/color]";
-				lastOpenedLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]N/A[/color]";
-			}
-			else
-			{
-				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]{nameLabel.Text}[/color]";
-			}
-
-			versionButton.Disabled = true;
-			openButton.Disabled = true;
+			//DateTime lCurrentTime = DateTime.UtcNow;
+			return $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]N/A[/color]";
 		}
 
 		protected bool SetVersion(Version pVersion)
@@ -98,6 +90,22 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			return true;
 		}
 
+		protected void Disable(bool pMissing)
+		{
+			if (pMissing)
+			{
+				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}][b]Missing project[/b][/color]";
+				lastOpenedLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]N/A[/color]";
+			}
+			else
+			{
+				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]{nameLabel.Text}[/color]";
+			}
+
+			versionButton.Disabled = true;
+			openButton.Disabled = true;
+		}
+
 		protected void OnOpenPressed()
 		{
 			if (!File.Exists(projectPath))
@@ -120,12 +128,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected void OnRemovePressed()
 		{
 
-		}
-
-		protected string GetElapsedTime(DateTime pTime)
-		{
-			DateTime lCurrentTime = DateTime.UtcNow;
-			return "";
 		}
 	}
 }

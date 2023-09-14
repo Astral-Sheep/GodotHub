@@ -11,7 +11,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		public override void _Ready()
 		{
-			List<Project> lProjects = ProjectsData.GetProjects();
+			List<GDFile> lProjects = ProjectsData.GetProjects();
 
 			for (int i = 0; i < lProjects.Count; i++)
 			{
@@ -19,11 +19,15 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 		}
 
-		protected void CreateItem(Project pProject)
+		protected void CreateItem(GDFile pProject)
 		{
 			ProjectItem lItem = projectItemScene.Instantiate<ProjectItem>();
 			itemContainer.AddChild(lItem);
 			lItem.Init(pProject);
 		}
+
+		protected override void Connect() { }
+
+		protected override void Disconnect() { }
 	}
 }

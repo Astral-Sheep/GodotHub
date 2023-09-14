@@ -6,14 +6,17 @@ using Environment = System.Environment;
 
 namespace Com.Astral.GodotHub.Data
 {
+	/// <summary>
+	/// Static class used to get and set application parameters
+	/// </summary>
 	public static class Config
 	{
-		public enum Settings
+		private enum Settings
 		{
 			AutoCloseDownload,
 			AutoCreateShortcut,
 			AutoDeleteZip,
-			AutoRefreshRepos,
+			AutoUpdateRepository,
 			Debug,
 			DownloadDir,
 			InstallDir,
@@ -21,10 +24,16 @@ namespace Com.Astral.GodotHub.Data
 			UseInstallDirForZip,
 		}
 
+		/// <summary>
+		/// Event called when all settings are set to default values
+		/// </summary>
 		public static event Action Reset;
 
 		#region PROPERTIES
 
+		/// <summary>
+		/// Whether or not to close the download popup when completed or cancelled
+		/// </summary>
 		public static bool AutoCloseDownload
 		{
 			get => (bool)GetValue(Settings.AutoCloseDownload);
@@ -34,6 +43,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// Whether or not to create a shortcut on desktop after installing a version of Godot
+		/// </summary>
 		public static bool AutoCreateShortcut
 		{
 			get => (bool)GetValue(Settings.AutoCreateShortcut);
@@ -43,7 +55,10 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
-		public static bool AutoDeleteDownload
+		/// <summary>
+		/// Whether or not to delete the .zip file once it's extracted
+		/// </summary>
+		public static bool AutoDeleteZip
 		{
 			get => (bool)GetValue(Settings.AutoDeleteZip);
 			set
@@ -52,15 +67,21 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
-		public static bool AutoRefreshRepos
+		/// <summary>
+		/// Whether or not to retrieve new releases when launching the application
+		/// </summary>
+		public static bool AutoUpdateRepository
 		{
-			get => (bool)GetValue(Settings.AutoRefreshRepos);
+			get => (bool)GetValue(Settings.AutoUpdateRepository);
 			set
 			{
-				SetValue(Settings.AutoRefreshRepos, value);
+				SetValue(Settings.AutoUpdateRepository, value);
 			}
 		}
 
+		/// <summary>
+		/// Whether or not the console is visible
+		/// </summary>
 		public static bool Debug
 		{
 			get => (bool)GetValue(Settings.Debug);
@@ -70,6 +91,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// The directory in which the .zip file is downloaded
+		/// </summary>
 		public static string DownloadDir
 		{
 			get => (string)GetValue(Settings.DownloadDir);
@@ -79,6 +103,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// The directory in which the .zip is extracted
+		/// </summary>
 		public static string InstallDir
 		{
 			get => (string)GetValue(Settings.InstallDir);
@@ -88,6 +115,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// The default directory to create a project
+		/// </summary>
 		public static string ProjectDir
 		{
 			get => (string)GetValue(Settings.ProjectDir);
@@ -97,6 +127,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// Whether or not to use the same directory to download and extract the .zip file
+		/// </summary>
 		public static bool UseInstallDirForDownload
 		{
 			get => (bool)GetValue(Settings.UseInstallDirForZip);
@@ -108,7 +141,13 @@ namespace Com.Astral.GodotHub.Data
 
 		#endregion //PROPERTIES
 
+		/// <summary>
+		/// The current platform operating system
+		/// </summary>
 		public static readonly OS os;
+		/// <summary>
+		/// The current platform architecture
+		/// </summary>
 		public static readonly Architecture architecture;
 
 		private static readonly string filePath = PathT.appdata + "/config.cfg";
@@ -131,33 +170,38 @@ namespace Com.Astral.GodotHub.Data
 
 			switch (lError)
 			{
-				case Error.DoesNotExist:
-				case Error.Failed:
-				case Error.FileNotFound:
-					ResetAll();
-					Save();
-					break;
 				case Error.FileNoPermission:
 				case Error.Unauthorized:
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
+				case Error.Ok:
+					break;
 				default:
+					ResetAll();
+					Save();
+					Debugger.PrintValidation("Config file created successfully");
 					break;
 			}
 		}
 
+		/// <summary>
+		/// Save all settings
+		/// </summary>
 		public static void Save()
 		{
 			file.Save(filePath);
 			Debugger.PrintValidation("Config saved");
 		}
 
+		/// <summary>
+		/// Set all settings to default values
+		/// </summary>
 		public static void ResetAll()
 		{
 			AutoCloseDownload = true;
 			AutoCreateShortcut = true;
-			AutoDeleteDownload = true;
-			AutoRefreshRepos = true;
+			AutoDeleteZip = true;
+			AutoUpdateRepository = true;
 
 #if DEBUG
 			Debug = true;
@@ -172,14 +216,15 @@ namespace Com.Astral.GodotHub.Data
 			ProjectDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
 			UseInstallDirForDownload = true;
 			Reset?.Invoke();
+			Debugger.PrintMessage("Config reset");
 		}
 
-		public static Variant GetValue(Settings pSetting)
+		private static Variant GetValue(Settings pSetting)
 		{
 			return file.GetValue(nameof(Settings), pSetting.ToString());
 		}
 
-		public static void SetValue(Settings pSetting, Variant pValue)
+		private static void SetValue(Settings pSetting, Variant pValue)
 		{
 			file.SetValue(nameof(Settings), pSetting.ToString(), pValue);
 		}

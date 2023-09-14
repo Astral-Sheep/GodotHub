@@ -3,9 +3,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Com.Astral.GodotHub.Data
 {
@@ -24,7 +22,7 @@ namespace Com.Astral.GodotHub.Data
 			if (Config.os == OS.MacOS)
 			{
 				folderExpr = new Regex(@"(?:Godot)(_mono)??(?:[.]app)$");
-				exePath = "/Content/Mac/Godot";
+				exePath = "/Contents/MacOS/Godot";
 			}
 			else
 			{
@@ -45,7 +43,7 @@ namespace Com.Astral.GodotHub.Data
 				if (Config.architecture == Architecture.x64)
 				{
 					lPattern += "64";
-					exePath += "64{3}";
+					exePath += "64";
 				}
 				else
 				{
@@ -82,18 +80,25 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// Add engine version to the installs.cfg file
+		/// </summary>
 		public static void AddVersion(string pPath, bool pIsExe)
 		{
 			if (!pIsExe)
 			{
 				if (Config.os == OS.MacOS)
 				{
-					pPath += "/Content/Mac/Godot";
+					pPath += "/Contents/MacOS/Godot";
 				}
 				else
 				{
 					pPath += $"/{pPath[(pPath.RFind("/") + 1)..]}";
-					pPath += ".exe";
+
+					if (Config.os == OS.Windows)
+					{
+						pPath += ".exe";
+					}
 				}
 			}
 
@@ -109,6 +114,9 @@ namespace Com.Astral.GodotHub.Data
 			Save();
 		}
 
+		/// <summary>
+		/// Return engine path from <see cref="Version"/>
+		/// </summary>
 		public static string GetPath(string pVersion)
 		{
 			if (!file.HasSection(pVersion))
@@ -117,11 +125,9 @@ namespace Com.Astral.GodotHub.Data
 			return (string)file.GetValue(pVersion, PATH);
 		}
 
-		public static string GetPath(Version pVersion)
-		{
-			return (string)file.GetValue((string)pVersion, PATH);
-		}
-
+		/// <summary>
+		/// Return engine versions that share the same major and minor indices
+		/// </summary>
 		public static List<Version> GetCompatibleVersions(Version pVersion)
 		{
 			List<Version> lCompatibleVersions = new List<Version>();
@@ -138,17 +144,19 @@ namespace Com.Astral.GodotHub.Data
 				}
 			}
 
-			//To do: retrieve all engines with the same version x.x
 			return lCompatibleVersions;
 		}
 
-		public static List<Project> GetAllVersions()
+		/// <summary>
+		/// Return all installed engine versions
+		/// </summary>
+		public static List<GDFile> GetAllVersions()
 		{
-			List<Project> lVersions = new List<Project>();
+			List<GDFile> lVersions = new List<GDFile>();
 
 			foreach (string version in file.GetSections())
 			{
-				lVersions.Add(new Project(
+				lVersions.Add(new GDFile(
 					(string)file.GetValue(version, PATH),
 					(bool)file.GetValue(version, FAVORITE),
 					(Version)version
@@ -158,6 +166,9 @@ namespace Com.Astral.GodotHub.Data
 			return lVersions;
 		}
 
+		/// <summary>
+		/// Retrive all engine versions from the default directory
+		/// </summary>
 		public static void Reset()
 		{
 			IEnumerator<string> lDirectories = Directory.EnumerateDirectories(Config.InstallDir).GetEnumerator();
@@ -171,6 +182,9 @@ namespace Com.Astral.GodotHub.Data
 			}
 		}
 
+		/// <summary>
+		/// Save the installs.cfg file
+		/// </summary>
 		public static void Save()
 		{
 			file.Save(filePath);
