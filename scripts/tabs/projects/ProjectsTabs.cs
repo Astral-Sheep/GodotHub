@@ -1,5 +1,6 @@
-using Com.Astral.GodotHub.Settings;
+using Com.Astral.GodotHub.Data;
 using Godot;
+using System.Collections.Generic;
 
 namespace Com.Astral.GodotHub.Tabs.Projects
 {
@@ -10,17 +11,19 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		public override void _Ready()
 		{
-			for (int i = 0; i < Files.Projects.Count; i++)
+			List<Project> lProjects = ProjectsData.GetProjects();
+
+			for (int i = 0; i < lProjects.Count; i++)
 			{
-				CreateItem(Files.Projects[i]);
+				CreateItem(lProjects[i]);
 			}
 		}
 
-		protected void CreateItem(string pPath)
+		protected void CreateItem(Project pProject)
 		{
 			ProjectItem lItem = projectItemScene.Instantiate<ProjectItem>();
 			itemContainer.AddChild(lItem);
-			lItem.Init(pPath);
+			lItem.Init(pProject);
 		}
 	}
 }

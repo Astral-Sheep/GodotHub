@@ -1,3 +1,4 @@
+using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
 
 namespace Com.Astral.GodotHub.Settings.Buttons.Toggles

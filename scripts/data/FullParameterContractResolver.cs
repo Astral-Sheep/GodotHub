@@ -14,7 +14,6 @@ namespace Com.Astral.GodotHub.Data
 			ConstructorInfo lConstructor = pObjectType
 				.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
 				.OrderBy(constructor => constructor.GetParameters().Length)
-				.ToList()
 				.LastOrDefault();
 
 			if (lConstructor == null)

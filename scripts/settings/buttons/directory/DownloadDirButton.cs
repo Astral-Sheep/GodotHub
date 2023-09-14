@@ -1,3 +1,5 @@
+using Com.Astral.GodotHub.Data;
+
 namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 {
 	public partial class DownloadDirButton : DirButton

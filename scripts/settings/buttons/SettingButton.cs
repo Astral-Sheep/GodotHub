@@ -1,3 +1,4 @@
+using Com.Astral.GodotHub.Data;
 using Godot;
 
 namespace Com.Astral.GodotHub.Settings.Buttons

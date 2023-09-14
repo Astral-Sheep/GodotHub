@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
-    <RootNamespace>GodotHub</RootNamespace>
+    <RootNamespace>Com.Astral.GodotHub</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />

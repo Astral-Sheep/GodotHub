@@ -1,8 +1,12 @@
+using Com.Astral.GodotHub.Data;
 using Godot;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+
 using Debugger = Com.Astral.GodotHub.Debug.Debugger;
+using Version = Com.Astral.GodotHub.Data.Version;
 
 namespace Com.Astral.GodotHub.Tabs.Projects
 {
@@ -16,37 +20,33 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		[Export] protected Button openButton;
 		[Export] protected Button removeButton;
 
+		protected Project project;
 		protected string projectPath = "";
-		protected string projectDirectory = "";
 		protected string enginePath = "";
 
-		public void Init(string pPath)
+		public void Init(Project pProject)
 		{
-			pathLabel.Text = pPath;
-			projectDirectory = pPath;
-			projectPath = pPath + "/project.godot";
+			project = pProject;
 			versionButton.GetPopup().TransparentBg = true;
-
-			SetVersion();
+			pathLabel.Text = pProject.Path;
+			projectPath = pProject.Path + "/project.godot";
 
 			ConfigFile lProject = new ConfigFile();
 			Error lError = lProject.Load(projectPath);
 
 			if (lError == Error.Ok)
 			{
-				versionButton.Disabled = false;
-				openButton.Disabled = false;
-
 				nameLabel.Text = $"[b]{lProject.GetValue("application", "config/name")}[/b]";
 				lastOpenedLabel.Text = GetElapsedTime(
 					new FileInfo(projectPath).LastAccessTimeUtc
 				);
 
-				openButton.Pressed += OnOpenPressed;
-
-				lError = lProject.Load(projectDirectory + "/.godot/editor/project_metadata.cfg");
-
-				if (lError != Error.Ok)
+				if (SetVersion(pProject.Version))
+				{
+					openButton.Pressed += OnOpenPressed;
+					
+				}
+				else
 				{
 					Disable(false);
 					Debugger.PrintError($"Can't find version of project {lProject.GetValue("application", "config/name")}");
@@ -54,7 +54,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 			else
 			{
-				nameLabel.Text = $"[b][color=#{Colors.ToHexa(Colors.Singleton.Red)}]Missing project[/color][/b]";
 				Disable(true);
 			}
 		}
@@ -64,39 +63,39 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			if (pMissing)
 			{
 				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}][b]Missing project[/b][/color]";
+				lastOpenedLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]N/A[/color]";
 			}
 			else
 			{
 				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]{nameLabel.Text}[/color]";
 			}
 
-			lastOpenedLabel.Text = "";
 			versionButton.Disabled = true;
 			openButton.Disabled = true;
 		}
 
-		protected Error SetVersion()
+		protected bool SetVersion(Version pVersion)
 		{
-			ConfigFile lProjectData = new ConfigFile();
+			List<Version> lCompatibleVersions = InstallsData.GetCompatibleVersions(pVersion);
 
-			if (File.Exists(projectDirectory + "/.godot/editor/project_metadata.cfg"))
+			if (lCompatibleVersions.Count == 0)
+				return false;
+
+			lCompatibleVersions.Sort();
+			Version lVersion;
+
+			for (int i = 0; i < lCompatibleVersions.Count; i++)
 			{
-				//4.0 and above
-				Error lError = lProjectData.Load(projectDirectory + "/.godot/editor/project_metadata.cfg");
+				lVersion = lCompatibleVersions[i];
+				versionButton.AddItem((string)lVersion, i);
 
-				if (lError != Error.Ok)
-					return lError;
-
-				string lEngine = (string)lProjectData.GetValue("editor_metadata", "executable_path");
-				string lVersion = lEngine[(lEngine.RFind("Godot_v") + 7)..lEngine.RFind("-stable")];
-				Debugger.PrintMessage($"Version: {lVersion}");
-			}
-			else
-			{
-
+				if (lVersion == pVersion)
+				{
+					versionButton.Selected = i;
+				}
 			}
 
-			return Error.Ok;
+			return true;
 		}
 
 		protected void OnOpenPressed()
@@ -104,11 +103,18 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			if (!File.Exists(projectPath))
 				return;
 
-			Process.Start(new ProcessStartInfo() {
-				FileName = "C:/Users/thoma/Downloads/Godot_v4.0.4-stable_mono_win64/Godot_v4.0.4-stable_mono_win64.exe",
-				WorkingDirectory = projectDirectory,
-				Arguments = "--editor"
-			});
+			try
+			{
+				Process.Start(new ProcessStartInfo() {
+					FileName = InstallsData.GetPath(versionButton.Text),
+					WorkingDirectory = project.Path,
+					Arguments = "--editor"
+				});
+			}
+			catch (Exception lException)
+			{
+				Debugger.PrintException(lException);
+			}
 		}
 
 		protected void OnRemovePressed()

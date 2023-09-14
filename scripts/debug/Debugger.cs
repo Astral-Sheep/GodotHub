@@ -1,3 +1,4 @@
+using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Settings;
 using Godot;
 using System;
@@ -51,6 +52,11 @@ namespace Com.Astral.GodotHub.Debug
 			{
 				instance = null;
 			}
+		}
+
+		public static void PrintObject(object pObject)
+		{
+			PrintMessage(pObject.ToString());
 		}
 
 		public static void PrintMessage(string pMessage)

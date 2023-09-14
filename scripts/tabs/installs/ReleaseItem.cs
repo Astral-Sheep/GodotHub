@@ -1,6 +1,5 @@
 using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Settings;
 using Godot;
 using Octokit;
 using System;
@@ -53,8 +52,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			architectureButton.ItemSelected += OnArchitectureChanged;
 			installButton.Pressed += OnInstallClicked;
 
-			osButton.Selected = (int)Main.Instance.OS;
-			architectureButton.Selected = (int)Main.Instance.Architecture;
+			osButton.Selected = (int)Config.os;
+			architectureButton.Selected = (int)Config.architecture;
 		}
 
 		public void Init(Release pRelease, int pIndex)

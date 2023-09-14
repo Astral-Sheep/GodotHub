@@ -1,8 +1,6 @@
 ﻿using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Settings;
 using Godot;
-using Octokit;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -91,7 +89,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			if (source == null)
 				return;
 
-			Result lResult = await InstallInternal(installationSource.Token);
+			Result lResult = await InstallInternal();
 
 			if (lResult == Result.Cancelled)
 			{
@@ -110,7 +108,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 		}
 
-		protected async Task<Result> InstallInternal(CancellationToken pToken)
+		protected async Task<Result> InstallInternal()
 		{
 			downloading = true;
 			animationSource = new CancellationTokenSource();
@@ -242,7 +240,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 			}
 
+			InstallsData.AddVersion(source.mono ? lZip[0..^4] : lDir, false);
+
 			#endregion //UNZIP
+
+			#region SHORTCUT
 
 			if (Config.AutoCreateShortcut)
 			{
@@ -257,7 +259,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 				StreamWriter lWriter = new StreamWriter(lShortcutPath, true);
 				string lAppPath = lDir;
-					
+				
 				if (source.os == OS.MacOS)
 				{
 					lAppPath += "/Godot";
@@ -293,6 +295,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				lWriter.WriteLine($"IconFile={lAppPath}");
 				lWriter.Close();
 			}
+
+			#endregion SHORTCUT
 
 			#endregion //INSTALL
 
@@ -345,7 +349,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		protected async void AnimateStatus(string pPrefix, CancellationToken pToken)
 		{
 			List<string> lIcons = new List<string>() {
-				"", ".", "..", "...",
+				".", "..", "...",
 			};
 			int lIndex = 0;
 			float lInitPosition = statusLabel.Position.X;
@@ -360,7 +364,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 							statusLabel.Position.Y
 						);
 						lIndex = (lIndex + 1) % lIcons.Count;
-						Thread.Sleep(200);
+						Thread.Sleep(250);
 					}
 				},
 				pToken

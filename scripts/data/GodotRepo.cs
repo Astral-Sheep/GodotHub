@@ -17,7 +17,7 @@ namespace Com.Astral.GodotHub.Data
 
 		public static event Action RepoRetrieved;
 
-		private static readonly string releasesPath = Config.dataPath + "/releases.json";
+		private static readonly string releasesPath = PathT.appdata + "/releases.json";
 
 		private static GitHubClient client;
 		private static List<Release> releases;

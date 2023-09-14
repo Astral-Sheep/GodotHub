@@ -47,6 +47,7 @@ offset_bottom = -35.0
 bbcode_enabled = true
 text = "Godot Hub"
 scroll_active = false
+shortcut_keys_enabled = false
 
 [node name="Path" type="Label" parent="."]
 layout_mode = 1
@@ -60,7 +61,7 @@ offset_top = -35.0
 offset_bottom = -20.0
 theme_override_colors/font_color = Color(0.588235, 0.588235, 0.588235, 1)
 theme_override_font_sizes/font_size = 10
-text = "C:/Users/thoma/Documents/Projects/Godot Hub"
+text = "E:/Path/69/ProjectName"
 vertical_alignment = 1
 text_overrun_behavior = 3
 
@@ -71,7 +72,7 @@ anchor_left = 0.375
 anchor_top = 0.2
 anchor_right = 0.55
 anchor_bottom = 0.8
-text = "11 months ago"
+text = "69 months ago"
 vertical_alignment = 1
 text_overrun_behavior = 3
 

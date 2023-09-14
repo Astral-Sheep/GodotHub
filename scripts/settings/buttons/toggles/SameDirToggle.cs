@@ -1,3 +1,4 @@
+using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Settings.Buttons.Directory;
 using Godot;
 

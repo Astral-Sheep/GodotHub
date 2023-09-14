@@ -1,11 +1,8 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Debug;
 using Godot;
 using System;
-using System.Runtime.InteropServices;
-
-using Architecture = Com.Astral.GodotHub.Data.Architecture;
-using Environment = System.Environment;
-using OS = Com.Astral.GodotHub.Data.OS;
+using System.Text.RegularExpressions;
 
 namespace Com.Astral.GodotHub
 {
@@ -14,9 +11,6 @@ namespace Com.Astral.GodotHub
 		public static Main Instance { get; private set; }
 
 		public event Action Initialized;
-
-		public OS OS { get; protected set; }
-		public Architecture Architecture { get; protected set; }
 
 		private Main() : base()
 		{
@@ -28,23 +22,6 @@ namespace Com.Astral.GodotHub
 			}
 
 			Instance = this;
-
-			switch (Environment.OSVersion.Platform)
-			{
-				case PlatformID.Win32NT:
-					OS = OS.Windows;
-					break;
-				case PlatformID.Unix:
-					OS = OS.Linux;
-					break;
-				case PlatformID.Other:
-					OS = OS.MacOS;
-					break;
-			}
-
-			Architecture = (int)RuntimeInformation.OSArchitecture % 2 == 1 ?
-				Architecture.x64 :
-				Architecture.x32;
 		}
 
 		public override void _Ready()

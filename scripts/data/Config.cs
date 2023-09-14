@@ -1,10 +1,10 @@
 ﻿using Com.Astral.GodotHub.Debug;
 using Godot;
 using System;
-using System.IO;
+using System.Runtime.InteropServices;
 using Environment = System.Environment;
 
-namespace Com.Astral.GodotHub.Settings
+namespace Com.Astral.GodotHub.Data
 {
 	public static class Config
 	{
@@ -108,20 +108,26 @@ namespace Com.Astral.GodotHub.Settings
 
 		#endregion //PROPERTIES
 
-		public static readonly string dataPath = GetEnvironmentPath(Environment.SpecialFolder.ApplicationData) + "/Godot Hub";
-		private static readonly string configPath;
-		private static ConfigFile config;
+		public static readonly OS os;
+		public static readonly Architecture architecture;
+
+		private static readonly string filePath = PathT.appdata + "/config.cfg";
+		private static ConfigFile file;
 
 		static Config()
 		{
-			if (!Directory.Exists(dataPath))
-			{
-				Directory.CreateDirectory(dataPath);
-			}
+			os = Environment.OSVersion.Platform switch {
+				PlatformID.Win32NT => OS.Windows,
+				PlatformID.Unix => OS.Linux,
+				_ => OS.MacOS,
+			};
 
-			configPath = dataPath + "/config.cfg";
-			config = new ConfigFile();
-			Error lError = config.Load(configPath);
+			architecture = (int)RuntimeInformation.OSArchitecture % 2 == 1 ?
+				Architecture.x64 :
+				Architecture.x32;
+
+			file = new ConfigFile();
+			Error lError = file.Load(filePath);
 
 			switch (lError)
 			{
@@ -130,21 +136,20 @@ namespace Com.Astral.GodotHub.Settings
 				case Error.FileNotFound:
 					ResetAll();
 					Save();
-					Debugger.PrintMessage("Config file created successfully");
 					break;
 				case Error.FileNoPermission:
 				case Error.Unauthorized:
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
-				case Error.Ok:
+				default:
 					break;
 			}
 		}
 
 		public static void Save()
 		{
-			config.Save(configPath);
-			Debugger.PrintMessage("Config saved");
+			file.Save(filePath);
+			Debugger.PrintValidation("Config saved");
 		}
 
 		public static void ResetAll()
@@ -156,32 +161,27 @@ namespace Com.Astral.GodotHub.Settings
 
 #if DEBUG
 			Debug = true;
-			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
-			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
+			DownloadDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
+			InstallDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.UserProfile) + "/Downloads";
 #else
 			Debug = false;
-			DownloadDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
-			InstallDir = GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
+			DownloadDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
+			InstallDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.ProgramFiles);
 #endif
 
-			ProjectDir = GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
+			ProjectDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
 			UseInstallDirForDownload = true;
 			Reset?.Invoke();
 		}
 
 		public static Variant GetValue(Settings pSetting)
 		{
-			return config.GetValue(nameof(Settings), pSetting.ToString());
+			return file.GetValue(nameof(Settings), pSetting.ToString());
 		}
 
 		public static void SetValue(Settings pSetting, Variant pValue)
 		{
-			config.SetValue(nameof(Settings), pSetting.ToString(), pValue);
-		}
-
-		private static string GetEnvironmentPath(Environment.SpecialFolder pFolder)
-		{
-			return Environment.GetFolderPath(pFolder).Replace('\\', '/');
+			file.SetValue(nameof(Settings), pSetting.ToString(), pValue);
 		}
 	}
 }
