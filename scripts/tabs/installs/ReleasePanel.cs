@@ -5,27 +5,14 @@ using System.Collections.Generic;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
-	public partial class ReleasePanel : Control
+	public partial class ReleasePanel : SortedPanel
 	{
-		protected enum SortType
-		{
-			Date = 0,
-			Version = 1,
-		}
-
-		[Export] protected OptionButton sortButton;
-		[Export] protected CheckBox orderButton;
-		[ExportGroup("Release item")]
 		[Export] protected PackedScene releaseItemScene;
-		[Export] protected Control itemContainer;
 
 		protected List<ReleaseItem> items = new List<ReleaseItem>();
 
 		public override void _Ready()
 		{
-			sortButton.AddItem(SortType.Date.ToString(), (int)SortType.Date);
-			sortButton.AddItem(SortType.Version.ToString(), (int)SortType.Version);
-			sortButton.GetPopup().TransparentBg = true;
 			GodotRepo.RepoRetrieved += OnRepoRetrieved;
 		}
 
@@ -38,10 +25,6 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			{
 				items.Add(CreateItem(lReleases[i], i));
 			}
-
-			Sort();
-			sortButton.ItemSelected += OnSortChanged;
-			orderButton.Toggled += OnOrderChanged;
 		}
 
 		protected ReleaseItem CreateItem(Release pRelease, int pIndex)
@@ -52,22 +35,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			return lItem;
 		}
 
-		protected void OnSortChanged(long _)
+		public override void Sort(SortType pType, bool pReversed)
 		{
-			Sort();
-		}
-
-		protected void OnOrderChanged(bool _)
-		{
-			Sort();
-		}
-
-		protected void Sort()
-		{
-			SortItems(
-				sortButton.Selected == (long)SortType.Date ? new DateSorter() : new VersionSorter(),
-				orderButton.ButtonPressed
-			);
+			SortItems(pType == SortType.Version ? new VersionSorter() : new DateSorter(), pReversed);
 		}
 
 		protected void SortItems(IComparer<ReleaseItem> pComparer, bool pReversed)

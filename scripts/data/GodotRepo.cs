@@ -1,5 +1,4 @@
 ﻿using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Settings;
 using Newtonsoft.Json;
 using Octokit;
 using System;

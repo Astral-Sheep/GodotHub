@@ -108,7 +108,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				Process.Start(new ProcessStartInfo() {
 					FileName = InstallsData.GetPath(versionButton.Text),
 					WorkingDirectory = project.Path,
-					Arguments = "--editor"
+					Arguments = "--editor",
 				});
 			}
 			catch (Exception lException)

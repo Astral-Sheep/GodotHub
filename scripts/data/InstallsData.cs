@@ -92,7 +92,7 @@ namespace Com.Astral.GodotHub.Data
 				}
 				else
 				{
-					pPath += $"/{pPath[(pPath.RFind("/") + 1)..^0]}";
+					pPath += $"/{pPath[(pPath.RFind("/") + 1)..]}";
 					pPath += ".exe";
 				}
 			}
@@ -140,6 +140,22 @@ namespace Com.Astral.GodotHub.Data
 
 			//To do: retrieve all engines with the same version x.x
 			return lCompatibleVersions;
+		}
+
+		public static List<Project> GetAllVersions()
+		{
+			List<Project> lVersions = new List<Project>();
+
+			foreach (string version in file.GetSections())
+			{
+				lVersions.Add(new Project(
+					(string)file.GetValue(version, PATH),
+					(bool)file.GetValue(version, FAVORITE),
+					(Version)version
+				));
+			}
+
+			return lVersions;
 		}
 
 		public static void Reset()
