@@ -1,5 +1,6 @@
 ﻿using Com.Astral.GodotHub.Debug;
 using Godot;
+using Godot.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -45,6 +46,10 @@ namespace Com.Astral.GodotHub.Data
 			Save();
 		}
 
+		/// <summary>
+		/// Remove project from the project.cfg file if it exists
+		/// </summary>
+		/// <param name="pPath"></param>
 		public static void RemoveProject(string pPath)
 		{
 			if (file.HasSection(pPath))
@@ -81,20 +86,40 @@ namespace Com.Astral.GodotHub.Data
 
 		public static Version GetVersionFromFolder(string pPath)
 		{
-			//Godot 4.0 and above
-			if (Directory.Exists($"{pPath}/.godot"))
+			ConfigFile lConfig = new ConfigFile();
+
+			if (lConfig.Load(pPath + "/project.godot") == Error.Ok)
 			{
-				ConfigFile lFile = new ConfigFile();
-				lFile.Load($"{pPath}/.godot/editor/project_metadata.cfg");
-				string lExecutable = (string)lFile.GetValue("editor_metadata", "executable_path");
-				return (Version)lExecutable;
+				int lConfigVersion = (int)lConfig.GetValue("", "config_version");
+
+				if (lConfigVersion >= 5)
+				{
+					return GetGodot4OrHigherVersion(lConfig);
+				}
+				else
+				{
+					return GetGodot3OrLowerVersion(lConfigVersion);
+				}
 			}
 			else
 			{
-				//To do: Godot 3.5 and lower
+				Debugger.PrintError("Invalid project passed, can't find version from folder");
+				return new Version();
 			}
+		}
 
-			return new Version();
+		private static Version GetGodot4OrHigherVersion(ConfigFile pConfig)
+		{
+			Array<string> lFeatures = (Array<string>)pConfig.GetValue("application", "config/features");
+			return (Version)lFeatures[0];
+		}
+
+		private static Version GetGodot3OrLowerVersion(int pConfigVersion)
+		{
+			if (pConfigVersion < 4)
+				return new Version();
+
+			return new Version(3, 5, 2);
 		}
 
 		/// <summary>

@@ -190,7 +190,6 @@ namespace Com.Astral.GodotHub.Data
 		public static void Save()
 		{
 			file.Save(filePath);
-			Debugger.PrintValidation("Config saved");
 		}
 
 		/// <summary>

@@ -29,14 +29,21 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 		{
 			button.Pressed -= OnPressed;
 			FileDialog lDialog = folderDialogScene.Instantiate<FileDialog>();
-			lDialog.CurrentDir = button.Text.Replace(" ", "");
-			lDialog.DirSelected += OnDirSelected;
 			Main.Instance.AddChild(lDialog);
+			lDialog.PopupCentered();
+			lDialog.CurrentDir = button.Text[1..];
+			lDialog.DirSelected += OnDirSelected;
+			lDialog.Canceled += OnCanceled;
 		}
 
 		protected virtual void OnDirSelected(string pDir)
 		{
 			button.Text = $" {pDir}";
+			button.Pressed += OnPressed;
+		}
+
+		protected void OnCanceled()
+		{
 			button.Pressed += OnPressed;
 		}
 	}

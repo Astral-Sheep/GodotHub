@@ -6,6 +6,7 @@ namespace Com.Astral.GodotHub.Data
 {
 	public struct Version : IComparable<Version>
 	{
+		public static readonly Version minimumSupportedVersion = new Version(3, 1, 1);
 		private static readonly Regex expression = new Regex(@"([0-9]+)([.]{1}?[0-9]+){1,2}");
 
 		public int major;
@@ -24,7 +25,14 @@ namespace Com.Astral.GodotHub.Data
 		/// </summary>
 		public bool IsCompatible(Version pOther)
 		{
-			return major == pOther.major && minor == pOther.minor;
+			if (major >= 4)
+			{
+				return major == pOther.major && minor == pOther.minor;
+			}
+			else
+			{
+				return major == pOther.major;
+			}
 		}
 
 		public int CompareTo(Version pOther)

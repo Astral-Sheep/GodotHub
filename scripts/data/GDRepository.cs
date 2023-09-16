@@ -66,6 +66,15 @@ namespace Com.Astral.GodotHub.Data
 				try
 				{
 					_releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
+
+					for (int i = _releases.Count - 1; i >= 0; i++)
+					{
+						if ((Version)_releases[i].Name < Version.minimumSupportedVersion)
+						{
+							_releases.RemoveAt(i);
+						}
+					}
+
 					SaveReleases();
 					Debugger.PrintMessage($"{_releases.Count} new releases found");
 				}
@@ -90,13 +99,20 @@ namespace Com.Astral.GodotHub.Data
 
 			try
 			{
-				int lCount = _releases.Count;
-				_releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
-				SaveReleases();
+				List<Release> lReleases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
+				int lLastIndex = 0;
+				string lLastName = _releases[0].Name;
 
-				lCount = _releases.Count - lCount;
-				Updated?.Invoke(_releases.GetRange(0, lCount));
-				Debugger.PrintMessage($"{lCount} new releases found");
+				for (lLastIndex = 0; lLastIndex < lReleases.Count; lLastIndex++)
+				{
+					if (lReleases[lLastIndex].Name == lLastName)
+						break;
+				}
+
+				_releases.InsertRange(0, lReleases.GetRange(0, lLastIndex));				
+				SaveReleases();
+				Updated?.Invoke(_releases.GetRange(0, lLastIndex));
+				Debugger.PrintMessage($"{lLastIndex} new releases found");
 			}
 			catch (Exception lException)
 			{

@@ -16,6 +16,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			List<GDFile> lProjects = ProjectsData.GetProjects();
 
+			ProjectsData.GetVersionFromFolder(lProjects[1].Path);
+
 			for (int i = 0; i < lProjects.Count; i++)
 			{
 				CreateItem(lProjects[i]);

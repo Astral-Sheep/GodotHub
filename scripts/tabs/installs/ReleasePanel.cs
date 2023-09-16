@@ -20,9 +20,15 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		{
 			GDRepository.Loaded -= OnRepoRetrieved;
 			List<Release> lReleases = GDRepository.Releases;
+			Release lRelease;
 
 			for (int i = 0; i < lReleases.Count; i++)
 			{
+				lRelease = lReleases[i];
+
+				if ((Version)lRelease.Name < Version.minimumSupportedVersion)
+					continue;
+
 				items.Add(CreateItem(lReleases[i], i));
 			}
 		}

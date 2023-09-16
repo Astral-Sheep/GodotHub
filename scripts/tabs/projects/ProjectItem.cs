@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
+using System.Linq;
 using Debugger = Com.Astral.GodotHub.Debug.Debugger;
 using Version = Com.Astral.GodotHub.Data.Version;
 
@@ -47,7 +47,10 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			{
 				nameLabel.Text = $"[b]{lProject.GetValue(APPLICATION_SECTION, NAME_KEY)}[/b]";
 				lastOpenedLabel.Text = GetElapsedTime(
-					new FileInfo(projectPath).LastAccessTimeUtc
+					new DirectoryInfo(project.Path)
+						.GetFiles()
+						.OrderByDescending(f => f.LastWriteTimeUtc)
+						.First().LastWriteTimeUtc
 				);
 				favoriteToggle.Toggled += OnFavoriteToggled;
 
@@ -71,8 +74,78 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected string GetElapsedTime(DateTime pTime)
 		{
-			//DateTime lCurrentTime = DateTime.UtcNow;
-			return $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]N/A[/color]";
+			DateTime lCurrentTime = DateTime.UtcNow;
+			TimeSpan lDifferenceSpan = lCurrentTime - pTime;
+
+			Debugger.PrintMessage($"Last: {pTime}\nCurrent: {lCurrentTime}");
+
+			if (pTime.Year < lCurrentTime.Year)
+			{
+				float lDifference = lCurrentTime.Year - pTime.Year;
+
+				if (lDifference == 1 && lCurrentTime.Month < pTime.Month)
+				{
+					return $"{pTime.Month - lCurrentTime.Month} months ago";
+				}
+				else
+				{
+					return $"{lDifference} year{(lDifference > 1 ? "s" : "")} ago";
+				}
+			}
+			else if (pTime.Month < lCurrentTime.Month)
+			{
+				float lDifference = lCurrentTime.Month - pTime.Month;
+
+				if (lDifference == 1 && lCurrentTime.Day < pTime.Day)
+				{
+					return $"{lDifferenceSpan.Days} days ago";
+				}
+				else
+				{
+					return $"{lDifference} month{(lDifference > 1 ? "s" : "")} ago";
+				}
+			}
+			else if (pTime.Day < lCurrentTime.Day)
+			{
+				if (lDifferenceSpan.Hours < 24)
+				{
+					return $"{lDifferenceSpan.Hours} hours ago";
+				}
+				else
+				{
+					return $"{lDifferenceSpan.Days} day{(lDifferenceSpan.Days > 1 ? "s" : "")} ago";
+				}
+			}
+			else if (pTime.Hour < lCurrentTime.Hour)
+			{
+				if (lDifferenceSpan.Minutes < 60)
+				{
+					return $"{lDifferenceSpan.Minutes} minutes ago";
+				}
+				else
+				{
+					return $"{lDifferenceSpan.Hours} hour{(lDifferenceSpan.Hours > 1 ? "s" : "")} ago";
+				}
+			}
+			else if (pTime.Minute < lCurrentTime.Minute)
+			{
+				if (lDifferenceSpan.Seconds < 60)
+				{
+					return $"{lDifferenceSpan.Seconds} seconds ago";
+				}
+				else
+				{
+					return $"{lDifferenceSpan.Minutes} minute{(lDifferenceSpan.Minutes > 1 ? "s" : "")} ago";
+				}
+			}
+			else if (pTime.Second < lCurrentTime.Second)
+			{
+				return $"{lDifferenceSpan.Seconds} second{(lDifferenceSpan.Seconds > 1 ? "s" : "")} ago";
+			}
+			else
+			{
+				return "Now";
+			}
 		}
 
 		protected bool SetVersion(Version pVersion)
