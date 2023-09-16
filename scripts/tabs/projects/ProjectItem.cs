@@ -27,7 +27,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		[ExportGroup("Remove")]
 		[Export] protected float closeDuration = 0.25f;
-		[Export] protected PackedScene confirmationPopup;
+		[Export] protected PackedScene confirmationPopupScene;
 
 		protected GDFile project;
 		protected string projectPath = "";
@@ -141,7 +141,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnRemovePressed()
 		{
-			ConfirmationDialog lDialog = confirmationPopup.Instantiate<ConfirmationDialog>();
+			ConfirmationDialog lDialog = confirmationPopupScene.Instantiate<ConfirmationDialog>();
 			Main.Instance.AddChild(lDialog);
 			lDialog.Title = "Remove";
 			lDialog.DialogText = "Do you really want to remove this project?";

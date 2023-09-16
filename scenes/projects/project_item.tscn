@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://bqbsr5iermvuw"]
+[gd_scene load_steps=4 format=3 uid="uid://bqbsr5iermvuw"]
 
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_0g1rf"]
 [ext_resource type="Script" path="res://scripts/tabs/projects/ProjectItem.cs" id="2_uxxbh"]
-[ext_resource type="PackedScene" uid="uid://cnpdgwyrvity5" path="res://scenes/confirmation_dialog.tscn" id="3_hba6a"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gi7kc"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
@@ -22,7 +21,6 @@ lastOpenedLabel = NodePath("LastOpened")
 versionButton = NodePath("VersionButton")
 openButton = NodePath("OpenButton")
 removeButton = NodePath("RemoveButton")
-confirmationPopup = ExtResource("3_hba6a")
 
 [node name="FavoriteButton" type="Button" parent="."]
 layout_mode = 1

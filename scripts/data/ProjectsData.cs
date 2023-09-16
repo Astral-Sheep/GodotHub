@@ -79,7 +79,7 @@ namespace Com.Astral.GodotHub.Data
 			file.SetValue(pProject, FAVORITE, pFavorite);
 		}
 
-		private static string GetVersionFromFolder(string pPath)
+		public static Version GetVersionFromFolder(string pPath)
 		{
 			//Godot 4.0 and above
 			if (Directory.Exists($"{pPath}/.godot"))
@@ -87,15 +87,14 @@ namespace Com.Astral.GodotHub.Data
 				ConfigFile lFile = new ConfigFile();
 				lFile.Load($"{pPath}/.godot/editor/project_metadata.cfg");
 				string lExecutable = (string)lFile.GetValue("editor_metadata", "executable_path");
-				return (string)(Version)lExecutable;
-				//To do: recognize MacOS
+				return (Version)lExecutable;
 			}
 			else
 			{
 				//To do: Godot 3.5 and lower
 			}
 
-			return "";
+			return new Version();
 		}
 
 		/// <summary>
@@ -135,7 +134,7 @@ namespace Com.Astral.GodotHub.Data
 				if (File.Exists($"{lDirectories.Current}/project.godot"))
 				{
 					lDirectory = lDirectories.Current.Replace("\\", "/");
-					file.SetValue(lDirectory, VERSION, GetVersionFromFolder(lDirectories.Current));
+					file.SetValue(lDirectory, VERSION, (string)GetVersionFromFolder(lDirectories.Current));
 					file.SetValue(lDirectory, FAVORITE, false);
 				}
 			}

@@ -8,6 +8,9 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 	{
 		[Export] protected PackedScene projectItemScene;
 		[Export] protected Control itemContainer;
+		[ExportGroup("Project addition")]
+		[Export] protected PackedScene folderPopupScene;
+		[Export] protected Button addButton;
 
 		public override void _Ready()
 		{
@@ -17,6 +20,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			{
 				CreateItem(lProjects[i]);
 			}
+			
+			addButton.Pressed += OnAddPressed;
 		}
 
 		protected void CreateItem(GDFile pProject)
@@ -29,5 +34,33 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected override void Connect() { }
 
 		protected override void Disconnect() { }
+
+		protected void OnAddPressed()
+		{
+			FileDialog lDialog = folderPopupScene.Instantiate<FileDialog>();
+			Main.Instance.AddChild(lDialog);
+			lDialog.PopupCentered();
+			lDialog.CurrentDir = Config.ProjectDir;
+			lDialog.FileMode = FileDialog.FileModeEnum.OpenFiles;
+			lDialog.Filters = new string[] { "*.godot" };
+			lDialog.FileSelected += OnFileSelected;
+			lDialog.FilesSelected += OnFilesSelected;
+		}
+
+		protected void OnFileSelected(string pPath)
+		{
+			pPath = pPath[..pPath.RFind("/project.godot")];
+			GDFile lProject = new GDFile(pPath, false, ProjectsData.GetVersionFromFolder(pPath));
+			ProjectsData.AddProject(lProject);
+			CreateItem(lProject);
+		}
+
+		protected void OnFilesSelected(string[] pPaths)
+		{
+			for (int i = 0; i < pPaths.Length; i++)
+			{
+				OnFileSelected(pPaths[i]);
+			}
+		}
 	}
 }

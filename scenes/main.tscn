@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://cf45rric6gmx5"]
+[gd_scene load_steps=39 format=3 uid="uid://cf45rric6gmx5"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
@@ -6,6 +6,7 @@
 [ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="3_gh8ej"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="PackedScene" uid="uid://bqbsr5iermvuw" path="res://scenes/projects/project_item.tscn" id="4_ftw23"]
+[ext_resource type="PackedScene" path="res://scenes/settings/folder_dialog.tscn" id="5_10olf"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/InstallsTab.cs" id="5_s1nr3"]
 [ext_resource type="ButtonGroup" uid="uid://c2ypx5qbtttva" path="res://resources/button_groups/install_btn_group.tres" id="7_5b0sc"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/ReleasePanel.cs" id="7_07w4y"]
@@ -112,7 +113,7 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="ProjectsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer")]
+[node name="ProjectsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -123,6 +124,33 @@ mouse_filter = 1
 script = ExtResource("3_047ry")
 projectItemScene = ExtResource("4_ftw23")
 itemContainer = NodePath("ProjectsList/VBoxContainer")
+folderPopupScene = ExtResource("5_10olf")
+addButton = NodePath("UpperButton/AddButton")
+
+[node name="UpperButton" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = 185.0
+grow_horizontal = 2
+
+[node name="AddButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButton"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -135.0
+offset_top = -45.0
+offset_right = -35.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = ExtResource("3_gh8ej")
+text = "Add"
 
 [node name="ProjectsList" type="ScrollContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
@@ -142,6 +170,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="InstallsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("installsPanel", "releasesPanel", "installsButton", "releasesButton", "sortButton", "orderButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
