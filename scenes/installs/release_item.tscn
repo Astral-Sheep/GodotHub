@@ -7,6 +7,7 @@
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 
 [node name="ReleaseItem" type="Panel" node_paths=PackedStringArray("versionLabel", "dateLabel", "monoCheck", "osButton", "architectureButton", "installButton")]
+clip_contents = true
 custom_minimum_size = Vector2(0, 75)
 offset_right = 850.0
 offset_bottom = 75.0

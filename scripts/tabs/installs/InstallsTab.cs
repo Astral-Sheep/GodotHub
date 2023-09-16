@@ -7,8 +7,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 	public partial class InstallsTab : Tab
 	{
 		[ExportGroup("Panels")]
-		[Export] protected SortedPanel installsPanel;
-		[Export] protected SortedPanel releasesPanel;
+		[Export] protected InstallsPanel installsPanel;
+		[Export] protected ReleasePanel releasesPanel;
 		[Export] protected Button installsButton;
 		[Export] protected Button releasesButton;
 
@@ -24,6 +24,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			AddItem(sortButton, SortType.Date);
 			sortButton.GetPopup().TransparentBg = true;
 
+			installsButton.ButtonPressed = true;
+			releasesButton.ButtonPressed = false;
 			installsPanel.Visible = true;
 			releasesPanel.Visible = false;
 			currentPanel = installsPanel;
@@ -54,6 +56,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			installsPanel.Visible = true;
 			releasesPanel.Visible = false;
 			currentPanel = installsPanel;
+			installsPanel.ItemCountChanged += SortCurrent;
 			SortCurrent();
 		}
 
@@ -65,6 +68,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			releasesPanel.Visible = true;
 			installsPanel.Visible = false;
 			currentPanel = releasesPanel;
+			installsPanel.ItemCountChanged += SortCurrent;
 			SortCurrent();
 		}
 

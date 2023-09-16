@@ -45,6 +45,14 @@ namespace Com.Astral.GodotHub.Data
 			Save();
 		}
 
+		public static void RemoveProject(string pPath)
+		{
+			if (file.HasSection(pPath))
+			{
+				file.EraseSection(pPath);
+			}
+		}
+
 		/// <summary>
 		/// Whether or not the given project is marked as favorite by the user
 		/// </summary>

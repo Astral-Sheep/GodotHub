@@ -169,22 +169,22 @@ offset_bottom = 185.0
 grow_horizontal = 2
 
 [node name="InstallsButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons"]
-layout_mode = 0
-offset_left = 21.0
-offset_top = 11.0
-offset_right = 136.0
-offset_bottom = 56.0
+layout_mode = 1
+offset_left = 25.0
+offset_top = 15.0
+offset_right = 140.0
+offset_bottom = 60.0
 focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("7_5b0sc")
 text = "Installs"
 
 [node name="ReleasesButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons"]
-layout_mode = 0
-offset_left = 168.0
-offset_top = 10.0
-offset_right = 283.0
-offset_bottom = 55.0
+layout_mode = 1
+offset_left = 165.0
+offset_top = 15.0
+offset_right = 280.0
+offset_bottom = 60.0
 focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("7_5b0sc")

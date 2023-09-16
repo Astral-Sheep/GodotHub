@@ -1,11 +1,14 @@
 using Com.Astral.GodotHub.Data;
 using Godot;
+using System;
 using System.Collections.Generic;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class InstallsPanel : SortedPanel
 	{
+		public event Action ItemCountChanged;
+
 		[Export] protected PackedScene installItemScene;
 
 		protected List<InstallItem> items = new List<InstallItem>();
@@ -17,6 +20,18 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			for (int i = 0; i < lVersions.Count; i++)
 			{
 				items.Add(CreateItem(lVersions[i], i));
+			}
+
+			InstallsData.VersionAdded += OnVersionAdded;
+			InstallItem.Closed += OnItemClosed;
+		}
+
+		protected override void Dispose(bool pDisposing)
+		{
+			if (pDisposing)
+			{
+				InstallItem.Closed -= OnItemClosed;
+				InstallsData.VersionAdded -= OnVersionAdded;
 			}
 		}
 
@@ -46,6 +61,18 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			{
 				itemContainer.MoveChild(items[i], i);
 			}
+		}
+
+		protected void OnVersionAdded(GDFile pInstall)
+		{
+			items.Add(CreateItem(pInstall, items.Count));
+			ItemCountChanged?.Invoke();
+		}
+
+		protected void OnItemClosed(InstallItem pItem)
+		{
+			items.Remove(pItem);
+			ItemCountChanged?.Invoke();
 		}
 
 		protected class DateSorter : IComparer<InstallItem>

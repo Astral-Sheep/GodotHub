@@ -1,0 +1,15 @@
+[gd_scene load_steps=2 format=3 uid="uid://cnpdgwyrvity5"]
+
+[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_8qwdp"]
+
+[node name="ConfirmationDialog" type="ConfirmationDialog"]
+transparent_bg = true
+title = "Remove version?"
+size = Vector2i(400, 200)
+visible = true
+exclusive = false
+unresizable = true
+popup_window = true
+theme = ExtResource("1_8qwdp")
+dialog_text = "Are you confirming you want to do the action you clicked on?"
+dialog_autowrap = true

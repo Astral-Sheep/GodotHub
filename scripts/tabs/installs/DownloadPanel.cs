@@ -56,7 +56,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 		}
 
-		protected void OnInstallerCompleted(Installer pInstaller, Installer.Result _)
+		protected void OnInstallerCompleted(Installer pInstaller, InstallT.Result _)
 		{
 			pInstaller.Completed -= OnInstallerCompleted;
 			installers.Remove(pInstaller);

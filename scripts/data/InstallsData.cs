@@ -12,6 +12,8 @@ namespace Com.Astral.GodotHub.Data
 		private const string PATH = "path";
 		private const string FAVORITE = "favorite";
 
+		public static event Action<GDFile> VersionAdded;
+
 		private static readonly string exePath;
 		private static readonly Regex folderExpr;
 		private static readonly string filePath = PathT.appdata + "/installs.cfg";
@@ -19,46 +21,16 @@ namespace Com.Astral.GodotHub.Data
 
 		static InstallsData()
 		{
-			if (Config.os == OS.MacOS)
-			{
-				folderExpr = new Regex(@"(?:Godot)(_mono)??(?:[.]app)$");
-				exePath = "/Contents/MacOS/Godot";
-			}
-			else
-			{
-				string lPattern = @"Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??";
-				exePath = "Godot_v{0}-stable{1}";
-
-				if (Config.os == OS.Windows)
-				{
-					lPattern += "_win";
-					exePath += "_win";
-				}
-				else
-				{
-					lPattern += "_linux[._]x86_";
-					exePath += "_linux{2}x86_";
-				}
-
-				if (Config.architecture == Architecture.x64)
-				{
-					lPattern += "64";
-					exePath += "64";
-				}
-				else
-				{
-					lPattern += "32";
-					exePath += "32";
-
-				}
-
-				if (Config.os == OS.Windows)
-				{
-					exePath += ".exe";
-				}
-
-				folderExpr = new Regex(lPattern);
-			}
+#if GODOT_WINDOWS
+			folderExpr = new Regex(@"Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_win[0-9]{2}");
+			exePath = "/Godot_v{0}-stable{1}_win{2}.exe";
+#elif GODOT_LINUXBSD
+			folderExpr = new Regex(@"Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_linux[._]x86_[0-9]{2}");
+			exePath = "/Godot_{0}-stable{1}_linux.x86_{2}";
+#elif GODOT_MACOS
+			folderExpr = new Regex(@"(?:Godot)(_mono)??(?:[.]app)$");
+			exePath = "/Contents/MacOS/Godot";
+#endif
 
 			file = new ConfigFile();
 			Error lError = file.Load(filePath);
@@ -85,33 +57,68 @@ namespace Com.Astral.GodotHub.Data
 		/// </summary>
 		public static void AddVersion(string pPath, bool pIsExe)
 		{
+			if (!folderExpr.IsMatch(pPath))
+				return;
+
 			if (!pIsExe)
 			{
-				if (Config.os == OS.MacOS)
-				{
-					pPath += "/Contents/MacOS/Godot";
-				}
-				else
-				{
-					pPath += $"/{pPath[(pPath.RFind("/") + 1)..]}";
-
-					if (Config.os == OS.Windows)
-					{
-						pPath += ".exe";
-					}
-				}
+#if GODOT_MACOS
+				pPath += exePath;
+#else
+				pPath += string.Format(exePath, (Version)pPath, pPath.Contains("_mono") ? "_mono" : "", pPath[^2..]);
+#endif
 			}
 
 			if (!File.Exists(pPath))
 			{
-				Debugger.PrintError("Invalid file passed as executable");
+				Debugger.PrintError($"Invalid file passed as executable: {pPath}. Version not added");
 				return;
 			}
 
 			string lVersion = (string)(Version)pPath;
+
+			if (file.HasSection(lVersion))
+			{
+				string lCurrent = (string)file.GetValue(lVersion, PATH);
+
+				if (lCurrent.Contains("_mono"))
+				{
+					if (!pPath.Contains("_mono"))
+					{
+						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
+						return;
+					}
+#if GODOT_WINDOWS
+					//Get architecture in _win{xx}.exe
+					else if (int.Parse(pPath[^6..^4]) <= int.Parse(lCurrent[^6..^4]))
+					{
+						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
+						return;
+					}
+#elif GODOT_LINUXBSD
+					//Get architecture in linux.x86_{xx}
+					else if (int.Parse(pPath[^2..]) <= int.Parse(lCurrent[^2..]))
+					{
+						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
+						return;
+					}
+#endif
+				}
+			}
+
 			file.SetValue(lVersion, PATH, pPath);
 			file.SetValue(lVersion, FAVORITE, false);
 			Save();
+			VersionAdded?.Invoke(new GDFile(pPath, false, (Version)lVersion));
+		}
+
+		public static void RemoveVersion(Version pVersion)
+		{
+			if (file.HasSection((string)pVersion))
+			{
+				file.EraseSection((string)pVersion);
+				Save();
+			}
 		}
 
 		/// <summary>
@@ -123,6 +130,14 @@ namespace Com.Astral.GodotHub.Data
 				return "";
 
 			return (string)file.GetValue(pVersion, PATH);
+		}
+
+		public static void SetFavorite(Version pVersion, bool pIsFavorite)
+		{
+			if (!file.HasSection((string)pVersion))
+				return;
+
+			file.SetValue((string)pVersion, FAVORITE, pIsFavorite);
 		}
 
 		/// <summary>

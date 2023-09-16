@@ -12,6 +12,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 {
 	public partial class ProjectItem : Control
 	{
+		public static event Action<ProjectItem> Closed;
+
 		protected const string APPLICATION_SECTION = "application";
 		protected const string NAME_KEY = "config/name";
 
@@ -22,6 +24,10 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		[Export] protected OptionButton versionButton;
 		[Export] protected Button openButton;
 		[Export] protected Button removeButton;
+
+		[ExportGroup("Remove")]
+		[Export] protected float closeDuration = 0.25f;
+		[Export] protected PackedScene confirmationPopup;
 
 		protected GDFile project;
 		protected string projectPath = "";
@@ -43,6 +49,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				lastOpenedLabel.Text = GetElapsedTime(
 					new FileInfo(projectPath).LastAccessTimeUtc
 				);
+				favoriteToggle.Toggled += OnFavoriteToggled;
 
 				if (SetVersion(pProject.Version))
 				{
@@ -58,6 +65,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			{
 				Disable(true);
 			}
+
+			removeButton.Pressed += OnRemovePressed;
 		}
 
 		protected string GetElapsedTime(DateTime pTime)
@@ -106,6 +115,11 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			openButton.Disabled = true;
 		}
 
+		protected void OnFavoriteToggled(bool pToggled)
+		{
+			ProjectsData.SetFavorite(projectPath, pToggled);
+		}
+
 		protected void OnOpenPressed()
 		{
 			if (!File.Exists(projectPath))
@@ -127,7 +141,29 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnRemovePressed()
 		{
+			ConfirmationDialog lDialog = confirmationPopup.Instantiate<ConfirmationDialog>();
+			Main.Instance.AddChild(lDialog);
+			lDialog.Title = "Remove";
+			lDialog.DialogText = "Do you really want to remove this project?";
+			lDialog.GetChild<Label>(1, true).HorizontalAlignment = HorizontalAlignment.Center;
+			lDialog.PopupCentered();
+			lDialog.Confirmed += Remove;
+		}
 
+		protected void Remove()
+		{
+			ProjectsData.RemoveProject(projectPath);
+			Close();
+		}
+
+		protected void Close()
+		{
+			CreateTween()
+				.SetTrans(Tween.TransitionType.Quad)
+				.SetEase(Tween.EaseType.Out)
+				.TweenProperty(this, "custom_minimum_size:y", 0f, closeDuration)
+				.Finished += QueueFree;
+			Closed?.Invoke(this);
 		}
 	}
 }
