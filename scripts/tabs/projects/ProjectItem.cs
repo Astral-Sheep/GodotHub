@@ -31,7 +31,16 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected GDFile project;
 		protected string projectPath = "";
+		protected string projectName = "";
 		protected string enginePath = "";
+
+		protected override void Dispose(bool pDisposing)
+		{
+			if (pDisposing)
+			{
+				InstallsData.VersionAdded -= UpdateVersion;
+			}
+		}
 
 		public void Init(GDFile pProject)
 		{
@@ -45,7 +54,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			if (lError == Error.Ok)
 			{
-				nameLabel.Text = $"[b]{lProject.GetValue(APPLICATION_SECTION, NAME_KEY)}[/b]";
+				projectName = (string)lProject.GetValue(APPLICATION_SECTION, NAME_KEY);
+				nameLabel.Text = $"[b]{projectName}[/b]";
 				lastOpenedLabel.Text = GetElapsedTime(
 					new DirectoryInfo(project.Path)
 						.GetFiles()
@@ -54,15 +64,14 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				);
 				favoriteToggle.Toggled += OnFavoriteToggled;
 
-				if (SetVersion(pProject.Version))
-				{
-					openButton.Pressed += OnOpenPressed;
-				}
-				else
+				if (!SetVersion(pProject.Version))
 				{
 					Disable(false);
 					Debugger.PrintError($"Can't find compatible engine for project {lProject.GetValue(APPLICATION_SECTION, NAME_KEY)}");
 				}
+
+				openButton.Pressed += OnOpenPressed;
+				InstallsData.VersionAdded += UpdateVersion;
 			}
 			else
 			{
@@ -77,8 +86,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			DateTime lCurrentTime = DateTime.UtcNow;
 			TimeSpan lDifferenceSpan = lCurrentTime - pTime;
 
-			Debugger.PrintMessage($"Last: {pTime}\nCurrent: {lCurrentTime}");
-
+			//To refactor: i don't think it needs an explanation of why
 			if (pTime.Year < lCurrentTime.Year)
 			{
 				float lDifference = lCurrentTime.Year - pTime.Year;
@@ -156,6 +164,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				return false;
 
 			lCompatibleVersions.Sort();
+			lCompatibleVersions.Reverse();
 			Version lVersion;
 
 			for (int i = 0; i < lCompatibleVersions.Count; i++)
@@ -170,6 +179,37 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 
 			return true;
+		}
+
+		protected void UpdateVersion(GDFile pInstall)
+		{
+			if (!pInstall.Version.IsCompatible(project.Version))
+				return;
+
+			if (versionButton.ItemCount == 0)
+			{
+				versionButton.AddItem((string)pInstall.Version, 0);
+				versionButton.Disabled = false;
+				nameLabel.Text = $"[b]{projectName}[/b]";
+				return;
+			}
+
+			List<Version> lVersions = new List<Version>() { pInstall.Version };
+			lVersions.Reverse();
+
+			for (int i = 0; i < versionButton.ItemCount; i++)
+			{
+				lVersions.Add((Version)versionButton.GetItemText(i));
+			}
+
+			lVersions.Sort();
+
+			for (int i = 0; i < lVersions.Count; i++)
+			{
+				versionButton.AddItem((string)lVersions[i], i);
+			}
+
+			versionButton.Selected = lVersions.IndexOf(project.Version);
 		}
 
 		protected void Disable(bool pMissing)
