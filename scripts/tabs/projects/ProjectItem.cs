@@ -20,7 +20,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		public string ProjectName { get; protected set; }
 		public double TimeSinceLastOpening { get; protected set; }
 		public Version Version => project.Version;
-		public bool IsFavorite => project.IsFavorite;
+		public bool IsFavorite { get; protected set; }
 		public bool IsValid { get; protected set; } = true;
 
 		[Export] protected Button favoriteToggle;
@@ -69,6 +69,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				TimeSinceLastOpening = (DateTime.UtcNow - lTime).TotalSeconds;
 				favoriteToggle.Toggled += OnFavoriteToggled;
 				favoriteToggle.ButtonPressed = project.IsFavorite;
+				IsFavorite = project.IsFavorite;
 
 				if (!SetVersion(pProject.Version))
 				{
@@ -243,7 +244,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnFavoriteToggled(bool pToggled)
 		{
-			ProjectsData.SetFavorite(projectPath, pToggled);
+			ProjectsData.SetFavorite(project.Path, pToggled);
+			IsFavorite = pToggled;
 		}
 
 		protected void OnOpenPressed()

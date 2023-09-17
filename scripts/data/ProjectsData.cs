@@ -46,6 +46,11 @@ namespace Com.Astral.GodotHub.Data
 			Save();
 		}
 
+		public static bool HasProject(string pProject)
+		{
+			return file.HasSection(pProject);
+		}
+
 		/// <summary>
 		/// Remove project from the project.cfg file if it exists
 		/// </summary>
@@ -55,6 +60,7 @@ namespace Com.Astral.GodotHub.Data
 			if (file.HasSection(pPath))
 			{
 				file.EraseSection(pPath);
+				Save();
 			}
 		}
 

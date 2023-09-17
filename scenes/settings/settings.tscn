@@ -1,14 +1,12 @@
-[gd_scene load_steps=25 format=3 uid="uid://cmcj15j7iau6d"]
+[gd_scene load_steps=18 format=3 uid="uid://03yu8720kqas"]
 
 [ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="1_jlf08"]
-[ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes/style_box_bg_btn.tres" id="2_luqpj"]
-[ext_resource type="Texture2D" uid="uid://cqahek5snvkfx" path="res://assets/sprites/themes/cross.png" id="3_xu1qx"]
-[ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="4_gxq57"]
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="5_nxppr"]
-[ext_resource type="StyleBox" uid="uid://c61jjqjdali6w" path="res://resources/style_boxes/style_box_normal.tres" id="6_j3c4n"]
+[ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes_temp/style_box_bg_btn.tres" id="2_sqm41"]
+[ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="3_paxrg"]
+[ext_resource type="Theme" uid="uid://csirdw2fufxwq" path="res://resources/themes/settings.theme" id="4_3x3dr"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/directory/ProjectDirButton.cs" id="6_k8lve"]
 [ext_resource type="Texture2D" uid="uid://ck0fei3vii0gs" path="res://assets/sprites/themes/folder.png" id="7_xy6p1"]
-[ext_resource type="PackedScene" path="res://scenes/settings/folder_dialog.tscn" id="8_v2fuc"]
+[ext_resource type="PackedScene" uid="uid://c54ctd2k2mbg0" path="res://scenes/settings/folder_dialog.tscn" id="8_v2fuc"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/toggles/SameDirToggle.cs" id="10_3qbg1"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/directory/InstallDirButton.cs" id="11_x4rcq"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/directory/DownloadDirButton.cs" id="12_plh22"]
@@ -21,21 +19,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aow5g"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c3ha7"]
-texture = ExtResource("3_xu1qx")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4d55q"]
-texture = ExtResource("4_gxq57")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d1xt8"]
-texture = ExtResource("4_gxq57")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qwlxu"]
-texture = ExtResource("3_xu1qx")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_rd7yc"]
-texture = ExtResource("4_gxq57")
 
 [node name="Settings" type="Control" node_paths=PackedStringArray("content", "closeButton", "backgroundButton")]
 layout_mode = 3
@@ -63,11 +46,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme_override_styles/normal = ExtResource("2_luqpj")
-theme_override_styles/hover = ExtResource("2_luqpj")
-theme_override_styles/pressed = ExtResource("2_luqpj")
-theme_override_styles/disabled = ExtResource("2_luqpj")
-theme_override_styles/focus = ExtResource("2_luqpj")
+theme_override_styles/normal = ExtResource("2_sqm41")
+theme_override_styles/hover = ExtResource("2_sqm41")
+theme_override_styles/pressed = ExtResource("2_sqm41")
+theme_override_styles/disabled = ExtResource("2_sqm41")
+theme_override_styles/focus = ExtResource("2_sqm41")
 
 [node name="Panel" type="Panel" parent="."]
 z_index = 3
@@ -94,11 +77,7 @@ offset_right = -10.0
 offset_bottom = 35.0
 grow_horizontal = 0
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_c3ha7")
-theme_override_styles/hover = SubResource("StyleBoxTexture_4d55q")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_d1xt8")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_qwlxu")
-theme_override_styles/focus = SubResource("StyleBoxTexture_rd7yc")
+theme = ExtResource("3_paxrg")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
 layout_mode = 1
@@ -116,7 +95,7 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("5_nxppr")
+theme = ExtResource("4_3x3dr")
 
 [node name="ProjectDir" type="VBoxContainer" parent="Panel/ScrollContainer/Content" node_paths=PackedStringArray("button")]
 layout_mode = 2
@@ -134,7 +113,6 @@ fit_content = true
 [node name="Path" type="Button" parent="Panel/ScrollContainer/Content/ProjectDir"]
 layout_mode = 2
 focus_mode = 0
-theme_override_styles/normal = ExtResource("6_j3c4n")
 text = " C:\\Users\\thoma\\Documents\\Projects\\"
 icon = ExtResource("7_xy6p1")
 alignment = 0
@@ -177,7 +155,6 @@ fit_content = true
 [node name="Path" type="Button" parent="Panel/ScrollContainer/Content/InstallDir"]
 layout_mode = 2
 focus_mode = 0
-theme_override_styles/normal = ExtResource("6_j3c4n")
 text = " C:\\Users\\thoma\\Documents\\Projects\\"
 icon = ExtResource("7_xy6p1")
 alignment = 0
@@ -200,7 +177,6 @@ fit_content = true
 [node name="Path" type="Button" parent="Panel/ScrollContainer/Content/DownloadDir"]
 layout_mode = 2
 focus_mode = 0
-theme_override_styles/normal = ExtResource("6_j3c4n")
 text = " C:\\Users\\thoma\\Documents\\Projects\\"
 icon = ExtResource("7_xy6p1")
 alignment = 0

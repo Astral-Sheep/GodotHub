@@ -1,40 +1,18 @@
-[gd_scene load_steps=13 format=3 uid="uid://dp6av5va5ym14"]
+[gd_scene load_steps=5 format=3 uid="uid://3ek1c5uks77u"]
 
+[ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_6dfu7"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/Installer.cs" id="1_ke4qi"]
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_vqxyd"]
-[ext_resource type="Texture2D" uid="uid://cqahek5snvkfx" path="res://assets/sprites/themes/cross.png" id="3_w6rix"]
-[ext_resource type="Texture2D" uid="uid://dqjuu1rnp3lc4" path="res://assets/sprites/themes/cross_highlight.png" id="4_bilt3"]
+[ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="3_gl0mp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i8jxo"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2k8il"]
-bg_color = Color(0.0823529, 0.0823529, 0.0901961, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omuyo"]
-bg_color = Color(0.215686, 0.615686, 0.65098, 1)
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_d0tq7"]
-texture = ExtResource("3_w6rix")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2nhqn"]
-texture = ExtResource("4_bilt3")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s8u7n"]
-texture = ExtResource("4_bilt3")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_v6p3j"]
-texture = ExtResource("3_w6rix")
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_k73gs"]
-texture = ExtResource("3_w6rix")
 
 [node name="Installer" type="Panel" node_paths=PackedStringArray("versionLabel", "statusLabel", "loadingBar", "cancelButton")]
 clip_contents = true
 custom_minimum_size = Vector2(0, 100)
 offset_right = 320.0
 offset_bottom = 100.0
-theme = ExtResource("1_vqxyd")
+theme = ExtResource("1_6dfu7")
 theme_override_styles/panel = SubResource("StyleBoxFlat_i8jxo")
 script = ExtResource("1_ke4qi")
 closeDuration = 0.2
@@ -80,17 +58,14 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = -14.0
+offset_top = -15.0
 offset_right = -20.0
-offset_bottom = -10.0
+offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_colors/font_color = Color(0, 0, 0, 0)
-theme_override_font_sizes/font_size = 1
-theme_override_styles/background = SubResource("StyleBoxFlat_2k8il")
-theme_override_styles/fill = SubResource("StyleBoxFlat_omuyo")
 
 [node name="CancelButton" type="Button" parent="."]
+custom_minimum_size = Vector2(15, 15)
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 1.0
@@ -101,8 +76,4 @@ offset_right = -10.0
 offset_bottom = 22.5
 grow_horizontal = 0
 focus_mode = 0
-theme_override_styles/normal = SubResource("StyleBoxTexture_d0tq7")
-theme_override_styles/hover = SubResource("StyleBoxTexture_2nhqn")
-theme_override_styles/pressed = SubResource("StyleBoxTexture_s8u7n")
-theme_override_styles/disabled = SubResource("StyleBoxTexture_v6p3j")
-theme_override_styles/focus = SubResource("StyleBoxTexture_k73gs")
+theme = ExtResource("3_gl0mp")

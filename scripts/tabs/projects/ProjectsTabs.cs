@@ -81,6 +81,10 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected void OnFileSelected(string pPath)
 		{
 			pPath = pPath[..pPath.RFind("/project.godot")];
+
+			if (ProjectsData.HasProject(pPath))
+				return;
+
 			GDFile lProject = new GDFile(pPath, false, ProjectsData.GetVersionFromFolder(pPath));
 			ProjectsData.AddProject(lProject);
 			CreateItem(lProject);

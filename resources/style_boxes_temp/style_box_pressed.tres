@@ -1,9 +1,9 @@
 [gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://opxang1fx2oq"]
 
-[ext_resource type="Texture2D" uid="uid://dapx6vrjpiai6" path="res://assets/sprites/themes/btn_bg.png" id="1"]
+[ext_resource type="Texture2D" uid="uid://dapx6vrjpiai6" path="res://assets/sprites/themes/btn_bg.png" id="1_gy5k5"]
 
 [resource]
-texture = ExtResource("1")
+texture = ExtResource("1_gy5k5")
 texture_margin_left = 11.0
 texture_margin_top = 11.0
 texture_margin_right = 8.0

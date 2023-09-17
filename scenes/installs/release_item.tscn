@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://c066vl0uu0wv4"]
+[gd_scene load_steps=5 format=3 uid="uid://c75ty2plb2sys"]
 
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_fm773"]
+[ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_0r2wn"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/ReleaseItem.cs" id="1_ukbs0"]
+[ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="3_78hul"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0sgs"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
@@ -11,7 +12,7 @@ clip_contents = true
 custom_minimum_size = Vector2(0, 75)
 offset_right = 850.0
 offset_bottom = 75.0
-theme = ExtResource("1_fm773")
+theme = ExtResource("1_0r2wn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_d0sgs")
 script = ExtResource("1_ukbs0")
 versionLabel = NodePath("Version")
@@ -94,4 +95,5 @@ offset_right = -25.0
 offset_bottom = -15.0
 grow_horizontal = 0
 focus_mode = 0
+theme = ExtResource("3_78hul")
 text = "Install"

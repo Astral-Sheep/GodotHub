@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cnpdgwyrvity5"]
+[gd_scene load_steps=2 format=3 uid="uid://bilwvy6kxj1nk"]
 
-[ext_resource type="Theme" uid="uid://b12sbcx567vcy" path="res://resources/themes/main_theme.tres" id="1_8qwdp"]
+[ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_kav0p"]
 
 [node name="ConfirmationDialog" type="ConfirmationDialog"]
 transparent_bg = true
@@ -10,6 +10,6 @@ visible = true
 exclusive = false
 unresizable = true
 popup_window = true
-theme = ExtResource("1_8qwdp")
+theme = ExtResource("1_kav0p")
 dialog_text = "Are you confirming you want to do the action you clicked on?"
 dialog_autowrap = true

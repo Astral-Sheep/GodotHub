@@ -1,0 +1,7 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://b8t8n87drtecc"]
+
+[ext_resource type="Texture2D" uid="uid://n0ngwfu5xhvd" path="res://assets/sprites/star.png" id="1_h2w4n"]
+
+[resource]
+texture = ExtResource("1_h2w4n")
+modulate_color = Color(0.2, 0.2, 0.2, 1)

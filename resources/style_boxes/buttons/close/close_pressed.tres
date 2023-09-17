@@ -1,0 +1,7 @@
+[gd_resource type="StyleBoxTexture" load_steps=2 format=3 uid="uid://bcdy4dfhraxsi"]
+
+[ext_resource type="Texture2D" uid="uid://crtj2ch3o166n" path="res://assets/sprites/cross_white.png" id="1_ybsvh"]
+
+[resource]
+texture = ExtResource("1_ybsvh")
+modulate_color = Color(0.427451, 0.156863, 0.156863, 1)
