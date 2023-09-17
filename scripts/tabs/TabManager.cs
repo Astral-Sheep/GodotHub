@@ -18,11 +18,20 @@ namespace Com.Astral.GodotHub.Tabs
 		{
 			projectsButton.Toggled += OnProjectsToggled;
 			installsButton.Toggled += OnInstallsToggled;
+#if DEBUG
 			documentationButton.Toggled += OnDocumentationToggled;
+#endif //DEBUG
 
 			projectsTab.Toggle(projectsButton.ButtonPressed);
 			installsTab.Toggle(installsButton.ButtonPressed);
+#if DEBUG
 			documentationTab.Toggle(documentationButton.ButtonPressed);
+#endif //DEBUG
+
+#if !DEBUG
+			documentationButton.Visible = false;
+			documentationTab.Visible = false;
+#endif //!DEBUG
 		}
 
 		protected void OnProjectsToggled(bool pToggle)
@@ -32,7 +41,9 @@ namespace Com.Astral.GodotHub.Tabs
 
 			projectsTab.Toggle(true);
 			installsTab.Toggle(false);
+#if DEBUG
 			documentationTab.Toggle(false);
+#endif //DEBUG
 		}
 
 		protected void OnInstallsToggled(bool pToggle)
@@ -42,9 +53,12 @@ namespace Com.Astral.GodotHub.Tabs
 			
 			installsTab.Toggle(true);
 			projectsTab.Toggle(false);
+#if DEBUG
 			documentationTab.Toggle(false);
+#endif //DEBUG
 		}
 
+#if DEBUG
 		protected void OnDocumentationToggled(bool pToggle)
 		{
 			if (documentationTab.Visible || !pToggle)
@@ -54,5 +68,6 @@ namespace Com.Astral.GodotHub.Tabs
 			projectsTab.Toggle(false);
 			installsTab.Toggle(false);
 		}
+#endif //DEBUG
 	}
 }

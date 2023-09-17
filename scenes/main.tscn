@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://cf45rric6gmx5"]
+[gd_scene load_steps=40 format=3 uid="uid://cf45rric6gmx5"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" path="res://scripts/tabs/installs/InstallsTab.cs" id="5_s1nr3"]
 [ext_resource type="ButtonGroup" uid="uid://c2ypx5qbtttva" path="res://resources/button_groups/install_btn_group.tres" id="7_5b0sc"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/ReleasePanel.cs" id="7_07w4y"]
+[ext_resource type="Script" path="res://scripts/tabs/projects/SortToggle.cs" id="7_7242a"]
 [ext_resource type="Texture2D" uid="uid://be2gnv6tr4e73" path="res://assets/sprites/themes/arrow_down.png" id="7_kehch"]
 [ext_resource type="Texture2D" uid="uid://buy4vfi18sdga" path="res://assets/sprites/themes/arrow_up.png" id="7_njnqi"]
 [ext_resource type="PackedScene" uid="uid://c066vl0uu0wv4" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
@@ -113,7 +114,7 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="ProjectsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton")]
+[node name="ProjectsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -125,19 +126,21 @@ script = ExtResource("3_047ry")
 projectItemScene = ExtResource("4_ftw23")
 itemContainer = NodePath("ProjectsList/VBoxContainer")
 folderPopupScene = ExtResource("5_10olf")
-addButton = NodePath("UpperButton/AddButton")
+addButton = NodePath("UpperButtons/AddButton")
+favoriteButton = NodePath("UpperButtons/SortOptions/FavoriteButton")
+nameButton = NodePath("UpperButtons/SortOptions/NameButton")
+dateButton = NodePath("UpperButtons/SortOptions/DateButton")
+versionButton = NodePath("UpperButtons/SortOptions/VersionButton")
 
-[node name="UpperButton" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab"]
+[node name="UpperButtons" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
-offset_left = 10.0
 offset_top = 10.0
-offset_right = -10.0
-offset_bottom = 185.0
+offset_bottom = 195.0
 grow_horizontal = 2
 
-[node name="AddButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButton"]
+[node name="AddButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -145,12 +148,87 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -135.0
-offset_top = -45.0
+offset_top = -105.0
 offset_right = -35.0
+offset_bottom = -60.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = ExtResource("3_gh8ej")
 text = "Add"
+
+[node name="SortOptions" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = -50.0
+offset_right = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="FavoriteButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.038
+anchor_top = 0.5
+anchor_right = 0.038
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+focus_mode = 0
+toggle_mode = true
+script = ExtResource("7_7242a")
+
+[node name="NameButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.075
+anchor_top = 0.5
+anchor_right = 0.35
+anchor_bottom = 0.5
+offset_top = -20.0
+focus_mode = 0
+theme = ExtResource("3_gh8ej")
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Name"
+script = ExtResource("7_7242a")
+
+[node name="DateButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.375
+anchor_top = 0.5
+anchor_right = 0.55
+anchor_bottom = 0.5
+offset_top = -20.0
+focus_mode = 0
+theme = ExtResource("3_gh8ej")
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Date
+"
+script = ExtResource("7_7242a")
+
+[node name="VersionButton" type="Button" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.575
+anchor_top = 0.5
+anchor_right = 0.725
+anchor_bottom = 0.5
+offset_top = -20.0
+focus_mode = 0
+theme = ExtResource("3_gh8ej")
+theme_override_font_sizes/font_size = 14
+toggle_mode = true
+text = "Version
+"
+script = ExtResource("7_7242a")
 
 [node name="ProjectsList" type="ScrollContainer" parent="UI/Control/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
@@ -170,6 +248,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="InstallsTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("installsPanel", "releasesPanel", "installsButton", "releasesButton", "sortButton", "orderButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -290,6 +369,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DocumentationTab" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -318,6 +398,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DownloadPanel" type="Control" parent="UI/Control/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -491,6 +572,7 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("18_bwlxg")]
+visible = false
 openButton = NodePath("../UI/Control/Tabs/MiscButtonContainer/ParameterButton")
 
 [node name="SplashScreen" type="ColorRect" parent="."]

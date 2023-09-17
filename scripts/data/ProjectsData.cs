@@ -82,6 +82,13 @@ namespace Com.Astral.GodotHub.Data
 		public static void SetFavorite(string pProject, bool pFavorite)
 		{
 			file.SetValue(pProject, FAVORITE, pFavorite);
+			Save();
+		}
+
+		public static void SetVersion(string pProject, string pVersion)
+		{
+			file.SetValue(pProject, VERSION, pVersion);
+			Save();
 		}
 
 		public static Version GetVersionFromFolder(string pPath)

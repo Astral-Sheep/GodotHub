@@ -17,6 +17,12 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected const string APPLICATION_SECTION = "application";
 		protected const string NAME_KEY = "config/name";
 
+		public string ProjectName { get; protected set; }
+		public double TimeSinceLastOpening { get; protected set; }
+		public Version Version => project.Version;
+		public bool IsFavorite => project.IsFavorite;
+		public bool IsValid { get; protected set; } = true;
+
 		[Export] protected Button favoriteToggle;
 		[Export] protected RichTextLabel nameLabel;
 		[Export] protected Label pathLabel;
@@ -31,8 +37,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected GDFile project;
 		protected string projectPath = "";
-		protected string projectName = "";
-		protected string enginePath = "";
 
 		protected override void Dispose(bool pDisposing)
 		{
@@ -54,20 +58,22 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			if (lError == Error.Ok)
 			{
-				projectName = (string)lProject.GetValue(APPLICATION_SECTION, NAME_KEY);
-				nameLabel.Text = $"[b]{projectName}[/b]";
-				lastOpenedLabel.Text = GetElapsedTime(
-					new DirectoryInfo(project.Path)
+				ProjectName = (string)lProject.GetValue(APPLICATION_SECTION, NAME_KEY);
+				nameLabel.Text = $"[b]{ProjectName}[/b]";
+
+				DateTime lTime = new DirectoryInfo(project.Path)
 						.GetFiles()
 						.OrderByDescending(f => f.LastWriteTimeUtc)
-						.First().LastWriteTimeUtc
-				);
+						.First().LastWriteTimeUtc;
+				lastOpenedLabel.Text = GetElapsedTime(lTime);
+				TimeSinceLastOpening = (DateTime.UtcNow - lTime).TotalSeconds;
 				favoriteToggle.Toggled += OnFavoriteToggled;
+				favoriteToggle.ButtonPressed = project.IsFavorite;
 
 				if (!SetVersion(pProject.Version))
 				{
 					Disable(false);
-					Debugger.PrintError($"Can't find compatible engine for project {lProject.GetValue(APPLICATION_SECTION, NAME_KEY)}");
+					Debugger.PrintError($"Can't find compatible engine for project {ProjectName}");
 				}
 
 				openButton.Pressed += OnOpenPressed;
@@ -89,71 +95,76 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			//To refactor: i don't think it needs an explanation of why
 			if (pTime.Year < lCurrentTime.Year)
 			{
-				float lDifference = lCurrentTime.Year - pTime.Year;
+				int lDifference = lCurrentTime.Year - pTime.Year;
 
 				if (lDifference == 1 && lCurrentTime.Month < pTime.Month)
 				{
-					return $"{pTime.Month - lCurrentTime.Month} months ago";
+					return FormatTime(pTime.Month - lCurrentTime.Month, "month");
 				}
 				else
 				{
-					return $"{lDifference} year{(lDifference > 1 ? "s" : "")} ago";
+					return FormatTime(lDifference, "year");
 				}
 			}
 			else if (pTime.Month < lCurrentTime.Month)
 			{
-				float lDifference = lCurrentTime.Month - pTime.Month;
+				int lDifference = lCurrentTime.Month - pTime.Month;
 
 				if (lDifference == 1 && lCurrentTime.Day < pTime.Day)
 				{
-					return $"{lDifferenceSpan.Days} days ago";
+					return FormatTime(lDifferenceSpan.Days, "day");
 				}
 				else
 				{
-					return $"{lDifference} month{(lDifference > 1 ? "s" : "")} ago";
+					return FormatTime(lDifference, "month");
 				}
 			}
 			else if (pTime.Day < lCurrentTime.Day)
 			{
-				if (lDifferenceSpan.Hours < 24)
+				if (lDifferenceSpan.TotalHours < 24)
 				{
-					return $"{lDifferenceSpan.Hours} hours ago";
+					return FormatTime(lDifferenceSpan.Hours, "hour");
 				}
 				else
 				{
-					return $"{lDifferenceSpan.Days} day{(lDifferenceSpan.Days > 1 ? "s" : "")} ago";
+					return FormatTime(lDifferenceSpan.Days, "day");
 				}
 			}
 			else if (pTime.Hour < lCurrentTime.Hour)
 			{
-				if (lDifferenceSpan.Minutes < 60)
+				if (lDifferenceSpan.TotalMinutes < 60)
 				{
-					return $"{lDifferenceSpan.Minutes} minutes ago";
+					return FormatTime(lDifferenceSpan.Minutes, "minute");
 				}
 				else
 				{
-					return $"{lDifferenceSpan.Hours} hour{(lDifferenceSpan.Hours > 1 ? "s" : "")} ago";
+					return FormatTime(lDifferenceSpan.Hours, "hour");
 				}
 			}
 			else if (pTime.Minute < lCurrentTime.Minute)
 			{
-				if (lDifferenceSpan.Seconds < 60)
+				if (lDifferenceSpan.TotalSeconds < 60)
 				{
-					return $"{lDifferenceSpan.Seconds} seconds ago";
+					return FormatTime(lDifferenceSpan.Seconds, "second");
 				}
 				else
 				{
-					return $"{lDifferenceSpan.Minutes} minute{(lDifferenceSpan.Minutes > 1 ? "s" : "")} ago";
+					return FormatTime(lDifferenceSpan.Minutes, "minute");
 				}
 			}
 			else if (pTime.Second < lCurrentTime.Second)
 			{
-				return $"{lDifferenceSpan.Seconds} second{(lDifferenceSpan.Seconds > 1 ? "s" : "")} ago";
+				return FormatTime(lDifferenceSpan.Seconds, "second");
 			}
 			else
 			{
 				return "Now";
 			}
+		}
+
+		protected string FormatTime(int pTime, string pSuffix)
+		{
+			return $"{pTime} {pSuffix}{(pTime > 1 ? "s" : "")} ago";
 		}
 
 		protected bool SetVersion(Version pVersion)
@@ -190,7 +201,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			{
 				versionButton.AddItem((string)pInstall.Version, 0);
 				versionButton.Disabled = false;
-				nameLabel.Text = $"[b]{projectName}[/b]";
+				nameLabel.Text = $"[b]{ProjectName}[/b]";
+				IsValid = true;
 				return;
 			}
 
@@ -224,6 +236,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]{nameLabel.Text}[/color]";
 			}
 
+			IsValid = false;
 			versionButton.Disabled = true;
 			openButton.Disabled = true;
 		}
