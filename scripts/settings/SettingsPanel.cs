@@ -9,6 +9,7 @@ namespace Com.Astral.GodotHub.Settings
 	public partial class SettingsPanel : Control
 	{
 		[Export] protected Control content;
+		[Export] protected float openDuration = 0.2f;
 
 		[ExportGroup("Buttons")]
 		[Export] protected Button openButton;
@@ -18,6 +19,7 @@ namespace Com.Astral.GodotHub.Settings
 		[Export] protected Array<NodePath> buttonsPath;
 
 		protected List<ISettingButton> buttons;
+		protected (float top, float bottom) anchor;
 
 		public override void _Ready()
 		{
@@ -32,8 +34,9 @@ namespace Com.Astral.GodotHub.Settings
 				buttons.Add(GetNode<ISettingButton>(buttonsPath[i]));
 			}
 
+			anchor = (content.AnchorTop, content.AnchorBottom);
 			CloseInstant();
-			openButton.Pressed += OpenPressed;
+			openButton.Pressed += OnOpenPressed;
 		}
 
 		protected override void Dispose(bool pDisposing)
@@ -43,7 +46,7 @@ namespace Com.Astral.GodotHub.Settings
 
 			if (openButton != null)
 			{
-				openButton.Pressed -= OpenPressed;
+				openButton.Pressed -= OnOpenPressed;
 			}
 		}
 
@@ -63,43 +66,46 @@ namespace Com.Astral.GodotHub.Settings
 			}
 		}
 
-		protected void OpenPressed()
+		protected void OnOpenPressed()
 		{
 			Tween lTween = CreateTween()
 				.SetParallel()
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.Out);
-			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, 0), 0.2f);
-			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 1f), 0.2f);
+			lTween.TweenProperty(content, "anchor_top", anchor.top,openDuration);
+			lTween.TweenProperty(content, "anchor_bottom", anchor.bottom, openDuration);
+			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 1f), openDuration);
 			
 			EnableButtons();
-			openButton.Pressed -= OpenPressed;
-			closeButton.Pressed += ClosePressed;
-			backgroundButton.Pressed += ClosePressed;
+			openButton.Pressed -= OnOpenPressed;
+			closeButton.Pressed += OnClosePressed;
+			backgroundButton.Pressed += OnClosePressed;
 			backgroundButton.MouseFilter = MouseFilterEnum.Stop;
 		}
 
-		protected void ClosePressed()
+		protected void OnClosePressed()
 		{
 			Config.Save();
 
 			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
-			backgroundButton.Pressed -= ClosePressed;
-			closeButton.Pressed -= ClosePressed;
-			openButton.Pressed += OpenPressed;
+			backgroundButton.Pressed -= OnClosePressed;
+			closeButton.Pressed -= OnClosePressed;
+			openButton.Pressed += OnOpenPressed;
 			DisableButtons();
 
 			Tween lTween = CreateTween()
 				.SetParallel()
 				.SetTrans(Tween.TransitionType.Cubic)
 				.SetEase(Tween.EaseType.In);
-			lTween.TweenProperty(content, "position", new Vector2(content.Position.X, -content.Size.Y), 0.2f);
-			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 0f), 0.2f);
+			lTween.TweenProperty(content, "anchor_top", -anchor.bottom, openDuration);
+			lTween.TweenProperty(content, "anchor_bottom", anchor.top, openDuration);
+			lTween.TweenProperty(backgroundButton, "self_modulate", new Color(backgroundButton.SelfModulate, 0f), openDuration);
 		}
 
 		protected void CloseInstant()
 		{
-			content.Position = new Vector2(content.Position.X, -content.Size.Y);
+			content.AnchorTop = -anchor.bottom;
+			content.AnchorBottom = anchor.top;
 			backgroundButton.SelfModulate = new Color(backgroundButton.SelfModulate, 0f);
 			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
 		}
