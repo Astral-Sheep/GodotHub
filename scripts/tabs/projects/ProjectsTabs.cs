@@ -16,7 +16,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		[Export] protected Button addButton;
 
 		[ExportGroup("Sorting")]
-		[Export] protected SortToggle favoriteButton;
+		[Export] protected Button favoriteButton;
 		[Export] protected SortToggle nameButton;
 		[Export] protected SortToggle dateButton;
 		[Export] protected SortToggle versionButton;
@@ -33,7 +33,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				items.Add(CreateItem(lProjects[i]));
 			}
 
-			favoriteButton.CustomToggled += OnFavoriteToggled;
+			favoriteButton.Toggled += OnFavoriteToggled;
 			nameButton.CustomToggled += OnNameToggled;
 			dateButton.CustomToggled += OnDateToggled;
 			versionButton.CustomToggled += OnVersionToggled;
@@ -100,16 +100,22 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnFavoriteToggled(bool pToggled)
 		{
-			nameButton.Disable();
-			dateButton.Disable();
-			versionButton.Disable();
-
-			Sort(pToggled ? CompareFavorites : ReversedCompareFavorites);
+			if (pToggled)
+			{
+				nameButton.Disable();
+				dateButton.Disable();
+				versionButton.Disable();
+				Sort(pToggled ? CompareFavorites : ReversedCompareFavorites);
+			}
+			else
+			{
+				dateButton.OnToggled(true);
+			}
 		}
 
 		protected void OnNameToggled(bool pToggled)
 		{
-			favoriteButton.Disable();
+			favoriteButton.ButtonPressed = false;
 			dateButton.Disable();
 			versionButton.Disable();
 
@@ -118,7 +124,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnDateToggled(bool pToggled)
 		{
-			favoriteButton.Disable();
+			favoriteButton.ButtonPressed = false;
 			nameButton.Disable();
 			versionButton.Disable();
 
@@ -127,7 +133,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnVersionToggled(bool pToggled)
 		{
-			favoriteButton.Disable();
+			favoriteButton.ButtonPressed = false;
 			nameButton.Disable();
 			dateButton.Disable();
 

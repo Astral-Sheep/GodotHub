@@ -158,9 +158,8 @@ offset_bottom = 15.0
 focus_mode = 0
 theme = ExtResource("9_ol1lc")
 toggle_mode = true
-script = ExtResource("7_7242a")
 
-[node name="NameButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+[node name="NameButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions" node_paths=PackedStringArray("arrowRect")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.075
@@ -173,8 +172,20 @@ toggle_mode = true
 text = "Name"
 alignment = 0
 script = ExtResource("7_7242a")
+arrowRect = NodePath("Arrow")
 
-[node name="DateButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+[node name="Arrow" type="TextureRect" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions/NameButton"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 55.0
+offset_right = 70.0
+grow_vertical = 2
+pivot_offset = Vector2(7.5, 12.5)
+texture = ExtResource("7_kehch")
+stretch_mode = 5
+
+[node name="DateButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions" node_paths=PackedStringArray("arrowRect")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.375
@@ -187,8 +198,20 @@ toggle_mode = true
 text = "Last Opened"
 alignment = 0
 script = ExtResource("7_7242a")
+arrowRect = NodePath("Arrow")
 
-[node name="VersionButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+[node name="Arrow" type="TextureRect" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions/DateButton"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 140.0
+offset_right = 155.0
+grow_vertical = 2
+pivot_offset = Vector2(7.5, 12.5)
+texture = ExtResource("7_kehch")
+stretch_mode = 5
+
+[node name="VersionButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions" node_paths=PackedStringArray("arrowRect")]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.575
@@ -202,6 +225,18 @@ text = "Version
 "
 alignment = 0
 script = ExtResource("7_7242a")
+arrowRect = NodePath("Arrow")
+
+[node name="Arrow" type="TextureRect" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions/VersionButton"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 90.0
+offset_right = 105.0
+grow_vertical = 2
+pivot_offset = Vector2(7.5, 12.5)
+texture = ExtResource("7_kehch")
+stretch_mode = 5
 
 [node name="ProjectsList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
