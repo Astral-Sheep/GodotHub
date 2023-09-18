@@ -1,5 +1,6 @@
 using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using Octokit;
 using System;
@@ -12,7 +13,7 @@ using Version = Com.Astral.GodotHub.Data.Version;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
-	public partial class ReleaseItem : Control
+	public partial class ReleaseItem : Control, IVersionItem, IValidItem
 	{
 		protected const string RELEASE_NAME_SUFFIX = "-stable";
 		protected const string ASSET_NAME_PREFIX = "Godot_v";
@@ -22,6 +23,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		public int Index { get; protected set; }
 		public Version Version { get; protected set; }
+		public bool IsValid => true;
 
 		[Export] protected Label versionLabel;
 		[Export] protected Label dateLabel;

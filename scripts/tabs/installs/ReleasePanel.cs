@@ -1,13 +1,21 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using Octokit;
+using System;
 using System.Collections.Generic;
+
+using Version = Com.Astral.GodotHub.Data.Version;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class ReleasePanel : SortedPanel
 	{
 		[Export] protected PackedScene releaseItemScene;
+
+		[ExportGroup("Sorting")]
+		[Export] protected SortToggle versionButton;
+		[Export] protected SortToggle dateButton;
 
 		protected List<ReleaseItem> items = new List<ReleaseItem>();
 
@@ -31,6 +39,10 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 				items.Add(CreateItem(lReleases[i], i));
 			}
+
+			versionButton.CustomToggled += OnVersionToggled;
+			dateButton.CustomToggled += OnDateToggled;
+			dateButton.ButtonPressed = true;
 		}
 
 		protected ReleaseItem CreateItem(Release pRelease, int pIndex)
@@ -41,50 +53,36 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			return lItem;
 		}
 
-		//public override void Sort(SortType pType, bool pReversed)
-		//{
-		//	SortItems(pType == SortType.Version ? new VersionSorter() : new DateSorter(), pReversed);
-		//}
-
-		protected void SortItems(IComparer<ReleaseItem> pComparer, bool pReversed)
+		protected void OnVersionToggled(bool pToggled)
 		{
-			items.Sort(pComparer);
+			dateButton.Disable();
+			Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
+		}
 
-			if (pReversed)
-			{
-				items.Reverse();
-			}
-			
+		protected void OnDateToggled(bool pToggled)
+		{
+			versionButton.Disable();
+			Sort(pToggled ? CompareIndices : ReversedCompareIndices);
+		}
+
+		protected void Sort(Comparison<ReleaseItem> pComparison)
+		{
+			items.Sort(pComparison);
+
 			for (int i = 0; i < items.Count; i++)
 			{
 				itemContainer.MoveChild(items[i], i);
 			}
 		}
 
-		protected class DateSorter : IComparer<ReleaseItem>
+		protected int CompareIndices(ReleaseItem pLhs, ReleaseItem pRhs)
 		{
-			public int Compare(ReleaseItem x, ReleaseItem y)
-			{
-				return x.Index - y.Index;
-			}
+			return pLhs.Index - pRhs.Index;
 		}
 
-		protected class VersionSorter : IComparer<ReleaseItem>
+		protected int ReversedCompareIndices(ReleaseItem pLhs, ReleaseItem pRhs)
 		{
-			public int Compare(ReleaseItem x, ReleaseItem y)
-			{
-				if (x.Version.major == y.Version.major)
-				{
-					if (x.Version.minor == y.Version.minor)
-					{
-						return y.Version.patch - x.Version.patch;
-					}
-
-					return y.Version.minor - x.Version.minor;
-				}
-
-				return y.Version.major - x.Version.major;
-			}
+			return CompareIndices(pRhs, pLhs);
 		}
 	}
 }
