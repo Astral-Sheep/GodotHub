@@ -1,0 +1,27 @@
+[gd_scene load_steps=6 format=3 uid="uid://dpptd81s7nml2"]
+
+[ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_pl5se"]
+[ext_resource type="StyleBox" uid="uid://bwbtmxumfpuux" path="res://resources/style_boxes/buttons/default/default_pressed.stylebox" id="2_gb8s2"]
+[ext_resource type="StyleBox" uid="uid://cy18s2lgnjx5u" path="res://resources/style_boxes/buttons/default/default_hover.stylebox" id="3_nyalc"]
+[ext_resource type="StyleBox" uid="uid://c7pi54b60wghh" path="res://resources/style_boxes/buttons/default/default_normal.stylebox" id="4_7okq5"]
+[ext_resource type="StyleBox" uid="uid://donklkuk8tnlx" path="res://resources/style_boxes/buttons/default/default_disabled.stylebox" id="5_be4ah"]
+
+[node name="SubButton" type="Button"]
+custom_minimum_size = Vector2(0, 45)
+offset_left = 25.0
+offset_top = 15.0
+offset_right = 140.0
+offset_bottom = 60.0
+focus_mode = 0
+theme = ExtResource("1_pl5se")
+theme_override_colors/font_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/font_pressed_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/font_hover_color = Color(0.933333, 0.933333, 0.933333, 1)
+theme_override_colors/font_focus_color = Color(0.933333, 0.933333, 0.933333, 1)
+theme_override_colors/font_hover_pressed_color = Color(0.933333, 0.933333, 0.933333, 1)
+theme_override_styles/normal = ExtResource("2_gb8s2")
+theme_override_styles/hover = ExtResource("3_nyalc")
+theme_override_styles/pressed = ExtResource("4_7okq5")
+theme_override_styles/disabled = ExtResource("5_be4ah")
+toggle_mode = true
+text = "Installs"

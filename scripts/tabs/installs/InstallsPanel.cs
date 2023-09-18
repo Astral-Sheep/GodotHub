@@ -4,11 +4,17 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
+using Version = Com.Astral.GodotHub.Data.Version;
+
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class InstallsPanel : SortedPanel
 	{
 		[Export] protected PackedScene installItemScene;
+
+		[ExportGroup("Install addition")]
+		[Export] protected Button addButton;
+		[Export] protected PackedScene fileDialogScene;
 
 		[ExportGroup("Sorting")]
 		[Export] protected Button favoriteButton;
@@ -34,6 +40,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			versionButton.CustomToggled += OnVersionToggled;
 			monoButton.CustomToggled += OnMonoToggled;
 			dateButton.CustomToggled += OnDateToggled;
+			addButton.Pressed += OnAddPressed;
 
 			dateButton.ButtonPressed = true;
 		}
@@ -65,6 +72,45 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		protected void OnItemClosed(InstallItem pItem)
 		{
 			items.Remove(pItem);
+		}
+
+		protected void OnAddPressed()
+		{
+			FileDialog lDialog = fileDialogScene.Instantiate<FileDialog>();
+			Main.Instance.AddChild(lDialog);
+			lDialog.PopupCentered();
+			lDialog.FileMode = FileDialog.FileModeEnum.OpenFiles;
+
+#if GODOT_WINDOWS
+			lDialog.Filters = new string[] { "*.exe" };
+#else
+			lDialog.Filters = new string [] { "*" };
+#endif
+
+			lDialog.CurrentDir = Config.InstallDir;
+			lDialog.FilesSelected += OnFilesSelected;
+		}
+
+		protected void OnFilesSelected(string[] pPaths)
+		{
+			string lPath;
+
+			for (int i = 0; i < pPaths.Length; i++)
+			{
+				lPath = pPaths[i];
+
+				if (!InstallsData.VersionIsValid(lPath))
+					continue;
+
+				InstallsData.AddVersion(lPath, true);
+				items.Add(CreateItem(
+					new GDFile(
+						lPath,
+						false,
+						(Version)lPath
+					)
+				));
+			}
 		}
 
 		protected void OnFavoriteToggled(bool pToggled)

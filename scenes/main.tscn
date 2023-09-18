@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://c8n706h2grnj7"]
+[gd_scene load_steps=34 format=3 uid="uid://c8n706h2grnj7"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
@@ -18,13 +18,14 @@
 [ext_resource type="PackedScene" path="res://scenes/sort_button.tscn" id="10_h7r2s"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/DownloadPanel.cs" id="10_mj2qp"]
 [ext_resource type="PackedScene" uid="uid://8wgykcf75ex1" path="res://scenes/installs/install_item.tscn" id="10_ty7wm"]
-[ext_resource type="Texture2D" uid="uid://4v0f3326dtvv" path="res://assets/sprites/themes/box_checked.png" id="12_5gvuq"]
+[ext_resource type="PackedScene" uid="uid://dpptd81s7nml2" path="res://scenes/installs/subbutton.tscn" id="12_3gmeu"]
 [ext_resource type="PackedScene" uid="uid://dh08036ig8ywv" path="res://scenes/debug/debugger.tscn" id="14_cqlha"]
 [ext_resource type="Script" path="res://scripts/tabs/documentation/DocumentationTab.cs" id="14_tou5o"]
 [ext_resource type="Script" path="res://scripts/SplashScreen.cs" id="15_14etp"]
-[ext_resource type="PackedScene" uid="uid://03yu8720kqas" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
+[ext_resource type="PackedScene" uid="uid://djyx4rm2ak0n5" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="19_hewk5"]
 [ext_resource type="StyleBox" uid="uid://c4b7kd0ijhmvq" path="res://resources/style_boxes/panels/mid_dark_panel.stylebox" id="23_voqpq"]
+[ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
 [ext_resource type="StyleBox" uid="uid://cf5kfntpwc2kk" path="res://resources/style_boxes/panels/soft_dark_panel.stylebox" id="26_gjfo7"]
 [ext_resource type="Texture2D" uid="uid://b6m2numrdnkgc" path="res://assets/sprites/download_btn.png" id="29_7sdgg"]
 
@@ -87,7 +88,6 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -211,38 +211,29 @@ releasesPanel = NodePath("ReleasePanel")
 installsButton = NodePath("UpperButtons/InstallsButton")
 releasesButton = NodePath("UpperButtons/ReleasesButton")
 
-[node name="UpperButtons" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab"]
+[node name="UpperButtons" type="HBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
+offset_left = 20.0
 offset_top = 10.0
-offset_bottom = 195.0
+offset_right = -20.0
+offset_bottom = 85.0
 grow_horizontal = 2
+theme_override_constants/separation = 40
 
-[node name="InstallsButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons"]
-layout_mode = 1
-offset_left = 25.0
-offset_top = 15.0
-offset_right = 140.0
-offset_bottom = 60.0
-focus_mode = 0
-toggle_mode = true
+[node name="InstallsButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons" instance=ExtResource("12_3gmeu")]
+layout_mode = 2
+size_flags_vertical = 4
 button_group = ExtResource("7_5b0sc")
-text = "Installs"
 
-[node name="ReleasesButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons"]
-layout_mode = 1
-offset_left = 165.0
-offset_top = 15.0
-offset_right = 280.0
-offset_bottom = 60.0
-focus_mode = 0
-toggle_mode = true
+[node name="ReleasesButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons" instance=ExtResource("12_3gmeu")]
+layout_mode = 2
+size_flags_vertical = 4
 button_group = ExtResource("7_5b0sc")
 text = "Releases"
 
-[node name="InstallsPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("favoriteButton", "versionButton", "monoButton", "dateButton", "itemContainer")]
-visible = false
+[node name="InstallsPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("addButton", "favoriteButton", "versionButton", "monoButton", "dateButton", "itemContainer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -252,11 +243,25 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("9_mmwvm")
 installItemScene = ExtResource("10_ty7wm")
+addButton = NodePath("AddButton")
+fileDialogScene = ExtResource("5_10olf")
 favoriteButton = NodePath("SortOptions/FavoriteButton")
 versionButton = NodePath("SortOptions/VersionButton")
 monoButton = NodePath("SortOptions/MonoButton")
 dateButton = NodePath("SortOptions/DateButton")
 itemContainer = NodePath("InstallsList/VBoxContainer")
+
+[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -135.0
+offset_top = 91.0
+offset_right = -35.0
+offset_bottom = 136.0
+grow_horizontal = 0
+text = "Add"
 
 [node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
 layout_mode = 1
@@ -392,7 +397,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DocumentationTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -420,7 +424,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DownloadPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -573,7 +576,13 @@ theme_override_constants/separation = 25
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 focus_mode = 0
-icon = ExtResource("12_5gvuq")
+theme_override_colors/icon_normal_color = Color(0.564706, 0.564706, 0.564706, 1)
+theme_override_colors/icon_pressed_color = Color(0.411765, 0.411765, 0.411765, 1)
+theme_override_colors/icon_hover_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/icon_focus_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/icon_disabled_color = Color(0.2, 0.2, 0.2, 1)
+icon = ExtResource("25_njxfo")
 icon_alignment = 1
 expand_icon = true
 
@@ -582,21 +591,19 @@ custom_minimum_size = Vector2(50, 36)
 layout_mode = 2
 focus_mode = 0
 theme_override_colors/icon_normal_color = Color(0.564706, 0.564706, 0.564706, 1)
-theme_override_colors/icon_pressed_color = Color(0.14902, 0.423529, 0.45098, 1)
-theme_override_colors/icon_hover_color = Color(0.215686, 0.615686, 0.65098, 1)
-theme_override_colors/icon_hover_pressed_color = Color(0.215686, 0.615686, 0.65098, 1)
-theme_override_colors/icon_focus_color = Color(0.215686, 0.615686, 0.65098, 1)
+theme_override_colors/icon_pressed_color = Color(0.411765, 0.411765, 0.411765, 1)
+theme_override_colors/icon_hover_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/icon_hover_pressed_color = Color(0.721569, 0.721569, 0.721569, 1)
+theme_override_colors/icon_focus_color = Color(0.721569, 0.721569, 0.721569, 1)
 theme_override_colors/icon_disabled_color = Color(0.2, 0.2, 0.2, 1)
 icon = ExtResource("29_7sdgg")
 icon_alignment = 1
 expand_icon = true
 
 [node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("18_bwlxg")]
-visible = false
 openButton = NodePath("../UI/Tabs/MiscButtonContainer/ParameterButton")
 
 [node name="SplashScreen" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

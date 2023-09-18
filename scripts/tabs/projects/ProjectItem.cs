@@ -51,7 +51,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			if (pDisposing)
 			{
-				InstallsData.VersionAdded -= UpdateVersion;
+				InstallsData.VersionAdded -= OnVersionAdded;
 			}
 		}
 
@@ -87,7 +87,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				}
 
 				openButton.Pressed += OnOpenPressed;
-				InstallsData.VersionAdded += UpdateVersion;
+				InstallsData.VersionAdded += OnVersionAdded;
+				InstallsData.VersionRemoved += OnVersionRemoved;
 			}
 			else
 			{
@@ -120,38 +121,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 
 			return true;
-		}
-
-		protected void UpdateVersion(GDFile pInstall)
-		{
-			if (!pInstall.Version.IsCompatible(project.Version))
-				return;
-
-			if (versionButton.ItemCount == 0)
-			{
-				versionButton.AddItem((string)pInstall.Version, 0);
-				versionButton.Disabled = false;
-				nameLabel.Text = $"[b]{ItemName}[/b]";
-				IsValid = true;
-				return;
-			}
-
-			List<Version> lVersions = new List<Version>() { pInstall.Version };
-			lVersions.Reverse();
-
-			for (int i = 0; i < versionButton.ItemCount; i++)
-			{
-				lVersions.Add((Version)versionButton.GetItemText(i));
-			}
-
-			lVersions.Sort();
-
-			for (int i = 0; i < lVersions.Count; i++)
-			{
-				versionButton.AddItem((string)lVersions[i], i);
-			}
-
-			versionButton.Selected = lVersions.IndexOf(project.Version);
 		}
 
 		protected void Disable(bool pMissing)
@@ -221,6 +190,65 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			lDialog.GetChild<Label>(1, true).HorizontalAlignment = HorizontalAlignment.Center;
 			lDialog.PopupCentered();
 			lDialog.Confirmed += Remove;
+		}
+
+		protected void OnVersionAdded(GDFile pInstall)
+		{
+			if (!pInstall.Version.IsCompatible(project.Version))
+				return;
+
+			if (versionButton.ItemCount == 0)
+			{
+				versionButton.AddItem((string)pInstall.Version, 0);
+				versionButton.Disabled = false;
+				nameLabel.Text = $"[b]{ItemName}[/b]";
+				IsValid = true;
+				return;
+			}
+
+			List<Version> lVersions = new List<Version>() { pInstall.Version };
+			lVersions.Reverse();
+
+			for (int i = 0; i < versionButton.ItemCount; i++)
+			{
+				lVersions.Add((Version)versionButton.GetItemText(i));
+			}
+
+			lVersions.Sort();
+			versionButton.Clear();
+
+			for (int i = 0; i < lVersions.Count; i++)
+			{
+				versionButton.AddItem((string)lVersions[i], i);
+			}
+
+			versionButton.Selected = lVersions.IndexOf(project.Version);
+		}
+
+		protected void OnVersionRemoved(Version pVersion)
+		{
+			bool lHasVersion = false;
+			int lVersionIndex = -1;
+
+			for (int i = 0; i < versionButton.ItemCount; i++)
+			{
+				if (versionButton.GetItemText(i) == (string)pVersion)
+				{
+					lHasVersion = true;
+					lVersionIndex = i;
+					break;
+				}
+			}
+
+			if (!lHasVersion)
+				return;
+
+			for (int i = lVersionIndex; i < versionButton.ItemCount - 1; i++)
+			{
+				versionButton.SetItemText(i, versionButton.GetItemText(i + 1));
+			}
+
+			versionButton.RemoveItem(versionButton.ItemCount - 1);
 		}
 	}
 }

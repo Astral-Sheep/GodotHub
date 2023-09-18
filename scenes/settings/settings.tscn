@@ -1,11 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://03yu8720kqas"]
+[gd_scene load_steps=18 format=3 uid="uid://djyx4rm2ak0n5"]
 
 [ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="1_jlf08"]
 [ext_resource type="StyleBox" uid="uid://47jtgb6kttdb" path="res://resources/style_boxes/buttons/transparent_btn.stylebox" id="2_rnq86"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="3_paxrg"]
 [ext_resource type="Theme" uid="uid://csirdw2fufxwq" path="res://resources/themes/settings.theme" id="4_3x3dr"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/directory/ProjectDirButton.cs" id="6_k8lve"]
-[ext_resource type="Texture2D" uid="uid://ck0fei3vii0gs" path="res://assets/sprites/themes/folder.png" id="7_xy6p1"]
+[ext_resource type="Texture2D" uid="uid://ck0fei3vii0gs" path="res://assets/sprites/folder.png" id="7_68fo3"]
 [ext_resource type="PackedScene" uid="uid://c54ctd2k2mbg0" path="res://scenes/settings/folder_dialog.tscn" id="8_v2fuc"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/toggles/SameDirToggle.cs" id="10_3qbg1"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/directory/InstallDirButton.cs" id="11_x4rcq"]
@@ -107,14 +107,14 @@ button = NodePath("Path")
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "[b]Project Default Directory:[/b]"
+text = "[b]Default Project Directory:[/b]"
 fit_content = true
 
 [node name="Path" type="Button" parent="Panel/ScrollContainer/Content/ProjectDir"]
 layout_mode = 2
 focus_mode = 0
 text = " C:\\Users\\thoma\\Documents\\Projects\\"
-icon = ExtResource("7_xy6p1")
+icon = ExtResource("7_68fo3")
 alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
@@ -131,7 +131,7 @@ button = NodePath("CheckButton")
 
 [node name="Label" type="Label" parent="Panel/ScrollContainer/Content/UseInstallForDownload"]
 layout_mode = 2
-text = "Use install directory for .zip"
+text = "Use install directory for .zip download"
 
 [node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/UseInstallForDownload"]
 layout_mode = 2
@@ -156,7 +156,7 @@ fit_content = true
 layout_mode = 2
 focus_mode = 0
 text = " C:\\Users\\thoma\\Documents\\Projects\\"
-icon = ExtResource("7_xy6p1")
+icon = ExtResource("7_68fo3")
 alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
@@ -171,14 +171,14 @@ button = NodePath("Path")
 layout_mode = 2
 size_flags_vertical = 3
 bbcode_enabled = true
-text = "[b]Download Directory:[/b]"
+text = "[b].zip Download Directory:[/b]"
 fit_content = true
 
 [node name="Path" type="Button" parent="Panel/ScrollContainer/Content/DownloadDir"]
 layout_mode = 2
 focus_mode = 0
 text = " C:\\Users\\thoma\\Documents\\Projects\\"
-icon = ExtResource("7_xy6p1")
+icon = ExtResource("7_68fo3")
 alignment = 0
 text_overrun_behavior = 3
 expand_icon = true
@@ -194,7 +194,7 @@ button = NodePath("CheckButton")
 
 [node name="Label" type="Label" parent="Panel/ScrollContainer/Content/AutoCreateShortcut"]
 layout_mode = 2
-text = "Auto create shortcut"
+text = "Create shortcut after installation"
 
 [node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/AutoCreateShortcut"]
 layout_mode = 2
@@ -208,7 +208,7 @@ button = NodePath("CheckButton")
 
 [node name="Label" type="Label" parent="Panel/ScrollContainer/Content/DownloadDelete"]
 layout_mode = 2
-text = "Delete zip after completion"
+text = "Delete .zip after installation"
 
 [node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/DownloadDelete"]
 layout_mode = 2
@@ -240,7 +240,7 @@ button = NodePath("CheckButton")
 
 [node name="Label" type="Label" parent="Panel/ScrollContainer/Content/AutoUpdate"]
 layout_mode = 2
-text = "Auto update repository on open"
+text = "Auto update repository on application start"
 
 [node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/AutoUpdate"]
 layout_mode = 2
@@ -254,7 +254,7 @@ button = NodePath("CheckButton")
 
 [node name="Label" type="Label" parent="Panel/ScrollContainer/Content/DebugEnabling"]
 layout_mode = 2
-text = "Enable Debugging"
+text = "Enable debugger"
 
 [node name="CheckButton" type="CheckButton" parent="Panel/ScrollContainer/Content/DebugEnabling"]
 layout_mode = 2

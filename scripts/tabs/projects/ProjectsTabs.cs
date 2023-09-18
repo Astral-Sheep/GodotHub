@@ -3,6 +3,7 @@ using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Com.Astral.GodotHub.Tabs.Projects
 {
@@ -74,27 +75,24 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			lDialog.CurrentDir = Config.ProjectDir;
 			lDialog.FileMode = FileDialog.FileModeEnum.OpenFiles;
 			lDialog.Filters = new string[] { "*.godot" };
-			lDialog.FileSelected += OnFileSelected;
 			lDialog.FilesSelected += OnFilesSelected;
-		}
-
-		protected void OnFileSelected(string pPath)
-		{
-			pPath = pPath[..pPath.RFind("/project.godot")];
-
-			if (ProjectsData.HasProject(pPath))
-				return;
-
-			GDFile lProject = new GDFile(pPath, false, ProjectsData.GetVersionFromFolder(pPath));
-			ProjectsData.AddProject(lProject);
-			CreateItem(lProject);
 		}
 
 		protected void OnFilesSelected(string[] pPaths)
 		{
+			string lPath;
+
 			for (int i = 0; i < pPaths.Length; i++)
 			{
-				OnFileSelected(pPaths[i]);
+				lPath = pPaths[i];
+				lPath = lPath[..lPath.RFind("/project.godot")];
+
+				if (ProjectsData.HasProject(lPath))
+					continue;
+
+				GDFile lProject = new GDFile(lPath, false, ProjectsData.GetVersionFromFolder(lPath));
+				ProjectsData.AddProject(lProject);
+				CreateItem(lProject);
 			}
 		}
 

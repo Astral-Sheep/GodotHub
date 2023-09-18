@@ -13,6 +13,7 @@ namespace Com.Astral.GodotHub.Data
 		private const string FAVORITE = "favorite";
 
 		public static event Action<GDFile> VersionAdded;
+		public static event Action<Version> VersionRemoved;
 
 		private static readonly string exePath;
 		private static readonly Regex folderExpr;
@@ -112,6 +113,16 @@ namespace Com.Astral.GodotHub.Data
 			VersionAdded?.Invoke(new GDFile(pPath, false, (Version)lVersion));
 		}
 
+		public static bool VersionIsValid(string pPath)
+		{
+			return folderExpr.IsMatch(pPath);
+		}
+
+		public static bool HasVersion(string pPath)
+		{
+			return file.HasSection((string)(Version)pPath);
+		}
+
 		public static void RemoveVersion(Version pVersion)
 		{
 			if (!file.HasSection((string)pVersion))
@@ -119,6 +130,7 @@ namespace Com.Astral.GodotHub.Data
 
 			file.EraseSection((string)pVersion);
 			Save();
+			VersionRemoved?.Invoke(pVersion);
 		}
 
 		/// <summary>
