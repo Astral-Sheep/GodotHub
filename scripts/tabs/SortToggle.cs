@@ -1,7 +1,8 @@
+using Com.Astral.GodotHub.Debug;
 using Godot;
 using System;
 
-namespace Com.Astral.GodotHub.Tabs.Projects
+namespace Com.Astral.GodotHub.Tabs
 {
 	public partial class SortToggle : Button
 	{
@@ -17,6 +18,17 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			Toggled += OnToggled;
 		}
 
+		public void Enable()
+		{
+			if (ButtonPressed)
+				return;
+
+			SetPressedNoSignal(true);
+			arrowRect.Visible = true;
+			toggled = true;
+			arrowRect.Rotation = 0f;
+		}
+
 		public void Disable()
 		{
 			if (!ButtonPressed)
@@ -27,7 +39,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			toggled = false;
 		}
 
-		public void OnToggled(bool pToggled)
+		protected void OnToggled(bool pToggled)
 		{
 			SetPressedNoSignal(true);
 			arrowRect.Visible = true;

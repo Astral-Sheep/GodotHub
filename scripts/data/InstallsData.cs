@@ -114,11 +114,11 @@ namespace Com.Astral.GodotHub.Data
 
 		public static void RemoveVersion(Version pVersion)
 		{
-			if (file.HasSection((string)pVersion))
-			{
-				file.EraseSection((string)pVersion);
-				Save();
-			}
+			if (!file.HasSection((string)pVersion))
+				return;
+
+			file.EraseSection((string)pVersion);
+			Save();
 		}
 
 		/// <summary>
@@ -138,6 +138,7 @@ namespace Com.Astral.GodotHub.Data
 				return;
 
 			file.SetValue((string)pVersion, FAVORITE, pIsFavorite);
+			Save();
 		}
 
 		/// <summary>

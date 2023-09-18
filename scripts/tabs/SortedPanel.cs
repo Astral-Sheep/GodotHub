@@ -11,7 +11,5 @@ namespace Com.Astral.GodotHub.Tabs
 		}
 
 		[Export] protected Control itemContainer;
-
-		public abstract void Sort(SortType pType, bool pReversed);
 	}
 }

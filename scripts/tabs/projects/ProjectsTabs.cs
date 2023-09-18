@@ -1,5 +1,5 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -100,107 +100,48 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnFavoriteToggled(bool pToggled)
 		{
+			nameButton.Disable();
+			dateButton.Disable();
+
 			if (pToggled)
 			{
-				nameButton.Disable();
-				dateButton.Disable();
 				versionButton.Disable();
-				Sort(pToggled ? CompareFavorites : ReversedCompareFavorites);
+				Sort(Comparer.CompareFavorites);
 			}
 			else
 			{
-				dateButton.OnToggled(true);
+				dateButton.Enable();
+				Sort(Comparer.CompareTimes);
 			}
 		}
 
 		protected void OnNameToggled(bool pToggled)
 		{
-			favoriteButton.ButtonPressed = false;
+			favoriteButton.SetPressedNoSignal(false);
 			dateButton.Disable();
 			versionButton.Disable();
 
-			Sort(pToggled ? CompareNames : ReversedCompareNames);
+			Sort(pToggled ? Comparer.CompareNames : Comparer.ReversedCompareNames);
 		}
 
 		protected void OnDateToggled(bool pToggled)
 		{
-			favoriteButton.ButtonPressed = false;
+			favoriteButton.SetPressedNoSignal(false);
 			nameButton.Disable();
 			versionButton.Disable();
 
-			Sort(pToggled ? CompareDates : ReversedCompareDates);
+			Sort(pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes);
 		}
 
 		protected void OnVersionToggled(bool pToggled)
 		{
-			favoriteButton.ButtonPressed = false;
+			favoriteButton.SetPressedNoSignal(false);
 			nameButton.Disable();
 			dateButton.Disable();
 
-			Sort(pToggled ? CompareVersions : ReversedCompareVersions);
+			Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
 		}
 
 		#endregion //EVENT_HANDLING
-
-		#region COMPARISONS
-
-		protected int CompareFavorites(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareItems(pLhs, pRhs, (lhs, rhs) => {
-				if (lhs.IsFavorite ^ rhs.IsFavorite)
-				{
-					return lhs.IsFavorite ? -1 : 1;
-				}
-
-				return CompareDates(lhs, rhs);
-			});
-		}
-
-		protected int ReversedCompareFavorites(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareFavorites(pRhs, pLhs);
-		}
-
-		protected int CompareNames(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareItems(pLhs, pRhs, (lhs, rhs) => lhs.ProjectName.CompareTo(rhs.ProjectName));
-		}
-
-		protected int ReversedCompareNames(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareNames(pRhs, pLhs);
-		}
-
-		protected int CompareDates(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareItems(pLhs, pRhs, (lhs, rhs) => lhs.TimeSinceLastOpening.CompareTo(rhs.TimeSinceLastOpening));
-		}
-
-		protected int ReversedCompareDates(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareDates(pRhs, pLhs);
-		}
-
-		protected int CompareVersions(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareItems(pLhs, pRhs, (lhs, rhs) => rhs.Version.CompareTo(lhs.Version));
-		}
-
-		protected int ReversedCompareVersions(ProjectItem pLhs, ProjectItem pRhs)
-		{
-			return CompareVersions(pRhs, pLhs);
-		}
-
-		protected int CompareItems(ProjectItem pLhs, ProjectItem pRhs, Func<ProjectItem, ProjectItem, int> pComparison)
-		{
-			if (pLhs.IsValid ^ pRhs.IsValid)
-			{
-				return pLhs.IsValid ? -1 : 1;
-			}
-
-			return pComparison(pLhs, pRhs);
-		}
-
-		#endregion //COMPARISONS
 	}
 }

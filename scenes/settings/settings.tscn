@@ -1,7 +1,7 @@
 [gd_scene load_steps=18 format=3 uid="uid://03yu8720kqas"]
 
 [ext_resource type="Script" path="res://scripts/settings/SettingsPanel.cs" id="1_jlf08"]
-[ext_resource type="StyleBox" uid="uid://rsx4qnjly8m8" path="res://resources/style_boxes_temp/style_box_bg_btn.tres" id="2_sqm41"]
+[ext_resource type="StyleBox" uid="uid://47jtgb6kttdb" path="res://resources/style_boxes/buttons/transparent_btn.stylebox" id="2_rnq86"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="3_paxrg"]
 [ext_resource type="Theme" uid="uid://csirdw2fufxwq" path="res://resources/themes/settings.theme" id="4_3x3dr"]
 [ext_resource type="Script" path="res://scripts/settings/buttons/directory/ProjectDirButton.cs" id="6_k8lve"]
@@ -46,11 +46,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
-theme_override_styles/normal = ExtResource("2_sqm41")
-theme_override_styles/hover = ExtResource("2_sqm41")
-theme_override_styles/pressed = ExtResource("2_sqm41")
-theme_override_styles/disabled = ExtResource("2_sqm41")
-theme_override_styles/focus = ExtResource("2_sqm41")
+theme_override_styles/normal = ExtResource("2_rnq86")
+theme_override_styles/hover = ExtResource("2_rnq86")
+theme_override_styles/pressed = ExtResource("2_rnq86")
+theme_override_styles/disabled = ExtResource("2_rnq86")
+theme_override_styles/focus = ExtResource("2_rnq86")
 
 [node name="Panel" type="Panel" parent="."]
 z_index = 3

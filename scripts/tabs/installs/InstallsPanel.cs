@@ -1,4 +1,5 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -7,9 +8,13 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class InstallsPanel : SortedPanel
 	{
-		public event Action ItemCountChanged;
-
 		[Export] protected PackedScene installItemScene;
+
+		[ExportGroup("Sorting")]
+		[Export] protected Button favoriteButton;
+		[Export] protected SortToggle versionButton;
+		[Export] protected SortToggle monoButton;
+		[Export] protected SortToggle dateButton;
 
 		protected List<InstallItem> items = new List<InstallItem>();
 
@@ -19,11 +24,18 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			for (int i = 0; i < lVersions.Count; i++)
 			{
-				items.Add(CreateItem(lVersions[i], i));
+				items.Add(CreateItem(lVersions[i]));
 			}
 
 			InstallsData.VersionAdded += OnVersionAdded;
 			InstallItem.Closed += OnItemClosed;
+
+			favoriteButton.Toggled += OnFavoriteToggled;
+			versionButton.CustomToggled += OnVersionToggled;
+			monoButton.CustomToggled += OnMonoToggled;
+			dateButton.CustomToggled += OnDateToggled;
+
+			dateButton.ButtonPressed = true;
 		}
 
 		protected override void Dispose(bool pDisposing)
@@ -35,69 +47,76 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 		}
 
-		protected InstallItem CreateItem(GDFile pInstall, int pIndex)
+		protected InstallItem CreateItem(GDFile pInstall)
 		{
 			InstallItem lItem = installItemScene.Instantiate<InstallItem>();
 			itemContainer.AddChild(lItem);
-			lItem.Init(pInstall, pIndex);
+			lItem.Init(pInstall);
 			return lItem;
 		}
 
-		public override void Sort(SortType pType, bool pReversed)
-		{
-			SortItems(pType == SortType.Version ? new VersionSorter() : new DateSorter(), pReversed);
-		}
-
-		protected void SortItems(IComparer<InstallItem> pComparer, bool pReversed)
-		{
-			items.Sort(pComparer);
-
-			if (pReversed)
-			{
-				items.Reverse();
-			}
-
-			for (int i = 0; i < items.Count; i++)
-			{
-				itemContainer.MoveChild(items[i], i);
-			}
-		}
+		#region EVENT_HANDLING
 
 		protected void OnVersionAdded(GDFile pInstall)
 		{
-			items.Add(CreateItem(pInstall, items.Count));
-			ItemCountChanged?.Invoke();
+			items.Add(CreateItem(pInstall));
 		}
 
 		protected void OnItemClosed(InstallItem pItem)
 		{
 			items.Remove(pItem);
-			ItemCountChanged?.Invoke();
 		}
 
-		protected class DateSorter : IComparer<InstallItem>
+		protected void OnFavoriteToggled(bool pToggled)
 		{
-			public int Compare(InstallItem x, InstallItem y)
+			versionButton.Disable();
+			monoButton.Disable();
+
+			if (pToggled)
 			{
-				return x.Index - y.Index;
+				dateButton.Disable();
+				Sort(Comparer.CompareFavorites);
+			}
+			else
+			{
+				dateButton.Enable();
+				Sort(Comparer.CompareTimes);
 			}
 		}
 
-		protected class VersionSorter : IComparer<InstallItem>
+		protected void OnVersionToggled(bool pToggled)
 		{
-			public int Compare(InstallItem x, InstallItem y)
+			favoriteButton.SetPressedNoSignal(false);
+			monoButton.Disable();
+			dateButton.Disable();
+			Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
+		}
+
+		protected void OnMonoToggled(bool pToggled)
+		{
+			favoriteButton.SetPressedNoSignal(false);
+			versionButton.Disable();
+			dateButton.Disable();
+			Sort(pToggled ? Comparer.CompareMonos : Comparer.ReversedCompareMonos);
+		}
+
+		protected void OnDateToggled(bool pToggled)
+		{
+			favoriteButton.SetPressedNoSignal(false);
+			versionButton.Disable();
+			monoButton.Disable();
+			Sort(pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes);
+		}
+
+		#endregion //EVENT_HANDLING
+
+		protected void Sort(Comparison<InstallItem> pComparison)
+		{
+			items.Sort(pComparison);
+
+			for (int i = 0; i < items.Count; i++)
 			{
-				if (x.Version.major == y.Version.major)
-				{
-					if (x.Version.minor == y.Version.minor)
-					{
-						return y.Version.patch - x.Version.patch;
-					}
-
-					return y.Version.minor - x.Version.minor;
-				}
-
-				return y.Version.major - x.Version.major;
+				itemContainer.MoveChild(items[i], i);
 			}
 		}
 	}

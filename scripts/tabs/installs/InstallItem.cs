@@ -1,20 +1,25 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using System;
 using System.Diagnostics;
 using System.IO;
 
 using Debugger = Com.Astral.GodotHub.Debug.Debugger;
+using Label = Godot.Label;
 using Version = Com.Astral.GodotHub.Data.Version;
 
 namespace Com.Astral.GodotHub.Tabs.Installs
 {
-	public partial class InstallItem : Control
+	public partial class InstallItem : Control, IFavoriteItem, IMonoItem, ITimedItem, IVersionItem, IValidItem
 	{
 		public static event Action<InstallItem> Closed;
 
+		public bool IsFavorite { get; protected set; }
+		public bool IsMono { get; protected set; }
+		public bool IsValid { get; protected set; } = true;
+		public double TimeSinceLastOpening { get; protected set; }
 		public Version Version => install.Version;
-		public int Index { get; protected set; }
 
 		[Export] protected PackedScene confirmationPopup;
 		[Export] protected float closeDuration = 0.25f;
@@ -23,6 +28,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		[Export] protected RichTextLabel nameLabel;
 		[Export] protected Label pathLabel;
 		[Export] protected CheckBox isMonoBox;
+		[Export] protected RichTextLabel timeLabel;
 
 		[ExportGroup("Buttons")]
 		[Export] protected Button favoriteToggle;
@@ -31,25 +37,32 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected GDFile install;
 
-		public void Init(GDFile pInstall, int pIndex)
+		public void Init(GDFile pInstall)
 		{
-			Index = pIndex;
 			install = pInstall;
 			pathLabel.Text = install.Path;
 			favoriteToggle.ButtonPressed = install.IsFavorite;
+			favoriteToggle.Toggled += OnFavoriteToggled;
+			IsFavorite = install.IsFavorite;
 
 			if (!File.Exists(install.Path))
 			{
 				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}][b]Missing version[/b][/color]";
 				isMonoBox.ButtonPressed = false;
+				timeLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}N/A[/color]";
 				openButton.Disabled = true;
 				uninstallButton.Text = "Remove";
 				uninstallButton.Pressed += OnRemovePressed;
+				IsValid = false;
 				return;
 			}
 
 			nameLabel.Text = $"[b]Godot {install.Version}[/b]";
 			isMonoBox.ButtonPressed = install.Path.Contains("mono");
+			IsMono = isMonoBox.ButtonPressed;
+			DateTime lTime = new FileInfo(install.Path).LastAccessTimeUtc;
+			TimeSinceLastOpening = (DateTime.UtcNow - lTime).TotalSeconds;
+			timeLabel.Text = TimeFormater.Format(lTime);
 			openButton.Pressed += Open;
 			uninstallButton.Pressed += OnUninstallPressed;
 		}
@@ -114,6 +127,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		protected void OnFavoriteToggled(bool pToggled)
 		{
 			InstallsData.SetFavorite(Version, pToggled);
+			IsFavorite = pToggled;
 		}
 
 		protected void OnUninstallPressed()

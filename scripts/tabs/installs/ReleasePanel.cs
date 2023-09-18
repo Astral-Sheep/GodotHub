@@ -41,10 +41,10 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			return lItem;
 		}
 
-		public override void Sort(SortType pType, bool pReversed)
-		{
-			SortItems(pType == SortType.Version ? new VersionSorter() : new DateSorter(), pReversed);
-		}
+		//public override void Sort(SortType pType, bool pReversed)
+		//{
+		//	SortItems(pType == SortType.Version ? new VersionSorter() : new DateSorter(), pReversed);
+		//}
 
 		protected void SortItems(IComparer<ReleaseItem> pComparer, bool pReversed)
 		{
