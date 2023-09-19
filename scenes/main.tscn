@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://c8n706h2grnj7"]
+[gd_scene load_steps=35 format=3 uid="uid://c8n706h2grnj7"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/tabs/installs/InstallsTab.cs" id="5_s1nr3"]
 [ext_resource type="ButtonGroup" uid="uid://c2ypx5qbtttva" path="res://resources/button_groups/install_btn_group.tres" id="7_5b0sc"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/ReleasePanel.cs" id="7_07w4y"]
+[ext_resource type="Theme" uid="uid://brtddydnujip" path="res://resources/themes/blue_btn.theme" id="7_26ckp"]
 [ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="7_le08s"]
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="7_xfihf"]
 [ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
@@ -88,6 +89,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -99,7 +101,7 @@ script = ExtResource("3_047ry")
 projectItemScene = ExtResource("4_ftw23")
 itemContainer = NodePath("ProjectsList/VBoxContainer")
 folderPopupScene = ExtResource("5_10olf")
-addButton = NodePath("UpperButtons/AddButton")
+addButton = NodePath("UpperButtons/MiscContainer/AddButton")
 favoriteButton = NodePath("UpperButtons/SortOptions/FavoriteButton")
 nameButton = NodePath("UpperButtons/SortOptions/NameButton")
 dateButton = NodePath("UpperButtons/SortOptions/DateButton")
@@ -113,19 +115,30 @@ offset_top = 10.0
 offset_bottom = 196.0
 grow_horizontal = 2
 
-[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons"]
+[node name="MiscContainer" type="HBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons"]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
+anchors_preset = -1
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -135.0
-offset_top = -105.0
-offset_right = -35.0
-offset_bottom = -60.0
-grow_horizontal = 0
-grow_vertical = 0
+offset_left = 10.0
+offset_top = 75.0
+offset_right = -10.0
+offset_bottom = 125.0
+theme_override_constants/separation = 25
+alignment = 2
+
+[node name="NewButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/MiscContainer"]
+custom_minimum_size = Vector2(100, 45)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("7_26ckp")
+text = "New"
+
+[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/MiscContainer"]
+custom_minimum_size = Vector2(100, 45)
+layout_mode = 2
+size_flags_vertical = 4
+focus_mode = 0
 theme = ExtResource("7_le08s")
 text = "Add"
 
@@ -261,6 +274,7 @@ offset_top = 91.0
 offset_right = -35.0
 offset_bottom = 136.0
 grow_horizontal = 0
+theme = ExtResource("7_le08s")
 text = "Add"
 
 [node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
@@ -397,6 +411,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DocumentationTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -424,6 +439,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DownloadPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -601,9 +617,11 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("18_bwlxg")]
+visible = false
 openButton = NodePath("../UI/Tabs/MiscButtonContainer/ParameterButton")
 
 [node name="SplashScreen" type="ColorRect" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

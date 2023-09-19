@@ -31,6 +31,7 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 			FileDialog lDialog = folderDialogScene.Instantiate<FileDialog>();
 			Main.Instance.AddChild(lDialog);
 			lDialog.PopupCentered();
+			lDialog.RootSubfolder = "";
 			lDialog.CurrentDir = button.Text[1..];
 			lDialog.DirSelected += OnDirSelected;
 			lDialog.Canceled += OnCanceled;

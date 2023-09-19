@@ -99,10 +99,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			{
 				lPath = pPaths[i];
 
-				if (!InstallsData.VersionIsValid(lPath))
+				if (!InstallsData.AddVersion(lPath, true))
 					continue;
 
-				InstallsData.AddVersion(lPath, true);
 				items.Add(CreateItem(
 					new GDFile(
 						lPath,

@@ -56,10 +56,10 @@ namespace Com.Astral.GodotHub.Data
 		/// <summary>
 		/// Add engine version to the installs.cfg file
 		/// </summary>
-		public static void AddVersion(string pPath, bool pIsExe)
+		public static bool AddVersion(string pPath, bool pIsExe)
 		{
 			if (!folderExpr.IsMatch(pPath))
-				return;
+				return false;
 
 			if (!pIsExe)
 			{
@@ -73,7 +73,7 @@ namespace Com.Astral.GodotHub.Data
 			if (!File.Exists(pPath))
 			{
 				Debugger.PrintError($"Invalid file passed as executable: {pPath}. Version not added");
-				return;
+				return false;
 			}
 
 			string lVersion = (string)(Version)pPath;
@@ -87,21 +87,21 @@ namespace Com.Astral.GodotHub.Data
 					if (!pPath.Contains("_mono"))
 					{
 						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
-						return;
+						return false;
 					}
 #if GODOT_WINDOWS
 					//Get architecture in _win{xx}.exe
 					else if (int.Parse(pPath[^6..^4]) <= int.Parse(lCurrent[^6..^4]))
 					{
 						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
-						return;
+						return false;
 					}
 #elif GODOT_LINUXBSD
 					//Get architecture in linux.x86_{xx}
 					else if (int.Parse(pPath[^2..]) <= int.Parse(lCurrent[^2..]))
 					{
 						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
-						return;
+						return false;
 					}
 #endif
 				}
@@ -111,6 +111,7 @@ namespace Com.Astral.GodotHub.Data
 			file.SetValue(lVersion, FAVORITE, false);
 			Save();
 			VersionAdded?.Invoke(new GDFile(pPath, false, (Version)lVersion));
+			return true;
 		}
 
 		public static bool VersionIsValid(string pPath)
