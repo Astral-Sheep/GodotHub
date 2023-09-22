@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://cjui7vv5c4tpk"]
+
+[ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_w1lgf"]
+
+[node name="MessageDialog" type="AcceptDialog"]
+transparent_bg = true
+title = "Error"
+position = Vector2i(250, 150)
+size = Vector2i(400, 250)
+visible = true
+theme = ExtResource("1_w1lgf")
+dialog_text = "This is an error"

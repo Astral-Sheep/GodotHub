@@ -39,7 +39,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			for (int i = 0; i < lProjects.Count; i++)
 			{
-				items.Add(CreateItem(lProjects[i]));
+				CreateItem(lProjects[i]);
 			}
 
 			favoriteButton.Toggled += OnFavoriteToggled;
@@ -61,13 +61,13 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			ProjectsData.Added -= OnProjectAdded;
 		}
 
-		protected ProjectItem CreateItem(GDFile pProject)
+		protected void CreateItem(GDFile pProject)
 		{
 			ProjectItem lItem = projectItemScene.Instantiate<ProjectItem>();
 			itemContainer.AddChild(lItem);
 			lItem.Init(pProject);
+			items.Add(lItem);
 			lItem.Closed += OnItemClosed;
-			return lItem;
 		}
 
 		protected override void Connect() { }
