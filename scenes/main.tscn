@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://c8n706h2grnj7"]
+[gd_scene load_steps=36 format=3 uid="uid://c8n706h2grnj7"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
@@ -29,6 +29,7 @@
 [ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
 [ext_resource type="StyleBox" uid="uid://cf5kfntpwc2kk" path="res://resources/style_boxes/panels/soft_dark_panel.stylebox" id="26_gjfo7"]
 [ext_resource type="Texture2D" uid="uid://b6m2numrdnkgc" path="res://assets/sprites/download_btn.png" id="29_7sdgg"]
+[ext_resource type="PackedScene" uid="uid://xvmi8s4miknq" path="res://scenes/new_project_dialog.tscn" id="30_nojqr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1gn1"]
 bg_color = Color(0, 0, 0, 0.247059)
@@ -47,6 +48,7 @@ bg_color = Color(0, 0, 0, 0.247059)
 
 [node name="Main" type="Node"]
 script = ExtResource("1_l0edh")
+fileDialogScene = ExtResource("5_10olf")
 
 [node name="UI" type="Control" parent="." node_paths=PackedStringArray("projectsTab", "installsTab", "documentationTab", "projectsButton", "installsButton", "documentationButton")]
 layout_mode = 3
@@ -88,8 +90,7 @@ layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 1
 
-[node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
-visible = false
+[node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "newButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -101,7 +102,9 @@ script = ExtResource("3_047ry")
 projectItemScene = ExtResource("4_ftw23")
 itemContainer = NodePath("ProjectsList/VBoxContainer")
 folderPopupScene = ExtResource("5_10olf")
-addButton = NodePath("UpperButtons/MiscContainer/AddButton")
+addButton = NodePath("UpperButtons/SortOptions/AddButton")
+creationPopupScene = ExtResource("30_nojqr")
+newButton = NodePath("UpperButtons/SortOptions/NewButton")
 favoriteButton = NodePath("UpperButtons/SortOptions/FavoriteButton")
 nameButton = NodePath("UpperButtons/SortOptions/NameButton")
 dateButton = NodePath("UpperButtons/SortOptions/DateButton")
@@ -115,33 +118,6 @@ offset_top = 10.0
 offset_bottom = 196.0
 grow_horizontal = 2
 
-[node name="MiscContainer" type="HBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons"]
-layout_mode = 1
-anchors_preset = -1
-anchor_right = 1.0
-offset_left = 10.0
-offset_top = 75.0
-offset_right = -10.0
-offset_bottom = 125.0
-theme_override_constants/separation = 25
-alignment = 2
-
-[node name="NewButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/MiscContainer"]
-custom_minimum_size = Vector2(100, 45)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-theme = ExtResource("7_26ckp")
-text = "New"
-
-[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/MiscContainer"]
-custom_minimum_size = Vector2(100, 45)
-layout_mode = 2
-size_flags_vertical = 4
-focus_mode = 0
-theme = ExtResource("7_le08s")
-text = "Add"
-
 [node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons"]
 layout_mode = 1
 anchors_preset = 12
@@ -149,7 +125,7 @@ anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 10.0
-offset_top = -50.0
+offset_top = -60.0
 offset_right = -10.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -193,6 +169,36 @@ text = "Version"
 offset_left = 90.0
 offset_right = 105.0
 
+[node name="NewButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.75
+anchor_top = 0.5
+anchor_right = 0.85
+anchor_bottom = 0.5
+offset_top = -22.0
+offset_bottom = 23.0
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("7_26ckp")
+text = "New"
+
+[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions"]
+custom_minimum_size = Vector2(100, 45)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.875
+anchor_top = 0.5
+anchor_right = 0.975
+anchor_bottom = 0.5
+offset_top = -22.0
+offset_bottom = 23.0
+size_flags_vertical = 4
+focus_mode = 0
+theme = ExtResource("7_le08s")
+text = "Add"
+
 [node name="ProjectsList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/ProjectsTab"]
 layout_mode = 1
 anchors_preset = -1
@@ -211,6 +217,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="InstallsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("installsPanel", "releasesPanel", "installsButton", "releasesButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

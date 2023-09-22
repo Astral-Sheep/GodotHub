@@ -1,0 +1,145 @@
+[gd_scene load_steps=3 format=3 uid="uid://xvmi8s4miknq"]
+
+[ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_554c5"]
+[ext_resource type="Script" path="res://scripts/tabs/projects/NewProjectDialog.cs" id="2_sd55l"]
+
+[node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("projectName", "projectDirectory", "folderCreateButton", "browseButton", "versionOption", "renderOption", "versionningOption")]
+transparent_bg = true
+title = "Create new project"
+size = Vector2i(900, 550)
+visible = true
+theme = ExtResource("1_554c5")
+script = ExtResource("2_sd55l")
+projectName = NodePath("Content/Name/Name/LineEdit")
+projectDirectory = NodePath("Content/Path/Name/LineEdit")
+folderCreateButton = NodePath("Content/Name/Name/Button")
+browseButton = NodePath("Content/Path/Name/Button")
+versionOption = NodePath("Content/Options/Version/OptionButton")
+renderOption = NodePath("Content/Options/Renderer/OptionButton")
+versionningOption = NodePath("Content/VersionningOption/OptionButton")
+
+[node name="Background" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 20.0
+offset_top = 15.0
+offset_right = 880.0
+offset_bottom = 475.0
+
+[node name="ColorRect" type="ColorRect" parent="Background"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Content" type="VBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 15.0
+offset_right = 880.0
+offset_bottom = 475.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Name" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Name"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Project Name:"
+
+[node name="Name" type="HBoxContainer" parent="Content/Name"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LineEdit" type="LineEdit" parent="Content/Name/Name"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 1
+text = "xXxProjectName69xXx"
+placeholder_text = "Folder path"
+virtual_keyboard_enabled = false
+
+[node name="Button" type="Button" parent="Content/Name/Name"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Create Folder"
+
+[node name="Path" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/Path"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Project Path:"
+
+[node name="Name" type="HBoxContainer" parent="Content/Path"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LineEdit" type="LineEdit" parent="Content/Path/Name"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+focus_mode = 1
+text = "E:/"
+placeholder_text = "Folder path"
+virtual_keyboard_enabled = false
+
+[node name="Button" type="Button" parent="Content/Path/Name"]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+focus_mode = 0
+text = "Browse"
+
+[node name="Space" type="Control" parent="Content"]
+custom_minimum_size = Vector2(0, 25)
+layout_mode = 2
+
+[node name="Options" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="Version" type="VBoxContainer" parent="Content/Options"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Label" type="Label" parent="Content/Options/Version"]
+layout_mode = 2
+text = "Version:"
+
+[node name="OptionButton" type="OptionButton" parent="Content/Options/Version"]
+layout_mode = 2
+focus_mode = 0
+
+[node name="Renderer" type="VBoxContainer" parent="Content/Options"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_horizontal = 2
+
+[node name="Label" type="Label" parent="Content/Options/Renderer"]
+layout_mode = 2
+text = "Renderer:"
+
+[node name="OptionButton" type="OptionButton" parent="Content/Options/Renderer"]
+layout_mode = 2
+focus_mode = 0
+
+[node name="VersionningOption" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Content/VersionningOption"]
+layout_mode = 2
+text = "Version Control Metadata:"
+
+[node name="OptionButton" type="OptionButton" parent="Content/VersionningOption"]
+layout_mode = 2
+focus_mode = 0

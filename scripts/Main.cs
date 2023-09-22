@@ -10,6 +10,8 @@ namespace Com.Astral.GodotHub
 
 		public event Action Initialized;
 
+		[Export] protected PackedScene fileDialogScene;
+
 		private Main() : base()
 		{
 			if (Instance != null)
@@ -41,6 +43,31 @@ namespace Com.Astral.GodotHub
 		{
 			await GDRepository.Init();
 			Initialized?.Invoke();
+		}
+
+		public FileDialog InstantiateFileDialog(Node pParent = null, bool pAutoFree = true)
+		{
+			FileDialog lDialog = fileDialogScene.Instantiate<FileDialog>();
+
+			if (pParent == null)
+			{
+				AddChild(lDialog);
+			}
+			else
+			{
+				pParent.AddChild(lDialog);
+			}
+
+			lDialog.GetCancelButton().FocusMode = Control.FocusModeEnum.None;
+			lDialog.GetOkButton().FocusMode = Control.FocusModeEnum.None;
+			lDialog.PopupCentered();
+
+			if (pAutoFree)
+			{
+				//lDialog.CloseRequested += () => lDialog.QueueFree();
+			}
+
+			return lDialog;
 		}
 	}
 }

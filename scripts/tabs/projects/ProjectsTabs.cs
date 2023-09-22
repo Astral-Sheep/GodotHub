@@ -1,9 +1,12 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Debug;
 using Com.Astral.GodotHub.Tabs.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
+
+using Version = Com.Astral.GodotHub.Data.Version;
 
 namespace Com.Astral.GodotHub.Tabs.Projects
 {
@@ -16,6 +19,10 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		[Export] protected PackedScene folderPopupScene;
 		[Export] protected Button addButton;
 
+		[ExportGroup("Project creation")]
+		[Export] protected PackedScene creationPopupScene;
+		[Export] protected Button newButton;
+
 		[ExportGroup("Sorting")]
 		[Export] protected Button favoriteButton;
 		[Export] protected SortToggle nameButton;
@@ -23,6 +30,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		[Export] protected SortToggle versionButton;
 
 		protected List<ProjectItem> items = new List<ProjectItem>();
+		protected Comparison<ProjectItem> currentSort;
 
 		public override void _Ready()
 		{
@@ -38,16 +46,28 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			nameButton.CustomToggled += OnNameToggled;
 			dateButton.CustomToggled += OnDateToggled;
 			versionButton.CustomToggled += OnVersionToggled;
+			newButton.Pressed += OnNewPressed;
 			addButton.Pressed += OnAddPressed;
+			ProjectsData.Added += OnProjectAdded;
 
 			dateButton.ButtonPressed = true;
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			if (!disposing)
+				return;
+
+			ProjectsData.Added -= OnProjectAdded;
 		}
 
 		protected ProjectItem CreateItem(GDFile pProject)
 		{
 			ProjectItem lItem = projectItemScene.Instantiate<ProjectItem>();
+			Debugger.PrintMessage(lItem.Name);
 			itemContainer.AddChild(lItem);
 			lItem.Init(pProject);
+			lItem.Closed += OnItemClosed;
 			return lItem;
 		}
 
@@ -55,9 +75,9 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected override void Disconnect() { }
 
-		protected void Sort(Comparison<ProjectItem> pComparison)
+		protected void Sort()
 		{
-			items.Sort(pComparison);
+			items.Sort(currentSort);
 
 			for (int i = 0; i < items.Count; i++)
 			{
@@ -67,15 +87,33 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		#region EVENT_HANDLING
 
+		protected void OnProjectAdded(GDFile pProject)
+		{
+			CreateItem(pProject);
+			Sort();
+		}
+
+		protected void OnNewPressed()
+		{
+			NewProjectDialog lDialog = creationPopupScene.Instantiate<NewProjectDialog>();
+			Main.Instance.AddChild(lDialog);
+			lDialog.Confirmed += OnProjectConfirmed;
+		}
+
+		protected void OnProjectConfirmed(string pName, string pPath, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
+		{
+			ProjectCreator.CreateProject(pName, pPath, pVersion, pRenderMode, pVersionningMode);
+		}
+
 		protected void OnAddPressed()
 		{
-			FileDialog lDialog = folderPopupScene.Instantiate<FileDialog>();
-			Main.Instance.AddChild(lDialog);
-			lDialog.PopupCentered();
+			FileDialog lDialog = Main.Instance.InstantiateFileDialog();
 			lDialog.CurrentDir = Config.ProjectDir;
 			lDialog.FileMode = FileDialog.FileModeEnum.OpenFiles;
 			lDialog.Filters = new string[] { "*.godot" };
 			lDialog.FilesSelected += OnFilesSelected;
+
+			//ProjectCreator.AddIcon("C:/Users/thoma/Desktop");
 		}
 
 		protected void OnFilesSelected(string[] pPaths)
@@ -92,8 +130,9 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 				GDFile lProject = new GDFile(lPath, false, ProjectsData.GetVersionFromFolder(lPath));
 				ProjectsData.AddProject(lProject);
-				CreateItem(lProject);
 			}
+
+			Sort();
 		}
 
 		protected void OnFavoriteToggled(bool pToggled)
@@ -104,13 +143,15 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			if (pToggled)
 			{
 				versionButton.Disable();
-				Sort(Comparer.CompareFavorites);
+				currentSort = Comparer.CompareFavorites;
 			}
 			else
 			{
 				dateButton.Enable();
-				Sort(Comparer.CompareTimes);
+				currentSort = Comparer.CompareTimes;
 			}
+
+			Sort();
 		}
 
 		protected void OnNameToggled(bool pToggled)
@@ -119,7 +160,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			dateButton.Disable();
 			versionButton.Disable();
 
-			Sort(pToggled ? Comparer.CompareNames : Comparer.ReversedCompareNames);
+			currentSort = pToggled ? Comparer.CompareNames : Comparer.ReversedCompareNames;
+			Sort();
 		}
 
 		protected void OnDateToggled(bool pToggled)
@@ -128,7 +170,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			nameButton.Disable();
 			versionButton.Disable();
 
-			Sort(pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes);
+			currentSort = pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes;
+			Sort();
 		}
 
 		protected void OnVersionToggled(bool pToggled)
@@ -137,7 +180,13 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			nameButton.Disable();
 			dateButton.Disable();
 
-			Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
+			currentSort = pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions;
+			Sort();
+		}
+
+		protected void OnItemClosed(ProjectItem pItem)
+		{
+			items.Remove(pItem);
 		}
 
 		#endregion //EVENT_HANDLING

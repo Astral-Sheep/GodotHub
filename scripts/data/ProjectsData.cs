@@ -1,6 +1,7 @@
 ﻿using Com.Astral.GodotHub.Debug;
 using Godot;
 using Godot.Collections;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -10,6 +11,8 @@ namespace Com.Astral.GodotHub.Data
 	{
 		private const string VERSION = "version";
 		private const string FAVORITE = "favorite";
+
+		public static event Action<GDFile> Added;
 
 		private static readonly string filePath = PathT.appdata + "/project.cfg";
 		private static ConfigFile file;
@@ -44,6 +47,7 @@ namespace Com.Astral.GodotHub.Data
 			file.SetValue(pProject.Path, VERSION, (string)pProject.Version);
 			file.SetValue(pProject.Path, FAVORITE, pProject.IsFavorite);
 			Save();
+			Added?.Invoke(pProject);
 		}
 
 		public static bool HasProject(string pProject)
@@ -100,13 +104,15 @@ namespace Com.Astral.GodotHub.Data
 		public static Version GetVersionFromFolder(string pPath)
 		{
 			ConfigFile lConfig = new ConfigFile();
+			Error lError = lConfig.Load(pPath + "/project.godot");
 
-			if (lConfig.Load(pPath + "/project.godot") == Error.Ok)
+			if (lError == Error.Ok)
 			{
 				int lConfigVersion = (int)lConfig.GetValue("", "config_version");
 
 				if (lConfigVersion >= 5)
 				{
+					Debugger.PrintMessage($"{lConfig.GetValue("", "config_version")}");
 					return GetGodot4OrHigherVersion(lConfig);
 				}
 				else
@@ -116,6 +122,7 @@ namespace Com.Astral.GodotHub.Data
 			}
 			else
 			{
+				Debugger.PrintMessage($"{lError}");
 				Debugger.PrintError("Invalid project passed, can't find version from folder");
 				return new Version();
 			}

@@ -114,9 +114,9 @@ namespace Com.Astral.GodotHub.Data
 			return true;
 		}
 
-		public static bool VersionIsValid(string pPath)
+		public static bool VersionIsMono(Version pVersion)
 		{
-			return folderExpr.IsMatch(pPath);
+			return file.HasSection((string)pVersion) && ((string)file.GetValue((string)pVersion, PATH)).Contains("_mono");
 		}
 
 		public static bool HasVersion(string pPath)

@@ -16,7 +16,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected const string APPLICATION_SECTION = "application";
 		protected const string NAME_KEY = "config/name";
 
-		public static event Action<ProjectItem> Closed;
+		public event Action<ProjectItem> Closed;
 
 		public bool IsFavorite { get; protected set; }
 		public string ItemName { get; protected set; }
@@ -142,7 +142,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void Remove()
 		{
-			ProjectsData.RemoveProject(projectPath);
+			ProjectsData.RemoveProject(project.Path);
 			Close();
 		}
 

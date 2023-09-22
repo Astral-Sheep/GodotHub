@@ -10,7 +10,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gi7kc"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 
-[node name="ProjectItem" type="Panel" node_paths=PackedStringArray("favoriteToggle", "nameLabel", "pathLabel", "lastOpenedLabel", "versionButton", "openButton", "removeButton")]
+[node name="ProjectItem" type="Panel" node_paths=PackedStringArray("nameLabel", "pathLabel", "lastOpenedLabel", "favoriteToggle", "versionButton", "openButton", "removeButton")]
 clip_contents = true
 custom_minimum_size = Vector2(0, 75)
 offset_right = 1000.0
@@ -18,10 +18,10 @@ offset_bottom = 75.0
 theme = ExtResource("1_hu2pw")
 theme_override_styles/panel = SubResource("StyleBoxFlat_gi7kc")
 script = ExtResource("2_uxxbh")
-favoriteToggle = NodePath("FavoriteButton")
 nameLabel = NodePath("Name")
 pathLabel = NodePath("Path")
 lastOpenedLabel = NodePath("LastOpened")
+favoriteToggle = NodePath("FavoriteButton")
 versionButton = NodePath("VersionButton")
 openButton = NodePath("OpenButton")
 removeButton = NodePath("RemoveButton")
