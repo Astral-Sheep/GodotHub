@@ -64,7 +64,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected ProjectItem CreateItem(GDFile pProject)
 		{
 			ProjectItem lItem = projectItemScene.Instantiate<ProjectItem>();
-			Debugger.PrintMessage(lItem.Name);
 			itemContainer.AddChild(lItem);
 			lItem.Init(pProject);
 			lItem.Closed += OnItemClosed;
@@ -103,6 +102,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected void OnProjectConfirmed(string pName, string pPath, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
 		{
 			ProjectCreator.CreateProject(pName, pPath, pVersion, pRenderMode, pVersionningMode);
+			//ProjectCreator.AddIcon("C:/Users/thoma/Desktop");
 		}
 
 		protected void OnAddPressed()
@@ -112,8 +112,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			lDialog.FileMode = FileDialog.FileModeEnum.OpenFiles;
 			lDialog.Filters = new string[] { "*.godot" };
 			lDialog.FilesSelected += OnFilesSelected;
-
-			//ProjectCreator.AddIcon("C:/Users/thoma/Desktop");
 		}
 
 		protected void OnFilesSelected(string[] pPaths)

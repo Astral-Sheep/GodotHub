@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
+using GError = Godot.Error;
+
 namespace Com.Astral.GodotHub.Data
 {
 	public static class ProjectsData
@@ -20,18 +22,18 @@ namespace Com.Astral.GodotHub.Data
 		static ProjectsData()
 		{
 			file = new ConfigFile();
-			Error lError = file.Load(filePath);
+			GError lError = file.Load(filePath);
 
 			switch (lError)
 			{
-				case Error.DoesNotExist:
-				case Error.Failed:
-				case Error.FileNotFound:
+				case GError.DoesNotExist:
+				case GError.Failed:
+				case GError.FileNotFound:
 					Reset();
 					Save();
 					break;
-				case Error.FileNoPermission:
-				case Error.Unauthorized:
+				case GError.FileNoPermission:
+				case GError.Unauthorized:
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
 				default:
@@ -104,9 +106,9 @@ namespace Com.Astral.GodotHub.Data
 		public static Version GetVersionFromFolder(string pPath)
 		{
 			ConfigFile lConfig = new ConfigFile();
-			Error lError = lConfig.Load(pPath + "/project.godot");
+			GError lError = lConfig.Load(pPath + "/project.godot");
 
-			if (lError == Error.Ok)
+			if (lError == GError.Ok)
 			{
 				int lConfigVersion = (int)lConfig.GetValue("", "config_version");
 

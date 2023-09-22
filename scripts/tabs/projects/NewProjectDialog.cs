@@ -27,6 +27,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		[ExportGroup("Versionning options")]
 		[Export] protected OptionButton versionningOption;
 
+		protected int currentMajor;
+
 		public override void _Ready()
 		{
 			base.Confirmed += OnConfirmed;
@@ -36,19 +38,26 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			projectDirectory.Text = Config.ProjectDir;
 
 			List<GDFile> lAvailableVersions = InstallsData.GetAllVersions();
-			lAvailableVersions.Sort((lhs, rhs) => rhs.Version.CompareTo(lhs.Version));
 
-			for (int i = 0; i < lAvailableVersions.Count; i++)
+			if (lAvailableVersions.Count > 0)
 			{
-				versionOption.AddItem((string)lAvailableVersions[i].Version, i);
+				lAvailableVersions.Sort((lhs, rhs) => rhs.Version.CompareTo(lhs.Version));
+
+				for (int i = 0; i < lAvailableVersions.Count; i++)
+				{
+					versionOption.AddItem((string)lAvailableVersions[i].Version, i);
+				}
+
+				versionOption.Selected = 0;
+				currentMajor = lAvailableVersions[0].Version.major;
+				SetRenderModes();
 			}
-
-			versionOption.Selected = 0;
-
-			renderOption.AddItem(RenderMode.Forward.ToString(), (int)RenderMode.Forward);
-			renderOption.AddItem(RenderMode.Mobile.ToString(), (int)RenderMode.Mobile);
-			renderOption.AddItem(RenderMode.Compatibility.ToString(), (int)RenderMode.Compatibility);
-			renderOption.Selected = 0;
+			else
+			{
+				versionOption.Disabled = true;
+				renderOption.Disabled = true;
+				GetOkButton().Disabled = true;
+			}
 
 			versionningOption.AddItem(VersionningMode.None.ToString(), (int)VersionningMode.None);
 			versionningOption.AddItem(VersionningMode.Git.ToString(), (int)VersionningMode.Git);
@@ -58,6 +67,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			projectDirectory.TextChanged += OnDirectoryTextChanged;
 			folderCreateButton.Pressed += OnFolderCreatePressed;
 			browseButton.Pressed += OnBrowsePressed;
+			versionOption.ItemSelected += OnVersionSelected;
 		}
 
 		protected void OnConfirmed()
@@ -66,7 +76,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				projectName.Text,
 				projectDirectory.Text,
 				(Version)versionOption.Text,
-				(RenderMode)renderOption.Selected,
+				GetRenderMode(),
 				(VersionningMode)versionningOption.Selected
 			);
 		}
@@ -118,6 +128,48 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected void OnDirSelected(string pDir)
 		{
 			projectDirectory.Text = pDir;
+		}
+
+		protected void OnVersionSelected(long _)
+		{
+			int lMajor = int.Parse(new ReadOnlySpan<char>(new char[] { versionOption.Text[0] }));
+
+			if (lMajor == currentMajor)
+				return;
+
+			currentMajor = lMajor;
+			SetRenderModes();
+		}
+
+		protected void SetRenderModes()
+		{
+			if (currentMajor < 4)
+			{
+				renderOption.Clear();
+				renderOption.AddItem(RenderMode.OpenGL3.ToString(), 0);
+				renderOption.AddItem(RenderMode.OpenGL2.ToString(), 1);
+			}
+			else
+			{
+				renderOption.Clear();
+				renderOption.AddItem(RenderMode.Forward.ToString(), 0);
+				renderOption.AddItem(RenderMode.Mobile.ToString(), 1);
+				renderOption.AddItem(RenderMode.Compatibility.ToString(), 1);
+			}
+
+			renderOption.Selected = 0;
+		}
+
+		protected RenderMode GetRenderMode()
+		{
+			if (currentMajor < 4)
+			{
+				return (RenderMode)renderOption.Selected;
+			}
+			else
+			{
+				return (RenderMode)(renderOption.Selected + 0b100);
+			}
 		}
 	}
 }

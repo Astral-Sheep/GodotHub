@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 
+using GError = Godot.Error;
+
 namespace Com.Astral.GodotHub.Data
 {
 	public static class InstallsData
@@ -34,18 +36,18 @@ namespace Com.Astral.GodotHub.Data
 #endif
 
 			file = new ConfigFile();
-			Error lError = file.Load(filePath);
+			GError lError = file.Load(filePath);
 
 			switch (lError)
 			{
-				case Error.DoesNotExist:
-				case Error.Failed:
-				case Error.FileNotFound:
+				case GError.DoesNotExist:
+				case GError.Failed:
+				case GError.FileNotFound:
 					Reset();
 					Save();
 					break;
-				case Error.FileNoPermission:
-				case Error.Unauthorized:
+				case GError.FileNoPermission:
+				case GError.Unauthorized:
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
 				default:

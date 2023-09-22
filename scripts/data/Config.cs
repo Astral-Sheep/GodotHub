@@ -4,6 +4,8 @@ using System;
 using System.Runtime.InteropServices;
 using Environment = System.Environment;
 
+using GError = Godot.Error;
+
 namespace Com.Astral.GodotHub.Data
 {
 	/// <summary>
@@ -166,15 +168,15 @@ namespace Com.Astral.GodotHub.Data
 				Architecture.x32;
 
 			file = new ConfigFile();
-			Error lError = file.Load(filePath);
+			GError lError = file.Load(filePath);
 
 			switch (lError)
 			{
-				case Error.FileNoPermission:
-				case Error.Unauthorized:
+				case GError.FileNoPermission:
+				case GError.Unauthorized:
 					Debugger.PrintError($"Can't load nor create config file: {lError}");
 					break;
-				case Error.Ok:
+				case GError.Ok:
 					break;
 				default:
 					ResetAll();
