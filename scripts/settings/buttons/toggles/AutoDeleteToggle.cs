@@ -6,12 +6,12 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
 	{
 		protected override void OnToggled(bool pToggled)
 		{
-			Config.AutoDeleteZip = pToggled;
+			AppConfig.AutoDeleteZip = pToggled;
 		}
 
 		protected override void Reset()
 		{
-			button.ButtonPressed = Config.AutoDeleteZip;
+			button.ButtonPressed = AppConfig.AutoDeleteZip;
 		}
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -17,12 +18,30 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 	{
 		public enum Result
 		{
+			/// <summary>
+			/// The installation process is fully completed
+			/// </summary>
 			Installed,
+			/// <summary>
+			/// The installation process stopped after downloading the assets
+			/// </summary>
 			Downloaded,
+			/// <summary>
+			/// The installation process wasn't able to download the assets
+			/// </summary>
 			Failed,
+			/// <summary>
+			/// The installation process was voluntarily stopped
+			/// </summary>
 			Cancelled,
 		}
 
+		/// <summary>
+		/// Download the asset in the given <see cref="Source"/>
+		/// </summary>
+		/// <param name="pSource"><see cref="Source"/> containing all the data</param>
+		/// <param name="pToken"><see cref="CancellationToken"/> used to cancel the operation</param>
+		/// <param name="pProgress"><see cref="IProgress{T}"/> used to report progress to the user</param>
 		public static async Task<Result> Download(Source pSource, CancellationToken pToken, IProgress<float> pProgress)
 		{
 			HttpResponseMessage lResponse = null;
@@ -30,8 +49,12 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			try
 			{
 				pProgress.Report(0f);
-				HttpClient lClient = new HttpClient();
-				lResponse = await lClient.GetAsync(new Uri(pSource.asset.BrowserDownloadUrl), pToken);
+
+				using (HttpClient lClient = new HttpClient())
+				{
+					lResponse = await lClient.GetAsync(new Uri(pSource.asset.BrowserDownloadUrl), pToken);
+				}
+				
 				pProgress.Report(0.8f);
 			}
 			catch (OperationCanceledException)
@@ -40,17 +63,21 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
+				//To do: create error popup
 				Debugger.PrintException(lException);
 				return Result.Failed;
 			}
 
-			string lZip = Config.DownloadDir + "/" + pSource.asset.Name;
+			string lZip = AppConfig.DownloadDir + "/" + pSource.asset.Name;
 
 			try
 			{
-				FileStream lStream = new FileStream(lZip, FileMode.Create);
-				await lResponse.Content.CopyToAsync(lStream, pToken);
-				lStream.Close();
+				using (FileStream lStream = new FileStream(lZip, FileMode.Create))
+				{
+					await lResponse.Content.CopyToAsync(lStream, pToken);
+					lStream.Close();
+				}
+
 				pProgress.Report(0.9f);
 			}
 			catch (OperationCanceledException)
@@ -65,6 +92,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 					CancelUnzip(lZip, null);
 				}
 
+				//To do: create error popup
 				Debugger.PrintException(lException);
 				return Result.Failed;
 			}
@@ -73,10 +101,16 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			return Result.Downloaded;
 		}
 
+		/// <summary>
+		/// Unzip a .zip folder of a windows version
+		/// </summary>
+		/// <param name="pSource"><see cref="Source"/> containing data of the folder to unzip</param>
+		/// <param name="pToken"><see cref="CancellationToken"/> used to cancel the operation</param>
+		/// <param name="pProgress"><see cref="IProgress{T}"/> used to report progress to the user</param>
 		public static async Task<Result> UnzipWindows(Source pSource, CancellationToken pToken, IProgress<float> pProgress)
 		{
-			string lZip = Config.DownloadDir + "/" + pSource.asset.Name;
-			string lDir = Config.InstallDir;
+			string lZip = AppConfig.DownloadDir + "/" + pSource.asset.Name;
+			string lDir = AppConfig.InstallDir;
 
 			if (!pSource.mono)
 			{
@@ -94,7 +128,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			string lFolder = pSource.mono ? lZip[..^4] : lDir;
 			InstallsData.AddVersion(lFolder, false);
 
-			if (Config.AutoCreateShortcut)
+			if (AppConfig.AutoCreateShortcut)
 			{
 				try
 				{
@@ -112,6 +146,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
+					//To do: create error popup
 					Debugger.PrintException(lException);
 					return Result.Installed;
 				}
@@ -120,11 +155,16 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			return Result.Installed;
 		}
-
+		/// <summary>
+		/// Unzip a .zip folder of a linux version
+		/// </summary>
+		/// <param name="pSource"><see cref="Source"/> containing data of the folder to unzip</param>
+		/// <param name="pToken"><see cref="CancellationToken"/> used to cancel the operation</param>
+		/// <param name="pProgress"><see cref="IProgress{T}"/> used to report progress to the user</param>
 		public static async Task<Result> UnzipLinux(Source pSource, CancellationToken pToken, IProgress<float> pProgress)
 		{
-			string lZip = Config.DownloadDir + "/" + pSource.asset.Name;
-			string lDir = Config.InstallDir;
+			string lZip = AppConfig.DownloadDir + "/" + pSource.asset.Name;
+			string lDir = AppConfig.InstallDir;
 
 			if (!pSource.mono)
 			{
@@ -145,8 +185,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				string lOriginalFolder = lFormattedFolder;
 				lFormattedFolder = PathT.FormatLinuxFolder(lFormattedFolder);
 
-				if (!await Task.Run(() => PathT.RenameFolder(lOriginalFolder, lFormattedFolder)))
+				if (!PathT.RenameFolder(lOriginalFolder, lFormattedFolder))
 				{
+					//To do: create error popup
 					Debugger.PrintError($"Can't rename folder {lOriginalFolder}");
 					return Result.Failed;
 				}
@@ -157,19 +198,42 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			if (Config.AutoCreateShortcut)
 			{
-				await Task.Run(() => {
-					CreateShortcut(PathT.GetExeFromFolder(lFormattedFolder, pSource.os), pSource.version);
-				});
+				try
+				{
+					await Task.Run(
+						() => {
+							CreateShortcut(PathT.GetExeFromFolder(lFormattedFolder, pSource.os), pSource.version);
+						}
+						pToken,
+					);
+				}
+				catch (OperationCanceledException)
+				{
+					CancelUnzip(lZip, lDir);
+					return Result.Cancelled;
+				}
+				catch (Exception lException)
+				{
+					//To do: create error popup
+					Debugger.PrintException(lException);
+					return Result.Installed;
+				}
 			}
 #endif
 
 			return Result.Installed;
 		}
 
+		/// <summary>
+		/// Unzip a .zip folder of a macos version
+		/// </summary>
+		/// <param name="pSource"><see cref="Source"/> containing data of the folder to unzip</param>
+		/// <param name="pToken"><see cref="CancellationToken"/> used to cancel the operation</param>
+		/// <param name="pProgress"><see cref="IProgress{T}"/> used to report progress to the user</param>
 		public static async Task<Result> UnzipMacOS(Source pSource, CancellationToken pToken, IProgress<float> pProgress)
 		{
-			string lZip = Config.DownloadDir + "/" + pSource.asset.Name;
-			string lDir = Config.InstallDir;
+			string lZip = AppConfig.DownloadDir + "/" + pSource.asset.Name;
+			string lDir = AppConfig.InstallDir;
 			Result lResult = await Unzip(lZip, lDir, pToken, pProgress);
 
 			if (lResult != Result.Installed)
@@ -186,9 +250,26 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			if (Config.AutoCreateShortcut)
 			{
-				await Task.Run(() => {
-					CreateShortcut(PathT.GetExeFromFolder(lFormattedFolder, pSource.os), pSource.version);
-				});
+				try
+				{
+					await Task.Run(
+						() => {
+							CreateShortcut(PathT.GetExeFromFolder(lFormattedFolder, pSource.os), pSource.version);
+						},
+						pToken
+					);
+				}
+				catch (OperationCanceledException)
+				{
+					CancelUnzip(lZip, lDir);
+					return Result.Cancelled;
+				}
+				catch (Exception lException)
+				{
+					//To do: create error popup
+					Debugger.PrintException(lException);
+					return Result.Installed;
+				}
 			}
 #endif
 
@@ -199,8 +280,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		{
 			try
 			{
-				await Task.Run(() => ZipFile.ExtractToDirectory(pZip, pDir), pToken);
-				pProgress.Report(Config.AutoDeleteZip ? 0.7f : 1f);
+				await Task.Run(
+					() => ZipFile.ExtractToDirectory(pZip, pDir),
+					pToken
+				);
+				pProgress.Report(AppConfig.AutoDeleteZip ? 0.7f : 1f);
 			}
 			catch (OperationCanceledException)
 			{
@@ -209,16 +293,17 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
+				//To do: create error popup
 				Debugger.PrintException(lException);
 				CancelUnzip(pZip, lException is UnauthorizedAccessException ? null : pDir);
 				return Result.Failed;
 			}
 
-			if (Config.AutoDeleteZip)
+			if (AppConfig.AutoDeleteZip)
 			{
 				try
 				{
-					await Task.Run(() => File.Delete(pZip), pToken);
+					File.Delete(pZip);
 					pProgress.Report(1f);
 				}
 				catch (OperationCanceledException)
@@ -228,6 +313,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
+					//To do: create error popup
 					Debugger.PrintException(lException);
 					return Result.Installed;
 				}
@@ -238,15 +324,16 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		private static void CreateShortcut(string pExecutable, Version pVersion)
 		{
-			StreamWriter lWriter = new StreamWriter(
-				$"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/Godot {pVersion}.url",
-				true
-			);
-			lWriter.WriteLine("[InternetShortcut]");
-			lWriter.WriteLine($"URL=file:///{pExecutable}");
-			lWriter.WriteLine("IconIndex=0");
-			lWriter.WriteLine($"IconFile={pExecutable}");
-			lWriter.Close();
+			using (StreamWriter lWriter = new StreamWriter($"{Environment.GetFolderPath(Environment.SpecialFolder.Desktop)}/Godot {pVersion}.url", false))
+			{
+				lWriter.Write(
+					$"[InternetShortcut]{PathT.EOL}" +
+					$"URL=file:///{pExecutable}{PathT.EOL}" +
+					$"IconIndex=0{PathT.EOL}" +
+					$"IconFile={pExecutable}{PathT.EOL}"
+				);
+				lWriter.Close();
+			}
 		}
 
 		private static void CancelUnzip(string pZip, string pDir)
@@ -259,6 +346,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
+					//To do: create error popup
 					Debugger.PrintException(lException);
 				}
 			}
@@ -271,6 +359,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
+					//To do: create error popup
 					Debugger.PrintException(lException);
 				}
 			}

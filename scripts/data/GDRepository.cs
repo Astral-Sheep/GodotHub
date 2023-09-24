@@ -1,4 +1,5 @@
 ﻿using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using Newtonsoft.Json;
 using Octokit;
 using System;
@@ -25,14 +26,15 @@ namespace Com.Astral.GodotHub.Data
 
 		private static readonly string releasesPath = PathT.appdata + "/releases.json";
 
-		public static List<Release> Releases => _releases;
-		private static List<Release> _releases;
+		public static List<Release> Releases { get; private set; }
 		private static GitHubClient client;
 
-		public async static Task<bool> Init()
+		public async static Task<Error> Init()
 		{
 			if (client != null)
-				return true;
+			{
+				return new Error();
+			}
 
 			client = new GitHubClient(new ProductHeaderValue(PRODUCT_NAME));
 
@@ -40,19 +42,18 @@ namespace Com.Astral.GodotHub.Data
 			{
 				LoadReleases();
 
-				if (Config.AutoUpdateRepository || _releases == null)
+				if (AppConfig.AutoUpdateRepository || Releases == null)
 				{
 					await UpdateReleases();
 				}
 
 				Loaded?.Invoke();
 				Debugger.PrintValidation("Releases loaded successfully");
-				return true;
+				return new Error();
 			}
 			catch (Exception lException)
 			{
-				Debugger.PrintException(lException);
-				return false;
+				return new Error(lException);
 			}
 		}
 
@@ -61,25 +62,26 @@ namespace Com.Astral.GodotHub.Data
 		/// </summary>
 		public async static Task UpdateReleases()
 		{
-			if (_releases == null)
+			if (Releases == null)
 			{
 				try
 				{
-					_releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
+					Releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
 
-					for (int i = _releases.Count - 1; i >= 0; i++)
+					for (int i = Releases.Count - 1; i >= 0; i++)
 					{
-						if ((Version)_releases[i].Name < Version.minimumSupportedVersion)
+						if ((Version)Releases[i].Name < Version.minimumSupportedVersion)
 						{
-							_releases.RemoveAt(i);
+							Releases.RemoveAt(i);
 						}
 					}
 
 					SaveReleases();
-					Debugger.PrintMessage($"{_releases.Count} new releases found");
+					Debugger.PrintMessage($"{Releases.Count} new releases found");
 				}
 				catch (Exception lException)
 				{
+					//To do: create error popup
 					Debugger.PrintException(lException);
 				}
 
@@ -88,11 +90,12 @@ namespace Com.Astral.GodotHub.Data
 
 			try
 			{
-				if (_releases[0] == await client.Repository.Release.GetLatest(USER, REPO))
+				if (Releases[0] == await client.Repository.Release.GetLatest(USER, REPO))
 					return;
 			}
 			catch (Exception lException)
 			{
+				//To do: create error popup
 				Debugger.PrintException(lException);
 				return;
 			}
@@ -101,7 +104,7 @@ namespace Com.Astral.GodotHub.Data
 			{
 				List<Release> lReleases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
 				int lLastIndex = 0;
-				string lLastName = _releases[0].Name;
+				string lLastName = Releases[0].Name;
 
 				for (lLastIndex = 0; lLastIndex < lReleases.Count; lLastIndex++)
 				{
@@ -109,28 +112,24 @@ namespace Com.Astral.GodotHub.Data
 						break;
 				}
 
-				_releases.InsertRange(0, lReleases.GetRange(0, lLastIndex));				
+				Releases.InsertRange(0, lReleases.GetRange(0, lLastIndex));				
 				SaveReleases();
-				Updated?.Invoke(_releases.GetRange(0, lLastIndex));
+				Updated?.Invoke(Releases.GetRange(0, lLastIndex));
 				Debugger.PrintMessage($"{lLastIndex} new releases found");
 			}
 			catch (Exception lException)
 			{
+				//To do: create error popup
 				Debugger.PrintException(lException);
 			}
 		}
 
 		private static void SaveReleases()
 		{
-			try
+			using (StreamWriter lWriter = new StreamWriter(releasesPath, false))
 			{
-				StreamWriter lWriter = new StreamWriter(releasesPath, false);
-				lWriter.Write(JsonConvert.SerializeObject(_releases));
+				lWriter.Write(JsonConvert.SerializeObject(Releases));
 				lWriter.Close();
-			}
-			catch (Exception lException)
-			{
-				Debugger.PrintException(lException);
 			}
 		}
 
@@ -139,20 +138,16 @@ namespace Com.Astral.GodotHub.Data
 			if (!File.Exists(releasesPath))
 				return;
 
-			try
+			using (StreamReader lReader = new StreamReader(releasesPath))
 			{
-				StreamReader lReader = new StreamReader(releasesPath);
-				_releases = JsonConvert.DeserializeObject<List<Release>>(
+				Releases = JsonConvert.DeserializeObject<List<Release>>(
 					lReader.ReadToEnd(),
-					new JsonSerializerSettings() {
+					new JsonSerializerSettings()
+					{
 						ContractResolver = new FullParameterContractResolver()
 					}
 				);
 				lReader.Close();
-			}
-			catch (Exception lException)
-			{
-				Debugger.PrintException(lException);
 			}
 		}
 

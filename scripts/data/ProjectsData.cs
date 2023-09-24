@@ -1,4 +1,5 @@
 ﻿using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using Godot;
 using Godot.Collections;
 using System;
@@ -14,6 +15,9 @@ namespace Com.Astral.GodotHub.Data
 		private const string VERSION = "version";
 		private const string FAVORITE = "favorite";
 
+		/// <summary>
+		/// Event called when a project is added in the projects config file
+		/// </summary>
 		public static event Action<GDFile> Added;
 
 		private static readonly string filePath = PathT.appdata + "/project.cfg";
@@ -42,7 +46,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Add project to the project.cfg file
+		/// Add the project to the project config file
 		/// </summary>
 		public static void AddProject(GDFile pProject)
 		{
@@ -52,15 +56,17 @@ namespace Com.Astral.GodotHub.Data
 			Added?.Invoke(pProject);
 		}
 
-		public static bool HasProject(string pProject)
+		/// <summary>
+		/// Whether or not a project is in the project config file
+		/// </summary>
+		public static bool HasProject(string pDirectory)
 		{
-			return file.HasSection(pProject);
+			return file.HasSection(pDirectory);
 		}
 
 		/// <summary>
-		/// Remove project from the project.cfg file if it exists
+		/// Remove the project from the project config file
 		/// </summary>
-		/// <param name="pPath"></param>
 		public static void RemoveProject(string pPath)
 		{
 			if (file.HasSection(pPath))
@@ -71,25 +77,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Whether or not the given project is marked as favorite by the user
-		/// </summary>
-		/// <param name="pProject"></param>
-		/// <returns></returns>
-		public static bool IsFavorite(string pProject)
-		{
-			return (bool)file.GetValue(pProject, FAVORITE);
-		}
-
-		/// <summary>
-		/// Return the <see cref="Version"/> of the given project 
-		/// </summary>
-		public static Version GetVersion(string pProject)
-		{
-			return (Version)(string)file.GetValue(pProject, VERSION);
-		}
-
-		/// <summary>
-		/// Mark given project as favorite (or not depending on the value of <paramref name="pFavorite"/>)
+		/// Set project favorite status
 		/// </summary>
 		public static void SetFavorite(string pProject, bool pFavorite)
 		{
@@ -97,12 +85,19 @@ namespace Com.Astral.GodotHub.Data
 			Save();
 		}
 
+		/// <summary>
+		/// Set project current <see cref="Version"/>
+		/// </summary>
 		public static void SetVersion(string pProject, string pVersion)
 		{
 			file.SetValue(pProject, VERSION, pVersion);
 			Save();
 		}
 
+		/// <summary>
+		/// Return project <see cref="Version"/> from a path<br/>
+		/// If the path doesn't refer to a project, it returns the default <see cref="Version"/>
+		/// </summary>
 		public static Version GetVersionFromFolder(string pPath)
 		{
 			ConfigFile lConfig = new ConfigFile();
@@ -114,7 +109,6 @@ namespace Com.Astral.GodotHub.Data
 
 				if (lConfigVersion >= 5)
 				{
-					Debugger.PrintMessage($"{lConfig.GetValue("", "config_version")}");
 					return GetGodot4OrHigherVersion(lConfig);
 				}
 				else
@@ -124,8 +118,7 @@ namespace Com.Astral.GodotHub.Data
 			}
 			else
 			{
-				Debugger.PrintMessage($"{lError}");
-				Debugger.PrintError("Invalid project passed, can't find version from folder");
+				Debugger.PrintError($"Invalid project passed, can't find version from folder: {lError}");
 				return new Version();
 			}
 		}
@@ -138,7 +131,7 @@ namespace Com.Astral.GodotHub.Data
 
 		private static Version GetGodot3OrLowerVersion(int pConfigVersion)
 		{
-			if (pConfigVersion < 4)
+			if (pConfigVersion != 4)
 				return new Version();
 
 			return new Version(3, 5, 2);
@@ -164,7 +157,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Save the projects.cfg file
+		/// Save projects.cfg
 		/// </summary>
 		public static void Save()
 		{
@@ -173,7 +166,7 @@ namespace Com.Astral.GodotHub.Data
 
 		private static void Reset()
 		{
-			IEnumerator<string> lDirectories = Directory.EnumerateDirectories(Config.ProjectDir).GetEnumerator();
+			IEnumerator<string> lDirectories = Directory.EnumerateDirectories(AppConfig.ProjectDir).GetEnumerator();
 			string lDirectory;
 
 			while (lDirectories.MoveNext())

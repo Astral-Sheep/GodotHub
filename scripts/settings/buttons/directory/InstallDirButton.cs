@@ -9,11 +9,11 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 
 		protected override void OnDirSelected(string pDir)
 		{
-			Config.InstallDir = pDir;
+			AppConfig.InstallDir = pDir;
 
-			if (Config.UseInstallDirForDownload)
+			if (AppConfig.UseInstallDirForDownload)
 			{
-				Config.DownloadDir = pDir;
+				AppConfig.DownloadDir = pDir;
 				downloadDirButton.Text = $" {pDir}";
 			}
 
@@ -22,7 +22,7 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 
 		protected override void Reset()
 		{
-			button.Text = $" {Config.InstallDir}";
+			button.Text = $" {AppConfig.InstallDir}";
 		}
 	}
 }

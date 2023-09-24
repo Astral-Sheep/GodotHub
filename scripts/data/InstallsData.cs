@@ -1,4 +1,5 @@
 ﻿using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,13 @@ namespace Com.Astral.GodotHub.Data
 		private const string PATH = "path";
 		private const string FAVORITE = "favorite";
 
+		/// <summary>
+		/// Event called when a new engine <see cref="Version"/> is added
+		/// </summary>
 		public static event Action<GDFile> VersionAdded;
+		/// <summary>
+		/// Event called when an engine <see cref="Version"/> is removed
+		/// </summary>
 		public static event Action<Version> VersionRemoved;
 
 		private static readonly string exePath;
@@ -116,16 +123,17 @@ namespace Com.Astral.GodotHub.Data
 			return true;
 		}
 
+		/// <summary>
+		/// Return whether or not an installed <see cref="Version"/> supports C#
+		/// </summary>
 		public static bool VersionIsMono(Version pVersion)
 		{
 			return file.HasSection((string)pVersion) && ((string)file.GetValue((string)pVersion, PATH)).Contains("_mono");
 		}
 
-		public static bool HasVersion(string pPath)
-		{
-			return file.HasSection((string)(Version)pPath);
-		}
-
+		/// <summary>
+		/// Remove a <see cref="Version"/> from the installs config file
+		/// </summary>
 		public static void RemoveVersion(Version pVersion)
 		{
 			if (!file.HasSection((string)pVersion))
@@ -147,6 +155,9 @@ namespace Com.Astral.GodotHub.Data
 			return (string)file.GetValue(pVersion, PATH);
 		}
 
+		/// <summary>
+		/// Set the <see cref="Version"/> favorite status
+		/// </summary>
 		public static void SetFavorite(Version pVersion, bool pIsFavorite)
 		{
 			if (!file.HasSection((string)pVersion))
@@ -157,7 +168,11 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Return engine versions that share the same major and minor indices
+		/// Return engine versions that are compatible.<br/>
+		/// For 4.x versions, they're considered compatible if they share
+		/// the same major and minor indices.<br/>
+		/// For older versions, they're all considered to be compatible
+		/// since I didn't find how to find the version of an already existing project.
 		/// </summary>
 		public static List<Version> GetCompatibleVersions(Version pVersion)
 		{
@@ -202,7 +217,7 @@ namespace Com.Astral.GodotHub.Data
 		/// </summary>
 		public static void Reset()
 		{
-			IEnumerator<string> lDirectories = Directory.EnumerateDirectories(Config.InstallDir).GetEnumerator();
+			IEnumerator<string> lDirectories = Directory.EnumerateDirectories(AppConfig.InstallDir).GetEnumerator();
 
 			while (lDirectories.MoveNext())
 			{

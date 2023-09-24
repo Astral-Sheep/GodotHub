@@ -6,13 +6,13 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 	{
 		protected override void OnDirSelected(string pDir)
 		{
-			Config.ProjectDir = pDir;
+			AppConfig.ProjectDir = pDir;
 			base.OnDirSelected(pDir);
 		}
 
 		protected override void Reset()
 		{
-			button.Text = $" {Config.ProjectDir}";
+			button.Text = $" {AppConfig.ProjectDir}";
 		}
 	}
 }

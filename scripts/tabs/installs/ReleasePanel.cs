@@ -1,5 +1,5 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Tabs.Comparisons;
+using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
 using Octokit;
 using System;

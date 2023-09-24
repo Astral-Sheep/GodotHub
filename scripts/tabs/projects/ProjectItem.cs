@@ -1,5 +1,6 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Tabs.Comparisons;
+using Com.Astral.GodotHub.Utils;
+using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
+using Colors = Com.Astral.GodotHub.Utils.Colors;
 using Debugger = Com.Astral.GodotHub.Debug.Debugger;
 using Error = Godot.Error;
 using Version = Com.Astral.GodotHub.Data.Version;
@@ -18,6 +20,9 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected const string APPLICATION_SECTION = "application";
 		protected const string NAME_KEY = "config/name";
 
+		/// <summary>
+		/// Event called when method <see cref="Close"/> has been called and the item is going to be disposed
+		/// </summary>
 		public event Action<ProjectItem> Closed;
 
 		public bool IsFavorite { get; protected set; }
@@ -51,12 +56,15 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected override void Dispose(bool pDisposing)
 		{
-			if (pDisposing)
-			{
-				InstallsData.VersionAdded -= OnVersionAdded;
-			}
+			if (!pDisposing)
+				return;
+
+			InstallsData.VersionAdded -= OnVersionAdded;
 		}
 
+		/// <summary>
+		/// Set the project data of this <see cref="ProjectItem"/>
+		/// </summary>
 		public void Init(GDFile pProject)
 		{
 			project = pProject;
@@ -158,6 +166,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			Closed?.Invoke(this);
 		}
 
+		#region EVENT_HANDLING
+
 		protected void OnFavoriteToggled(bool pToggled)
 		{
 			ProjectsData.SetFavorite(project.Path, pToggled);
@@ -176,9 +186,12 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 					WorkingDirectory = project.Path,
 					Arguments = "--editor",
 				});
+
+				ProjectsData.SetVersion(project.Path, versionButton.Text);
 			}
 			catch (Exception lException)
 			{
+				//To do: create error popup
 				Debugger.PrintException(lException);
 			}
 		}
@@ -252,5 +265,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			versionButton.RemoveItem(versionButton.ItemCount - 1);
 		}
+
+		#endregion //EVENT_HANDLING
 	}
 }

@@ -28,19 +28,22 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			background.SelfModulate = new Color(background.SelfModulate, 0f);
 
 			CreateCustomTween(Tween.EaseType.Out);
-			ReleaseItem.InstallClicked += Install;
+			ReleaseItem.InstallPressed += Install;
 			openButton.Pressed += Open;
 			Visible = true;
 		}
 
 		protected override void Dispose(bool pDisposing)
 		{
-			if (pDisposing)
-			{
-				ReleaseItem.InstallClicked -= Install;
-			}
+			if (!pDisposing)
+				return;
+
+			ReleaseItem.InstallPressed -= Install;
 		}
 
+		/// <summary>
+		/// Create a new <see cref="Installer"/> to download and install the given <see cref="Source"/>
+		/// </summary>
 		public void Install(ReleaseItem pItem, Source pSource)
 		{
 			Installer lInstaller = installerScene.Instantiate<Installer>();

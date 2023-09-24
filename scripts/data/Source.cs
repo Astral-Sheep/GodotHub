@@ -8,11 +8,11 @@ namespace Com.Astral.GodotHub.Data
 	public class Source
 	{
 		/// <summary>
-		/// The github release
+		/// Specific asset from a github release
 		/// </summary>
 		public ReleaseAsset asset;
 		/// <summary>
-		/// The <see cref="Version"/> of the release
+		/// <see cref="Version"/> of the release
 		/// </summary>
 		public Version version;
 		/// <summary>
@@ -20,11 +20,11 @@ namespace Com.Astral.GodotHub.Data
 		/// </summary>
 		public bool mono;
 		/// <summary>
-		/// The target <see cref="OS"/> of the release
+		/// Target <see cref="OS"/> of the release
 		/// </summary>
 		public OS os;
 		/// <summary>
-		/// The target <see cref="Architecture"/> of the release
+		/// Target <see cref="Architecture"/> of the release
 		/// </summary>
 		public Architecture? architecture;
 
@@ -40,7 +40,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Return version of the given release
+		/// Return the <see cref="Version"/> of the release
 		/// </summary>
 		public static Version GetVersion(Release pRelease)
 		{
@@ -48,7 +48,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Whether or not the given <see cref="Release"/> has C# support
+		/// Whether or not the <see cref="Release"/> has C# support
 		/// </summary>
 		public static bool IsMono(ReleaseAsset pAsset)
 		{
@@ -56,7 +56,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Return the target <see cref="OS"/> of the given <see cref="ReleaseAsset"/>
+		/// Return the target <see cref="OS"/> of the <see cref="ReleaseAsset"/>
 		/// </summary>
 		public static OS GetOS(ReleaseAsset pAsset)
 		{

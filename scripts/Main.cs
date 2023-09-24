@@ -1,6 +1,9 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Debug;
 using Godot;
 using System;
+
+using Error = Com.Astral.GodotHub.Utils.Error;
 
 namespace Com.Astral.GodotHub
 {
@@ -41,7 +44,13 @@ namespace Com.Astral.GodotHub
 
 		protected async void Init()
 		{
-			await GDRepository.Init();
+			Error lError = await GDRepository.Init();
+
+			if (!lError.Ok)
+			{
+				Debugger.PrintException(lError.Exception);
+			}
+
 			Initialized?.Invoke();
 		}
 

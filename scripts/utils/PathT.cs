@@ -7,10 +7,18 @@ using Environment = System.Environment;
 using OS = Com.Astral.GodotHub.Data.OS;
 using Version = Com.Astral.GodotHub.Data.Version;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Utils
 {
 	public static class PathT
 	{
+#if GODOT_WINDOWS
+		public const string EOL = "\r\n";
+#elif GODOT_MACOS
+		public const string EOL = "\r";
+#else
+		public const string EOL = "\n";
+#endif
+
 		private const string MAC_EXE_PATH = "/Contents/MacOS/Godot";
 		private const string DEFAULT_EXE_PATH = "/";
 

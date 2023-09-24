@@ -10,15 +10,15 @@ namespace Com.Astral.GodotHub.Settings.Buttons
 		public override void _Ready()
 		{
 			Reset();
-			Config.Reset += Reset;
+			AppConfig.Reset += Reset;
 		}
 
 		protected override void Dispose(bool pDisposing)
 		{
-			if (pDisposing)
-			{
-				Config.Reset -= Reset;
-			}
+			if (!pDisposing)
+				return;
+
+			AppConfig.Reset -= Reset;
 		}
 
 		public abstract void Connect();

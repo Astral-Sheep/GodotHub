@@ -1,10 +1,8 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Tabs.Comparisons;
+using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 using Version = Com.Astral.GodotHub.Data.Version;
 
@@ -108,7 +106,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		protected void OnAddPressed()
 		{
 			FileDialog lDialog = Main.Instance.InstantiateFileDialog();
-			lDialog.CurrentDir = Config.ProjectDir;
+			lDialog.CurrentDir = AppConfig.ProjectDir;
 			lDialog.FileMode = FileDialog.FileModeEnum.OpenFiles;
 			lDialog.Filters = new string[] { "*.godot" };
 			lDialog.FilesSelected += OnFilesSelected;

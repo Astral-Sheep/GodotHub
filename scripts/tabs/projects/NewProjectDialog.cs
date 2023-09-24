@@ -1,5 +1,6 @@
 using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,9 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 {
 	public partial class NewProjectDialog : ConfirmationDialog
 	{
+		/// <summary>
+		/// Event called when the ok button is pressed
+		/// </summary>
 		public new event Action<string, string, Version, RenderMode, VersionningMode> Confirmed;
 
 		[ExportGroup("Project name")]
@@ -35,7 +39,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			PopupCentered();
 			GetOkButton().FocusMode = Control.FocusModeEnum.None;
 			GetCancelButton().FocusMode = Control.FocusModeEnum.None;
-			projectDirectory.Text = Config.ProjectDir;
+			projectDirectory.Text = AppConfig.ProjectDir;
 
 			List<GDFile> lAvailableVersions = InstallsData.GetAllVersions();
 
@@ -69,6 +73,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			browseButton.Pressed += OnBrowsePressed;
 			versionOption.ItemSelected += OnVersionSelected;
 		}
+
+		#region EVENT_HANDLING
 
 		protected void OnConfirmed()
 		{
@@ -140,6 +146,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			currentMajor = lMajor;
 			SetRenderModes();
 		}
+
+		#endregion //EVENT_HANDLING
 
 		protected void SetRenderModes()
 		{

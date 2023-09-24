@@ -85,7 +85,7 @@ namespace Com.Astral.GodotHub.Settings
 
 		protected void OnClosePressed()
 		{
-			Config.Save();
+			AppConfig.Save();
 
 			backgroundButton.MouseFilter = MouseFilterEnum.Ignore;
 			backgroundButton.Pressed -= OnClosePressed;

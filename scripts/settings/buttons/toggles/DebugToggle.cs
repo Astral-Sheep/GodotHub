@@ -7,13 +7,13 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
 	{
 		protected override void OnToggled(bool pToggled)
 		{
-			Config.Debug = pToggled;
+			AppConfig.Debug = pToggled;
 			Debugger.Enabled = pToggled;
 		}
 
 		protected override void Reset()
 		{
-			button.ButtonPressed = Config.Debug;
+			button.ButtonPressed = AppConfig.Debug;
 		}
 	}
 }

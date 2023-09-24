@@ -1,10 +1,12 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Tabs.Comparisons;
+using Com.Astral.GodotHub.Utils;
+using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
 using System;
 using System.Diagnostics;
 using System.IO;
 
+using Colors = Com.Astral.GodotHub.Utils.Colors;
 using Debugger = Com.Astral.GodotHub.Debug.Debugger;
 using Label = Godot.Label;
 using Version = Com.Astral.GodotHub.Data.Version;
@@ -13,6 +15,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 {
 	public partial class InstallItem : Control, IFavoriteItem, IMonoItem, ITimedItem, IVersionItem, IValidItem
 	{
+		/// <summary>
+		/// Event called when <see cref="Close"/> has been called and the item is going to be disposed
+		/// </summary>
 		public static event Action<InstallItem> Closed;
 
 		public bool IsFavorite { get; protected set; }
@@ -37,6 +42,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected GDFile install;
 
+		/// <summary>
+		/// Set the data of this <see cref="InstallItem"/>
+		/// </summary>
 		public void Init(GDFile pInstall)
 		{
 			install = pInstall;

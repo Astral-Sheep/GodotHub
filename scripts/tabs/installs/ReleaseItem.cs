@@ -1,6 +1,6 @@
 using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Tabs.Comparisons;
+using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
 using Octokit;
 using System;
@@ -19,8 +19,15 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		protected const string ASSET_NAME_PREFIX = "Godot_v";
 		protected const string FILE_TYPE = ".zip";
 
-		public static event Action<ReleaseItem, Source> InstallClicked;
+		/// <summary>
+		/// Event called when the install button is pressed,
+		/// thus requiring an installation of the given <see cref="Source"/>
+		/// </summary>
+		public static event Action<ReleaseItem, Source> InstallPressed;
 
+		/// <summary>
+		/// Index of the release. 0 corresponds to the latest
+		/// </summary>
 		public int Index { get; protected set; }
 		public Version Version { get; protected set; }
 		public bool IsValid => true;
@@ -52,23 +59,28 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			architectureButton.ItemSelected += OnArchitectureChanged;
 			installButton.Pressed += OnInstallClicked;
 
-			osButton.Selected = (int)Config.os;
-			architectureButton.Selected = (int)Config.architecture;
+			osButton.Selected = (int)AppConfig.os;
+			architectureButton.Selected = (int)AppConfig.architecture;
 		}
 
 		protected override void Dispose(bool pDisposing)
 		{
-			if (pDisposing)
-			{
-				InstallItem.Closed -= OnInstallItemClosed;
-			}
+			if (!pDisposing)
+				return;
+
+			InstallItem.Closed -= OnInstallItemClosed;
 		}
 
+		/// <summary>
+		/// Set data to correspond to the <see cref="Release"/>
+		/// </summary>
+		/// <param name="pRelease"></param>
+		/// <param name="pIndex"><see cref="Release"/> index in the list of <see cref="Release"/>s</param>
 		public void Init(Release pRelease, int pIndex)
 		{
 			Index = pIndex;
 			assetNamePrefix = $"{ASSET_NAME_PREFIX}{pRelease.Name}";
-			string lVersion = pRelease.Name[0..pRelease.Name.Find(RELEASE_NAME_SUFFIX)];
+			Version lVersion = (Version)pRelease.Name;
 			Version = Source.GetVersion(pRelease);
 
 			installers = new List<Installer>();
@@ -112,18 +124,19 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected void OnInstallClicked()
 		{
-			string lAssetName = GetAssetName(true, true);
+			string lAssetName = GetAssetName(true);
 
 			foreach (Source source in sources)
 			{
 				if (source.asset.Name == lAssetName)
 				{
 					SetInstalling();
-					InstallClicked?.Invoke(this, source);
+					InstallPressed?.Invoke(this, source);
 					return;
 				}
 			}
 
+			//To do: create error popup
 			Debugger.PrintError($"No asset named {lAssetName}");
 		}
 
@@ -156,7 +169,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			installers.Remove(pInstaller);
 			pInstaller.Completed -= OnInstallationCompleted;
 
-			if (GetAssetName(true, true) == pInstaller.AssetName)
+			if (GetAssetName(true) == pInstaller.AssetName)
 			{
 				if (pResult == InstallT.Result.Installed)
 				{
@@ -173,14 +186,14 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected bool IsInstalled()
 		{
-			return Directory.Exists(Config.InstallDir + "/" + GetAssetName(false, false));
+			return Directory.Exists(AppConfig.InstallDir + "/" + GetAssetName(false));
 		}
 
 		protected void SetInstallButton()
 		{
 			if (installers.Count > 0)
 			{
-				string lAssetName = GetAssetName(true, true);
+				string lAssetName = GetAssetName(true);
 
 				for (int i = 0; i < installers.Count; i++)
 				{
@@ -222,7 +235,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			);
 		}
 
-		protected string GetAssetName(bool pIsFile, bool pForAsset)
+		protected string GetAssetName(bool pIsFile)
 		{
 			string lAssetName = assetNamePrefix;
 
@@ -231,11 +244,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				lAssetName += "_mono";
 			}
 
-			lAssetName += GetOS(pForAsset) + FILE_TYPE;
-			return pIsFile ? lAssetName : lAssetName[0..^4];
+			lAssetName += GetOS(pIsFile) + FILE_TYPE;
+			return pIsFile ? lAssetName : lAssetName[..^4];
 		}
 
-		protected string GetOS(bool pForAsset)
+		protected string GetOS(bool pIsFile)
 		{
 			if (osButton.Selected == (int)OS.MacOS)
 			{
@@ -247,7 +260,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			if (osButton.Selected == (int)OS.Linux)
 			{
 				lOS = $"_linux";
-				lOS += pForAsset && monoCheck.ButtonPressed ? "_x86" : ".x86";
+				lOS += pIsFile && monoCheck.ButtonPressed ? "_x86" : ".x86";
 				lOS += architectureButton.Selected == (int)Architecture.x32 ? "_32" : "_64";
 			}
 			else

@@ -15,8 +15,16 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 	{
 		protected const float POINT_PIXEL_SIZE = 6f;
 
+		/// <summary>
+		/// Event called when the installation has ended.<br/>
+		/// <see cref="Installer"/> corresponds to the instance that installed the <see cref="Source"/>.<br/>
+		/// <see cref="InstallT.Result"/> corresponds to the completion status.
+		/// </summary>
 		public event Action<Installer, InstallT.Result> Completed;
 
+		/// <summary>
+		/// The name of the asset contained by the <see cref="Source"/>
+		/// </summary>
 		public string AssetName { get; protected set; }
 
 		[Export] protected float closeDuration = 0.25f;
@@ -39,6 +47,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			statusPosition = statusLabel.Position;
 		}
 
+		/// <summary>
+		/// Initialize this instance by giving it a <see cref="Source"/>
+		/// </summary>
 		public void Init(Source pSource)
 		{
 			if (pSource.asset == null)
@@ -68,6 +79,10 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			cancelButton.Pressed += OnCancelPressed;
 		}
 
+		/// <summary>
+		/// Start the installation process. Need to call <see cref="Init(Source)"/> beforehand to be
+		/// able to install anything
+		/// </summary>
 		public async void Install()
 		{
 			if (source == null)
@@ -89,7 +104,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			Completed?.Invoke(this, lResult);
 
-			if (Config.AutoCloseDownload)
+			if (AppConfig.AutoCloseDownload)
 			{
 				Close(0.75f);
 			}

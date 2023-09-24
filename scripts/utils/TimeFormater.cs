@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Utils
 {
 	public static class TimeFormater
 	{

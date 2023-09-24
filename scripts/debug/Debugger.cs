@@ -2,6 +2,8 @@ using Com.Astral.GodotHub.Data;
 using Godot;
 using System;
 
+using Colors = Com.Astral.GodotHub.Utils.Colors;
+
 namespace Com.Astral.GodotHub.Debug
 {
 	/// <summary>
@@ -48,12 +50,15 @@ namespace Com.Astral.GodotHub.Debug
 				label.BbcodeEnabled = true;
 			}
 
-			Enabled = Config.Debug;
+			Enabled = AppConfig.Debug;
 		}
 
 		protected override void Dispose(bool pDisposing)
 		{
-			if (pDisposing && instance == this)
+			if (!pDisposing)
+				return;
+
+			if (instance != null)
 			{
 				instance = null;
 			}

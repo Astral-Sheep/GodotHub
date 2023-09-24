@@ -6,12 +6,12 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
 	{
 		protected override void OnToggled(bool pToggled)
 		{
-			Config.AutoCreateShortcut = pToggled;
+			AppConfig.AutoCreateShortcut = pToggled;
 		}
 
 		protected override void Reset()
 		{
-			button.ButtonPressed = Config.AutoCreateShortcut;
+			button.ButtonPressed = AppConfig.AutoCreateShortcut;
 		}
 	}
 }

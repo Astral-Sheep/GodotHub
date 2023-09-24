@@ -10,13 +10,13 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
 
 		protected override void OnToggled(bool pToggled)
 		{
-			Config.UseInstallDirForDownload = pToggled;
+			AppConfig.UseInstallDirForDownload = pToggled;
 			downloadDirButton.Enabled = !pToggled;
 		}
 
 		protected override void Reset()
 		{
-			button.ButtonPressed = Config.UseInstallDirForDownload;
+			button.ButtonPressed = AppConfig.UseInstallDirForDownload;
 		}
 	}
 }

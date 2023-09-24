@@ -4,8 +4,15 @@ using System.Text.RegularExpressions;
 
 namespace Com.Astral.GodotHub.Data
 {
+	/// <summary>
+	/// Representation of a Godot version as major.minor.patch
+	/// </summary>
 	public struct Version : IComparable<Version>
 	{
+		/// <summary>
+		/// <see cref="Version"/>s older than this one aren't supported by Godot Hub
+		/// since it would be too much work for little to no use
+		/// </summary>
 		public static readonly Version minimumSupportedVersion = new Version(3, 1, 1);
 		private static readonly Regex expression = new Regex(@"([0-9]+)([.]{1}?[0-9]+){1,2}");
 
@@ -21,7 +28,8 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Whether or not both <see cref="major"/> and <see cref="minor"/> are the same
+		/// For 4.x: whether or not each <see cref="Version"/> has the same <see cref="major"/> and <see cref="minor"/> indices<br/>
+		/// For 3.x: whether or not each <see cref="Version"/> has the same <see cref="major"/> index
 		/// </summary>
 		public bool IsCompatible(Version pOther)
 		{

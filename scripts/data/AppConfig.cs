@@ -1,4 +1,5 @@
 ﻿using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using Godot;
 using System;
 using System.Runtime.InteropServices;
@@ -11,7 +12,7 @@ namespace Com.Astral.GodotHub.Data
 	/// <summary>
 	/// Static class used to get and set application parameters
 	/// </summary>
-	public static class Config
+	public static class AppConfig
 	{
 		private enum Settings
 		{
@@ -46,7 +47,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Whether or not to create a shortcut on desktop after installing a version of Godot
+		/// Whether or not to create a shortcut on desktop after installing a <see cref="Version"/> of Godot
 		/// </summary>
 		public static bool AutoCreateShortcut
 		{
@@ -82,7 +83,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Whether or not the console is visible
+		/// Whether or not the <see cref="Debugger"/> is visible
 		/// </summary>
 		public static bool Debug
 		{
@@ -94,7 +95,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// The directory in which the .zip file is downloaded
+		/// Directory in which the .zip file is downloaded
 		/// </summary>
 		public static string DownloadDir
 		{
@@ -106,7 +107,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// The directory in which the .zip is extracted
+		/// Directory in which the .zip is extracted
 		/// </summary>
 		public static string InstallDir
 		{
@@ -118,7 +119,7 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// The default directory to create a project
+		/// Default directory in which a project is created
 		/// </summary>
 		public static string ProjectDir
 		{
@@ -144,18 +145,18 @@ namespace Com.Astral.GodotHub.Data
 		#endregion //PROPERTIES
 
 		/// <summary>
-		/// The current platform operating system
+		/// Current platform operating system
 		/// </summary>
 		public static readonly OS os;
 		/// <summary>
-		/// The current platform architecture
+		/// Current platform architecture
 		/// </summary>
 		public static readonly Architecture architecture;
 
 		private static readonly string filePath = PathT.appdata + "/config.cfg";
 		private static ConfigFile file;
 
-		static Config()
+		static AppConfig()
 		{
 			os = Environment.OSVersion.Platform switch {
 				PlatformID.Win32NT => OS.Windows,
@@ -181,7 +182,6 @@ namespace Com.Astral.GodotHub.Data
 				default:
 					ResetAll();
 					Save();
-					Debugger.PrintValidation("Config file created successfully");
 					break;
 			}
 		}
@@ -202,7 +202,7 @@ namespace Com.Astral.GodotHub.Data
 			AutoCloseDownload = true;
 			AutoCreateShortcut = true;
 			AutoDeleteZip = true;
-			AutoUpdateRepository = true;
+			AutoUpdateRepository = false;
 
 #if DEBUG
 			Debug = true;
@@ -217,7 +217,6 @@ namespace Com.Astral.GodotHub.Data
 			ProjectDir = PathT.GetEnvironmentPath(Environment.SpecialFolder.MyDocuments);
 			UseInstallDirForDownload = true;
 			Reset?.Invoke();
-			Debugger.PrintMessage("Config reset");
 		}
 
 		private static Variant GetValue(Settings pSetting)

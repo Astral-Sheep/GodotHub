@@ -6,12 +6,12 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
 	{
 		protected override void OnToggled(bool pToggled)
 		{
-			Config.AutoCloseDownload = pToggled;
+			AppConfig.AutoCloseDownload = pToggled;
 		}
 
 		protected override void Reset()
 		{
-			button.ButtonPressed = Config.AutoCloseDownload;
+			button.ButtonPressed = AppConfig.AutoCloseDownload;
 		}
 	}
 }

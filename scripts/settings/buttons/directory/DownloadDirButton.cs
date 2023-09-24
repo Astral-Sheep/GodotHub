@@ -20,14 +20,14 @@ namespace Com.Astral.GodotHub.Settings.Buttons.Directory
 
 		protected override void OnDirSelected(string pDir)
 		{
-			Config.DownloadDir = pDir;
+			AppConfig.DownloadDir = pDir;
 			base.OnDirSelected(pDir);
 		}
 
 		protected override void Reset()
 		{
-			button.Text = $" {Config.DownloadDir}";
-			Enabled = !Config.UseInstallDirForDownload;
+			button.Text = $" {AppConfig.DownloadDir}";
+			Enabled = !AppConfig.UseInstallDirForDownload;
 		}
 	}
 }

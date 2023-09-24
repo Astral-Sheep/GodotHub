@@ -1,5 +1,5 @@
 using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Tabs.Comparisons;
+using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			for (int i = 0; i < lVersions.Count; i++)
 			{
-				items.Add(CreateItem(lVersions[i]));
+				CreateItem(lVersions[i]);
 			}
 
 			InstallsData.VersionAdded += OnVersionAdded;
@@ -59,6 +59,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			InstallItem lItem = installItemScene.Instantiate<InstallItem>();
 			itemContainer.AddChild(lItem);
 			lItem.Init(pInstall);
+			items.Add(lItem);
 			return lItem;
 		}
 
@@ -66,7 +67,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected void OnVersionAdded(GDFile pInstall)
 		{
-			items.Add(CreateItem(pInstall));
+			CreateItem(pInstall);
 		}
 
 		protected void OnItemClosed(InstallItem pItem)
@@ -87,7 +88,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			lDialog.Filters = new string [] { "*" };
 #endif
 
-			lDialog.CurrentDir = Config.InstallDir;
+			lDialog.CurrentDir = AppConfig.InstallDir;
 			lDialog.FilesSelected += OnFilesSelected;
 		}
 
@@ -98,17 +99,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			for (int i = 0; i < pPaths.Length; i++)
 			{
 				lPath = pPaths[i];
-
-				if (!InstallsData.AddVersion(lPath, true))
-					continue;
-
-				items.Add(CreateItem(
-					new GDFile(
-						lPath,
-						false,
-						(Version)lPath
-					)
-				));
+				InstallsData.AddVersion(lPath, true);
 			}
 		}
 

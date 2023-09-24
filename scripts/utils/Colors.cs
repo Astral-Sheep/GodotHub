@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Utils
 {
 	public partial class Colors : Node
 	{

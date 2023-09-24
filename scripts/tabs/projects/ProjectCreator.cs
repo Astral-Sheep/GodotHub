@@ -1,11 +1,12 @@
 ﻿using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Error = Com.Astral.GodotHub.Data.Error;
+using Error = Com.Astral.GodotHub.Utils.Error;
 using FileAccess = Godot.FileAccess;
 using Version = Com.Astral.GodotHub.Data.Version;
 
@@ -13,14 +14,6 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 {
 	public static class ProjectCreator
 	{
-#if GODOT_WINDOWS
-		private const string EOL = "\r\n";
-#elif GODOT_MACOS
-		private const string EOL = "\r";
-#else
-		private const string EOL = "\n";
-#endif
-
 		private static readonly Dictionary<RenderMode, (string feature, string method)> RenderModes = new() {
 			{ RenderMode.OpenGL2, ("", "GLES2") },
 			{ RenderMode.OpenGL3, ("", "GLES3") },
@@ -29,6 +22,14 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			{ RenderMode.Compatibility, ("GL Compatibility", "gl_compatibility") }
 		};
 
+		/// <summary>
+		/// Create a new project with the specified parameters
+		/// </summary>
+		/// <param name="pName">Name of the project</param>
+		/// <param name="pDirectory">Path to the directory of the project</param>
+		/// <param name="pVersion"><see cref="Version"/> of the project</param>
+		/// <param name="pRenderMode"><see cref="RenderMode"/> of the project</param>
+		/// <param name="pVersionningMode"><see cref="VersionningMode"/> of the project</param>
 		public static void CreateProject(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
 		{
 			if (pVersion.major < 4 != (((int)pRenderMode & (int)RenderMode.Config5) == 0))
@@ -64,7 +65,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			if (!lError.Ok)
 			{
-				Debugger.PrintException(lError.exception);
+				//To do: create error popup
+				Debugger.PrintException(lError.Exception);
 			}
 			else
 			{
@@ -76,54 +78,49 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 		}
 
-		/// <summary>
-		/// Create a godot project with <code>config_version=5</code>
-		/// </summary>
-		/// <param name="pName">Name of the project</param>
-		/// <param name="pDirectory">Path to the directory of the project</param>
-		/// <param name="pVersion">Version of the project (throw error if under 4.x)</param>
-		/// <param name="pRenderMode">Render mode of the project (between Forward+, Mobile and Compatibility)</param>
 		private static Error CreateProjectInternal5(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
 		{
 			try
 			{
-				StreamWriter lWriter = new StreamWriter($"{pDirectory}/project.godot");
-				bool lIsMono = InstallsData.VersionIsMono(pVersion);
-				string lContent = 
-					$"; Engine configuration file.{EOL}" +
-					$"; It's best edited using the editor UI and not directly,{EOL}" +
-					$"; since the parameters that go here are not all obvious.{EOL}" +
-					$";{EOL}" +
-					$"; Format:{EOL}" +
-					$";   [section] ; section goes between []{EOL}" +
-					$";   param=value ; assign values to parameters{EOL}{EOL}" +
-					$"config_version=5{EOL}{EOL}" +
-					$"[application]{EOL}{EOL}" +
-					$"config/name=\"{pName}\"{EOL}" +
-					$"config/features=PackedStringArray(\"{pVersion}\"{(lIsMono ? ", \"C#\"" : "")}, \"{RenderModes[pRenderMode].feature}\"){EOL}" +
-					$"config/icon=\"res://icon.svg\"{EOL}";
-
-				if (lIsMono)
+				using (StreamWriter lWriter = new StreamWriter($"{pDirectory}/project.godot"))
 				{
-					lContent +=
-						$"{EOL}[dotnet]{EOL}{EOL}" +
-						$"project/assembly_name=\"{pName}\"{EOL}";
-				}
+					bool lIsMono = InstallsData.VersionIsMono(pVersion);
+					string lContent = 
+						$"; Engine configuration file.{PathT.EOL}" +
+						$"; It's best edited using the editor UI and not directly,{PathT.EOL}" +
+						$"; since the parameters that go here are not all obvious.{PathT.EOL}" +
+						$";{PathT.EOL}" +
+						$"; Format:{PathT.EOL}" +
+						$";   [section] ; section goes between []{PathT.EOL}" +
+						$";   param=value ; assign values to parameters{PathT.EOL}{PathT.EOL}" +
+						$"config_version=5{PathT.EOL}{PathT.EOL}" +
+						$"[application]{PathT.EOL}{PathT.EOL}" +
+						$"config/name=\"{pName}\"{PathT.EOL}" +
+						$"config/features=PackedStringArray(\"{pVersion}\"{(lIsMono ? ", \"C#\"" : "")}, \"{RenderModes[pRenderMode].feature}\"){PathT.EOL}" +
+						$"config/icon=\"res://icon.svg\"{PathT.EOL}";
 
-				if (pRenderMode != RenderMode.Forward)
-				{
-					lContent +=
-						$"{EOL}[rendering]{EOL}{EOL}" +
-						$"renderer/rendering_method=\"{RenderModes[pRenderMode].method}\"{EOL}";
-
-					if (pRenderMode == RenderMode.Compatibility)
+					if (lIsMono)
 					{
-						lContent += $"renderer/rendering_method=\"{RenderModes[pRenderMode].method}\"{EOL}";
+						lContent +=
+							$"{PathT.EOL}[dotnet]{PathT.EOL}{PathT.EOL}" +
+							$"project/assembly_name=\"{pName}\"{PathT.EOL}";
 					}
-				}
 
-				lWriter.Write(lContent);
-				lWriter.Close();
+					if (pRenderMode != RenderMode.Forward)
+					{
+						lContent +=
+							$"{PathT.EOL}[rendering]{PathT.EOL}{PathT.EOL}" +
+							$"renderer/rendering_method=\"{RenderModes[pRenderMode].method}\"{PathT.EOL}";
+
+						if (pRenderMode == RenderMode.Compatibility)
+						{
+							lContent += $"renderer/rendering_method=\"{RenderModes[pRenderMode].method}\"{PathT.EOL}";
+						}
+					}
+
+					lWriter.Write(lContent);
+					lWriter.Close();
+				}
 			}
 			catch (Exception lException)
 			{
@@ -140,19 +137,19 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		private static Error CreateProjectInternal4(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
 		{
-			StreamWriter lWriter;
-
 			try
 			{
-				lWriter = new StreamWriter($"{pDirectory}/default_env.tres");
-				lWriter.Write(
-					$"[gd_resource type=\"Environment\" load_steps=2 format=2]{EOL}" +
-					$"[sub_resource type=\"ProceduralSky\" id=1]{EOL}" +
-					$"[resource]{EOL}" +
-					$"background_mode = 2{EOL}" +
-					$"background_sky = SubResource( 1 ){EOL}"
-				);
-				lWriter.Close();
+				using (StreamWriter lWriter = new StreamWriter($"{pDirectory}/default_env.tres"))
+				{
+					lWriter.Write(
+						$"[gd_resource type=\"Environment\" load_steps=2 format=2]{PathT.EOL}" +
+						$"[sub_resource type=\"ProceduralSky\" id=1]{PathT.EOL}" +
+						$"[resource]{PathT.EOL}" +
+						$"background_mode = 2{PathT.EOL}" +
+						$"background_sky = SubResource( 1 ){PathT.EOL}"
+					);
+					lWriter.Close();
+				}
 			}
 			catch (Exception lException)
 			{
@@ -161,35 +158,36 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			try
 			{
-				lWriter = new StreamWriter($"{pDirectory}/project.godot");
-				string lContent =
-					$"; Engine configuration file.{EOL}" +
-					$"; It's best edited using the editor UI and not directly,{EOL}" +
-					$"; since the parameters that go here are not all obvious.{EOL}" +
-					$";{EOL}" +
-					$"; Format:{EOL}" +
-					$";   [section] ; section goes between []{EOL}" +
-					$";   param=value ; assign values to parameters{EOL}{EOL}" +
-					$"config_version=4{EOL}{EOL}" +
-					$"[application]{EOL}{EOL}" +
-					$"config/name=\"{pName}\"{EOL}" +
-					$"config/icon=\"res://icon.png\"{EOL}{EOL}" +
-					$"[physics]{EOL}{EOL}" +
-					$"common/enable_pause_aware_picking=true{EOL}{EOL}" +
-					$"[rendering]{EOL}{EOL}";
-
-
-				if (pRenderMode != RenderMode.OpenGL3)
+				using (StreamWriter lWriter = new StreamWriter($"{pDirectory}/project.godot"))
 				{
-					lContent +=
-						$"quality/driver/driver_name=\"{RenderModes[pRenderMode].method}\"{EOL}" +
-						$"vram_compression/import_etc=true{EOL}" +
-						$"vram_compression/import_etc2=false{EOL}";
-				}
+					string lContent =
+						$"; Engine configuration file.{PathT.EOL}" +
+						$"; It's best edited using the editor UI and not directly,{PathT.EOL}" +
+						$"; since the parameters that go here are not all obvious.{PathT.EOL}" +
+						$";{PathT.EOL}" +
+						$"; Format:{PathT.EOL}" +
+						$";   [section] ; section goes between []{PathT.EOL}" +
+						$";   param=value ; assign values to parameters{PathT.EOL}{PathT.EOL}" +
+						$"config_version=4{PathT.EOL}{PathT.EOL}" +
+						$"[application]{PathT.EOL}{PathT.EOL}" +
+						$"config/name=\"{pName}\"{PathT.EOL}" +
+						$"config/icon=\"res://icon.png\"{PathT.EOL}{PathT.EOL}" +
+						$"[physics]{PathT.EOL}{PathT.EOL}" +
+						$"common/enable_pause_aware_picking=true{PathT.EOL}{PathT.EOL}" +
+						$"[rendering]{PathT.EOL}{PathT.EOL}";
 
-				lContent += $"environment/default_environment=\"res://default_env.tres\"{EOL}";
-				lWriter.Write(lContent);
-				lWriter.Close();
+					if (pRenderMode != RenderMode.OpenGL3)
+					{
+						lContent +=
+							$"quality/driver/driver_name=\"{RenderModes[pRenderMode].method}\"{PathT.EOL}" +
+							$"vram_compression/import_etc=true{PathT.EOL}" +
+							$"vram_compression/import_etc2=false{PathT.EOL}";
+					}
+
+					lContent += $"environment/default_environment=\"res://default_env.tres\"{PathT.EOL}";
+					lWriter.Write(lContent);
+					lWriter.Close();
+				}
 			}
 			catch (Exception lException)
 			{
@@ -208,29 +206,33 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			try
 			{
-				string lGitignore = $"# Godot files{EOL}";
-
-				for (int i = 0; i < pElementsToIgnore.Length; i++)
+				using (StreamWriter lWriter = new StreamWriter($"{pDirectory}/.gitignore"))
 				{
-					lGitignore += $"{pElementsToIgnore[i]}{EOL}";
+					string lGitignore = $"# Godot files{PathT.EOL}";
+
+					for (int i = 0; i < pElementsToIgnore.Length; i++)
+					{
+						lGitignore += $"{pElementsToIgnore[i]}{PathT.EOL}";
+					}
+
+					lWriter.Write(lGitignore);
+					lWriter.Close();
 				}
 
-				StreamWriter lWriter = new StreamWriter($"{pDirectory}/.gitignore");
-				lWriter.Write(lGitignore);
-				lWriter.Close();
-
-				lWriter = new StreamWriter($"{pDirectory}/.gitattributes");
-				lWriter.Write(
-					$"# Normalize EOL for all files that Git considers text files.{EOL}" +
-	#if GODOT_WINDOWS
-					$"* text=auto eol=crlf{EOL}"
-	#elif GODOT_MACOS
-					$"* text=auto eol=cr{EOF}"
-	#else
-					$"* text=auto eol=lf{EOF}"
-	#endif
-				);
-				lWriter.Close();
+				using (StreamWriter lWriter = new StreamWriter($"{pDirectory}/.gitattributes"))
+				{
+					lWriter.Write(
+						$"# Normalize EOL for all files that Git considers text files.{PathT.EOL}" +
+#if GODOT_WINDOWS
+						$"* text=auto eol=crlf{PathT.EOL}"
+#elif GODOT_MACOS
+						$"* text=auto eol=cr{PathT.EOL}"
+#else
+						$"* text=auto eol=lf{PathT.EOL}"
+#endif
+					);
+					lWriter.Close();
+				}
 			}
 			catch (Exception lException)
 			{
@@ -240,6 +242,9 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			return new Error();
 		}
 
+		/// <summary>
+		/// To do: save an .svg file containing the godot default icon
+		/// </summary>
 		public static void AddIcon(string pProjectPath)
 		{
 			CompressedTexture2D lIcon = ResourceLoader.Load<CompressedTexture2D>("res://icon.svg");

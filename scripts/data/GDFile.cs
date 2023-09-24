@@ -6,7 +6,7 @@
 	public struct GDFile
 	{
 		/// <summary>
-		/// The absolute path to the file
+		/// Absolute path to the file
 		/// </summary>
 		public string Path { get; private set; }
 		/// <summary>
@@ -14,7 +14,7 @@
 		/// </summary>
 		public bool IsFavorite { get; private set; }
 		/// <summary>
-		/// The version of the engine or the project (currently 0.0.0 for versions under 4.0)
+		/// <see cref="Version"/> of the engine or the project
 		/// </summary>
 		public Version Version { get; private set; }
 
