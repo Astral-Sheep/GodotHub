@@ -196,15 +196,15 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 #if GODOT_LINUXBSD
 			InstallsData.AddVersion(pSource.mono ? lFormattedFolder : lDir, false);
 
-			if (Config.AutoCreateShortcut)
+			if (AppConfig.AutoCreateShortcut)
 			{
 				try
 				{
 					await Task.Run(
 						() => {
 							CreateShortcut(PathT.GetExeFromFolder(lFormattedFolder, pSource.os), pSource.version);
-						}
-						pToken,
+						},
+						pToken
 					);
 				}
 				catch (OperationCanceledException)
@@ -248,7 +248,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 #if GODOT_MACOS
 			InstallsData.AddVersion(lFormattedFolder, false);
 
-			if (Config.AutoCreateShortcut)
+			if (AppConfig.AutoCreateShortcut)
 			{
 				try
 				{
