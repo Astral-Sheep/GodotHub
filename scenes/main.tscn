@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://c8n706h2grnj7"]
+[gd_scene load_steps=36 format=3 uid="uid://qiyp3s4s212a"]
 
 [ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
 [ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
@@ -11,6 +11,7 @@
 [ext_resource type="Script" path="res://scripts/tabs/installs/ReleasePanel.cs" id="7_07w4y"]
 [ext_resource type="Theme" uid="uid://brtddydnujip" path="res://resources/themes/blue_btn.theme" id="7_26ckp"]
 [ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="7_le08s"]
+[ext_resource type="PackedScene" uid="uid://xvmi8s4miknq" path="res://scenes/projects/new_project_dialog.tscn" id="7_v6ut4"]
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="7_xfihf"]
 [ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
 [ext_resource type="Script" path="res://scripts/tabs/installs/InstallsPanel.cs" id="9_mmwvm"]
@@ -29,7 +30,6 @@
 [ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
 [ext_resource type="StyleBox" uid="uid://cf5kfntpwc2kk" path="res://resources/style_boxes/panels/soft_dark_panel.stylebox" id="26_gjfo7"]
 [ext_resource type="Texture2D" uid="uid://b6m2numrdnkgc" path="res://assets/sprites/download_btn.png" id="29_7sdgg"]
-[ext_resource type="PackedScene" uid="uid://xvmi8s4miknq" path="res://scenes/new_project_dialog.tscn" id="30_nojqr"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1gn1"]
 bg_color = Color(0, 0, 0, 0.247059)
@@ -91,6 +91,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "newButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -103,7 +104,7 @@ projectItemScene = ExtResource("4_ftw23")
 itemContainer = NodePath("ProjectsList/VBoxContainer")
 folderPopupScene = ExtResource("5_10olf")
 addButton = NodePath("UpperButtons/SortOptions/AddButton")
-creationPopupScene = ExtResource("30_nojqr")
+creationPopupScene = ExtResource("7_v6ut4")
 newButton = NodePath("UpperButtons/SortOptions/NewButton")
 favoriteButton = NodePath("UpperButtons/SortOptions/FavoriteButton")
 nameButton = NodePath("UpperButtons/SortOptions/NameButton")
@@ -217,7 +218,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="InstallsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("installsPanel", "releasesPanel", "installsButton", "releasesButton")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -263,7 +263,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("9_mmwvm")
 installItemScene = ExtResource("10_ty7wm")
-addButton = NodePath("AddButton")
+addButton = NodePath("SortOptions/AddButton")
 fileDialogScene = ExtResource("5_10olf")
 favoriteButton = NodePath("SortOptions/FavoriteButton")
 versionButton = NodePath("SortOptions/VersionButton")
@@ -271,25 +271,12 @@ monoButton = NodePath("SortOptions/MonoButton")
 dateButton = NodePath("SortOptions/DateButton")
 itemContainer = NodePath("InstallsList/VBoxContainer")
 
-[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -135.0
-offset_top = 91.0
-offset_right = -35.0
-offset_bottom = 136.0
-grow_horizontal = 0
-theme = ExtResource("7_le08s")
-text = "Add"
-
 [node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 offset_left = 10.0
-offset_top = 146.0
+offset_top = 136.0
 offset_right = -10.0
 offset_bottom = 196.0
 grow_horizontal = 2
@@ -338,6 +325,19 @@ text = "Last Opened"
 offset_left = 140.0
 offset_right = 155.0
 
+[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.85
+anchor_top = 0.5
+anchor_right = 0.975
+anchor_bottom = 0.5
+offset_top = -22.0
+offset_bottom = 23.0
+grow_horizontal = 0
+theme = ExtResource("7_le08s")
+text = "Add"
+
 [node name="InstallsList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
 layout_mode = 1
 anchors_preset = -1
@@ -354,6 +354,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ReleasePanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("versionButton", "dateButton", "itemContainer")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -372,7 +373,7 @@ layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
 offset_left = 10.0
-offset_top = 146.0
+offset_top = 136.0
 offset_right = -10.0
 offset_bottom = 196.0
 grow_horizontal = 2
