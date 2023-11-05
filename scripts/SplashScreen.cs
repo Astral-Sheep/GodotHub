@@ -21,7 +21,7 @@ namespace Com.Astral.GodotHub
 			CreateTween()
 				.SetTrans(Tween.TransitionType.Linear)
 				.SetEase(Tween.EaseType.InOut)
-				.TweenProperty(this, "color", new Color(0f, 0f, 0f, 0f), fadeDuration)
+				.TweenProperty(this, "self_modulate:a", 0f, fadeDuration)
 				.Finished += OnFadeOutFinished;
 		}
 

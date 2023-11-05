@@ -91,7 +91,6 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "newButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -354,7 +353,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="ReleasePanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("versionButton", "dateButton", "itemContainer")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -419,7 +417,6 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="DocumentationTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer"]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -447,7 +444,6 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DownloadPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
-visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -624,11 +620,9 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("18_bwlxg")]
-visible = false
 openButton = NodePath("../UI/Tabs/MiscButtonContainer/ParameterButton")
 
 [node name="SplashScreen" type="ColorRect" parent="."]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
