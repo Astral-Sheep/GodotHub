@@ -121,7 +121,7 @@ namespace Com.Astral.GodotHub.Utils
 			}
 			catch (Exception lException)
 			{
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 				return false;
 			}
 

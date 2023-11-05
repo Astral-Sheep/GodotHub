@@ -137,7 +137,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 
 			//To do: create error popup
-			Debugger.PrintError($"No asset named {lAssetName}");
+			Debugger.LogError($"No asset named {lAssetName}");
 		}
 
 		protected void OnInstallItemClosed(InstallItem pItem)

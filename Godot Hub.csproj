@@ -4,6 +4,15 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
     <RootNamespace>Com.Astral.GodotHub</RootNamespace>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;IDE0090</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportDebug|AnyCPU'">
+    <NoWarn>1701;1702;IDE0090</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportRelease|AnyCPU'">
+    <NoWarn>1701;1702;IDE0090</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="Octokit" Version="7.1.0" />

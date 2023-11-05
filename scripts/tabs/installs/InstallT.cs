@@ -64,7 +64,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			catch (Exception lException)
 			{
 				//To do: create error popup
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 				return Result.Failed;
 			}
 
@@ -93,7 +93,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 
 				//To do: create error popup
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 				return Result.Failed;
 			}
 
@@ -147,7 +147,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				catch (Exception lException)
 				{
 					//To do: create error popup
-					Debugger.PrintException(lException);
+					Debugger.LogException(lException);
 					return Result.Installed;
 				}
 			}
@@ -155,6 +155,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			return Result.Installed;
 		}
+
 		/// <summary>
 		/// Unzip a .zip folder of a linux version
 		/// </summary>
@@ -188,7 +189,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				if (!PathT.RenameFolder(lOriginalFolder, lFormattedFolder))
 				{
 					//To do: create error popup
-					Debugger.PrintError($"Can't rename folder {lOriginalFolder}");
+					Debugger.LogError($"Can't rename folder {lOriginalFolder}");
 					return Result.Failed;
 				}
 			}
@@ -294,7 +295,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			catch (Exception lException)
 			{
 				//To do: create error popup
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 				CancelUnzip(pZip, lException is UnauthorizedAccessException ? null : pDir);
 				return Result.Failed;
 			}
@@ -314,7 +315,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				catch (Exception lException)
 				{
 					//To do: create error popup
-					Debugger.PrintException(lException);
+					Debugger.LogException(lException);
 					return Result.Installed;
 				}
 			}
@@ -347,7 +348,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				catch (Exception lException)
 				{
 					//To do: create error popup
-					Debugger.PrintException(lException);
+					Debugger.LogException(lException);
 				}
 			}
 
@@ -360,7 +361,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				catch (Exception lException)
 				{
 					//To do: create error popup
-					Debugger.PrintException(lException);
+					Debugger.LogException(lException);
 				}
 			}
 		}

@@ -34,8 +34,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			if (pVersion.major < 4 != (((int)pRenderMode & (int)RenderMode.Config5) == 0))
 			{
-				Debugger.PrintMessage($"{pVersion.major < 4} == {(((int)pRenderMode & (int)RenderMode.Config5) == 0)}");
-				Debugger.PrintMessage($"Invalid version/render mode combination: {pVersion} | {pRenderMode}");
+				Debugger.LogMessage($"{pVersion.major < 4} == {(((int)pRenderMode & (int)RenderMode.Config5) == 0)}");
+				Debugger.LogMessage($"Invalid version/render mode combination: {pVersion} | {pRenderMode}");
 				return;
 			}
 
@@ -47,7 +47,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				}
 				catch (Exception lException)
 				{
-					Debugger.PrintException(lException);
+					Debugger.LogException(lException);
 					return;
 				}
 			}
@@ -66,7 +66,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			if (!lError.Ok)
 			{
 				//To do: create error popup
-				Debugger.PrintException(lError.Exception);
+				Debugger.LogException(lError.Exception);
 			}
 			else
 			{

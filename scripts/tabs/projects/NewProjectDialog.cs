@@ -91,7 +91,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			if (string.IsNullOrEmpty(pName))
 			{
-				Debugger.PrintError("Invalid name: empty name");
+				Debugger.LogError("Invalid name: empty name");
 			}
 		}
 
@@ -99,11 +99,11 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			if (!Directory.Exists(pPath))
 			{
-				Debugger.PrintError("Invalid path");
+				Debugger.LogError("Invalid path");
 			}
 			else if (Directory.GetFiles(pPath).Length > 0)
 			{
-				Debugger.PrintWarning("Non empty directory");
+				Debugger.LogWarning("Non empty directory");
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			if (Directory.Exists(lPath))
 			{
-				Debugger.PrintError($"Directory already exists at path {lPath}");
+				Debugger.LogError($"Directory already exists at path {lPath}");
 				return;
 			}
 

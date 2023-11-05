@@ -114,15 +114,15 @@ namespace Com.Astral.GodotHub.Data
 
 			if (!lMatch.Success)
 			{
-				Debugger.PrintError($"Invalid format: can't convert string \"{pValue}\" to {nameof(Version)}");
+				Debugger.LogError($"Invalid format: can't convert string \"{pValue}\" to {nameof(Version)}");
 				return new Version(0, 0, 0);
 			}
 
 			CaptureCollection lMinorCapture = lMatch.Groups[2].Captures;
 			return new Version(
 				int.Parse(lMatch.Groups[1].Value),
-				int.Parse(lMinorCapture[0].Value[1..^0]),
-				lMinorCapture.Count > 1 ? int.Parse(lMinorCapture[1].Value[1..^0]) : 0
+				int.Parse(lMinorCapture[0].Value[1..]),
+				lMinorCapture.Count > 1 ? int.Parse(lMinorCapture[1].Value[1..]) : 0
 			);
 		}
 

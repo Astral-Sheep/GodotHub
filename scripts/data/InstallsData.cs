@@ -55,7 +55,7 @@ namespace Com.Astral.GodotHub.Data
 					break;
 				case GError.FileNoPermission:
 				case GError.Unauthorized:
-					Debugger.PrintError($"Can't load nor create config file: {lError}");
+					Debugger.LogError($"Can't load nor create config file: {lError}");
 					break;
 				default:
 					break;
@@ -81,7 +81,7 @@ namespace Com.Astral.GodotHub.Data
 
 			if (!File.Exists(pPath))
 			{
-				Debugger.PrintError($"Invalid file passed as executable: {pPath}. Version not added");
+				Debugger.LogError($"Invalid file passed as executable: {pPath}. Version not added");
 				return false;
 			}
 
@@ -95,14 +95,14 @@ namespace Com.Astral.GodotHub.Data
 				{
 					if (!pPath.Contains("_mono"))
 					{
-						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
+						Debugger.LogWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
 						return false;
 					}
 #if GODOT_WINDOWS
 					//Get architecture in _win{xx}.exe
 					else if (int.Parse(pPath[^6..^4]) <= int.Parse(lCurrent[^6..^4]))
 					{
-						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
+						Debugger.LogWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
 						return false;
 					}
 #elif GODOT_LINUXBSD

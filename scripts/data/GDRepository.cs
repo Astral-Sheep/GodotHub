@@ -44,11 +44,16 @@ namespace Com.Astral.GodotHub.Data
 
 				if (AppConfig.AutoUpdateRepository || Releases == null)
 				{
-					await UpdateReleases();
+					Error lError = await UpdateReleases();
+
+					if (!lError.Ok)
+					{
+						return lError;
+					}
 				}
 
 				Loaded?.Invoke();
-				Debugger.PrintValidation("Releases loaded successfully");
+				Debugger.LogValidation("Releases loaded successfully");
 				return new Error();
 			}
 			catch (Exception lException)
@@ -60,7 +65,7 @@ namespace Com.Astral.GodotHub.Data
 		/// <summary>
 		/// Check if there are new releases and retrieve them
 		/// </summary>
-		public async static Task UpdateReleases()
+		public async static Task<Error> UpdateReleases()
 		{
 			if (Releases == null)
 			{
@@ -68,7 +73,7 @@ namespace Com.Astral.GodotHub.Data
 				{
 					Releases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
 
-					for (int i = Releases.Count - 1; i >= 0; i++)
+					for (int i = Releases.Count - 1; i >= 0; i--)
 					{
 						if ((Version)Releases[i].Name < Version.minimumSupportedVersion)
 						{
@@ -77,27 +82,25 @@ namespace Com.Astral.GodotHub.Data
 					}
 
 					SaveReleases();
-					Debugger.PrintMessage($"{Releases.Count} new releases found");
+					Debugger.LogMessage($"{Releases.Count} new releases found");
 				}
 				catch (Exception lException)
 				{
-					//To do: create error popup
-					Debugger.PrintException(lException);
+					Debugger.LogException(lException);
 				}
 
-				return;
+				return new Error();
 			}
 
 			try
 			{
 				if (Releases[0] == await client.Repository.Release.GetLatest(USER, REPO))
-					return;
+					return new Error();
 			}
 			catch (Exception lException)
 			{
-				//To do: create error popup
-				Debugger.PrintException(lException);
-				return;
+				Debugger.LogException(lException);
+				return new Error(lException);
 			}
 
 			try
@@ -115,13 +118,15 @@ namespace Com.Astral.GodotHub.Data
 				Releases.InsertRange(0, lReleases.GetRange(0, lLastIndex));				
 				SaveReleases();
 				Updated?.Invoke(Releases.GetRange(0, lLastIndex));
-				Debugger.PrintMessage($"{lLastIndex} new releases found");
+				Debugger.LogMessage($"{lLastIndex} new releases found");
 			}
 			catch (Exception lException)
 			{
-				//To do: create error popup
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
+				return new Error(lException);
 			}
+
+			return new Error();
 		}
 
 		private static void SaveReleases()

@@ -175,7 +175,7 @@ namespace Com.Astral.GodotHub.Data
 			{
 				case GError.FileNoPermission:
 				case GError.Unauthorized:
-					Debugger.PrintError($"Can't load nor create config file: {lError}");
+					Debugger.LogError($"Can't load nor create config file: {lError}");
 					break;
 				case GError.Ok:
 					break;

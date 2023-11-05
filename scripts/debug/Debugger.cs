@@ -58,7 +58,7 @@ namespace Com.Astral.GodotHub.Debug
 			if (!pDisposing)
 				return;
 
-			if (instance != null)
+			if (instance == this)
 			{
 				instance = null;
 			}
@@ -67,15 +67,15 @@ namespace Com.Astral.GodotHub.Debug
 		/// <summary>
 		/// Print an <see cref="object"/> in <see cref="Colors.White"/>
 		/// </summary>
-		public static void PrintObject(object pObject)
+		public static void LogObject(object pObject)
 		{
-			PrintMessage(pObject.ToString());
+			LogMessage(pObject.ToString());
 		}
 
 		/// <summary>
 		/// Print a message in <see cref="Colors.White"/>
 		/// </summary>
-		public static void PrintMessage(string pMessage)
+		public static void LogMessage(string pMessage)
 		{
 			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.White);
 		}
@@ -83,7 +83,7 @@ namespace Com.Astral.GodotHub.Debug
 		/// <summary>
 		/// Print a message in <see cref="Colors.Green"/>
 		/// </summary>
-		public static void PrintValidation(string pMessage)
+		public static void LogValidation(string pMessage)
 		{
 			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.Green);
 		}
@@ -91,7 +91,7 @@ namespace Com.Astral.GodotHub.Debug
 		/// <summary>
 		/// Print a message in <see cref="Colors.Yellow"/>
 		/// </summary>
-		public static void PrintWarning(string pMessage)
+		public static void LogWarning(string pMessage)
 		{
 			instance.label.Text += FormatMessage(pMessage, Colors.Singleton.Yellow);
 		}
@@ -99,7 +99,7 @@ namespace Com.Astral.GodotHub.Debug
 		/// <summary>
 		/// Print a message in bold <see cref="Colors.Red"/>
 		/// </summary>
-		public static void PrintError(string pMessage)
+		public static void LogError(string pMessage)
 		{
 			instance.label.Text += FormatMessage($"[b]{pMessage}[/b]", Colors.Singleton.Red);
 		}
@@ -107,9 +107,9 @@ namespace Com.Astral.GodotHub.Debug
 		/// <summary>
 		/// Print an <see cref="Exception"/> in bold <see cref="Colors.Red"/>
 		/// </summary>
-		public static void PrintException(Exception pException)
+		public static void LogException(Exception pException)
 		{
-			PrintError($"{pException.GetType()}: {pException.Message}");
+			LogError($"{pException.GetType()}: {pException.Message}");
 		}
 
 		private static string FormatMessage(string pMessage, Color pColor)

@@ -20,7 +20,7 @@ namespace Com.Astral.GodotHub.Utils
 		/// </summary>
 		public string Message => _exception.Message;
 
-		private Exception _exception;
+		private readonly Exception _exception;
 
 		public Error()
 		{

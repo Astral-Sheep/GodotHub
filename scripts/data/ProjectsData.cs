@@ -38,7 +38,7 @@ namespace Com.Astral.GodotHub.Data
 					break;
 				case GError.FileNoPermission:
 				case GError.Unauthorized:
-					Debugger.PrintError($"Can't load nor create config file: {lError}");
+					Debugger.LogError($"Can't load nor create config file: {lError}");
 					break;
 				default:
 					break;
@@ -118,7 +118,7 @@ namespace Com.Astral.GodotHub.Data
 			}
 			else
 			{
-				Debugger.PrintError($"Invalid project passed, can't find version from folder: {lError}");
+				Debugger.LogError($"Invalid project passed, can't find version from folder: {lError}");
 				return new Version();
 			}
 		}

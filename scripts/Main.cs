@@ -36,7 +36,10 @@ namespace Com.Astral.GodotHub
 
 		protected override void Dispose(bool pDisposing)
 		{
-			if (pDisposing && Instance == this)
+			if (!pDisposing)
+				return;
+
+			if (Instance == this)
 			{
 				Instance = null;
 			}
@@ -48,7 +51,8 @@ namespace Com.Astral.GodotHub
 
 			if (!lError.Ok)
 			{
-				Debugger.PrintException(lError.Exception);
+				ExceptionHandler.Singleton.LogException(lError.Exception);
+				//Debugger.LogException(lError.Exception);
 			}
 
 			Initialized?.Invoke();
@@ -73,7 +77,7 @@ namespace Com.Astral.GodotHub
 
 			if (pAutoFree)
 			{
-				//lDialog.CloseRequested += () => lDialog.QueueFree();
+				lDialog.CloseRequested += () => lDialog.QueueFree();
 			}
 
 			return lDialog;

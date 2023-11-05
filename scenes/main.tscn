@@ -549,7 +549,6 @@ offset_top = 100.0
 offset_right = -10.0
 offset_bottom = 250.0
 grow_horizontal = 2
-alignment = 1
 
 [node name="ProjectsButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
 light_mask = 0

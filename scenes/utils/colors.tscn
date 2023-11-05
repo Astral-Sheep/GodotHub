@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://cd5aapghu6aef"]
+
+[ext_resource type="Script" path="res://scripts/utils/Colors.cs" id="1_rs3ov"]
+
+[node name="Colors" type="Node"]
+script = ExtResource("1_rs3ov")

@@ -87,7 +87,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 			}
 		}
 
@@ -99,7 +99,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 			}
 
 			Remove();

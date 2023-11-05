@@ -5,8 +5,12 @@
 [node name="MessageDialog" type="AcceptDialog"]
 transparent_bg = true
 title = "Error"
-position = Vector2i(250, 150)
-size = Vector2i(400, 250)
+position = Vector2i(300, 150)
+size = Vector2i(650, 350)
 visible = true
+transient = false
+unresizable = true
+always_on_top = true
 theme = ExtResource("1_w1lgf")
 dialog_text = "This is an error"
+dialog_autowrap = true

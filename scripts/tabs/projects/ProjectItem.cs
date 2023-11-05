@@ -93,7 +93,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				if (!SetVersion(pProject.Version))
 				{
 					Disable(false);
-					Debugger.PrintError($"Can't find compatible engine for project {ItemName}");
+					Debugger.LogError($"Can't find compatible engine for project {ItemName}");
 				}
 
 				openButton.Pressed += OnOpenPressed;
@@ -192,7 +192,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			catch (Exception lException)
 			{
 				//To do: create error popup
-				Debugger.PrintException(lException);
+				Debugger.LogException(lException);
 			}
 		}
 
