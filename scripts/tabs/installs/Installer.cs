@@ -55,6 +55,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			if (pSource.asset == null)
 			{
 				Debugger.LogError("Invalid asset passed: [i]null[/i] asset");
+				statusLabel.Text = "Cancelled";
 				Completed?.Invoke(this, InstallT.Result.Cancelled);
 				return;
 			}
@@ -87,6 +88,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 		{
 			if (source == null)
 			{
+				statusLabel.Text = "Failed";
 				Completed?.Invoke(this, InstallT.Result.Failed);
 				return;
 			}

@@ -1,4 +1,5 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Debug;
 using Com.Astral.GodotHub.Utils;
 using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
@@ -191,8 +192,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			}
 			catch (Exception lException)
 			{
-				//To do: create error popup
-				Debugger.LogException(lException);
+				ExceptionHandler.Singleton.LogException(lException);
+				//Debugger.LogException(lException);
 			}
 		}
 

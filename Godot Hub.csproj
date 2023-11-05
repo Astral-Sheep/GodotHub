@@ -5,13 +5,13 @@
     <RootNamespace>Com.Astral.GodotHub</RootNamespace>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090</NoWarn>
+    <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportDebug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090</NoWarn>
+    <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportRelease|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090</NoWarn>
+    <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />

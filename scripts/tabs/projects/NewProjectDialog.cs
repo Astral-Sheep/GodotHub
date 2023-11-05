@@ -89,6 +89,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnNameTextChanged(string pName)
 		{
+			//To do: add RichTextLabel to log this on dialog popup
 			if (string.IsNullOrEmpty(pName))
 			{
 				Debugger.LogError("Invalid name: empty name");
@@ -97,6 +98,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 		protected void OnDirectoryTextChanged(string pPath)
 		{
+			//To do: add RichTextLabel to log this on dialog popup
 			if (!Directory.Exists(pPath))
 			{
 				Debugger.LogError("Invalid path");
@@ -113,7 +115,12 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 
 			if (Directory.Exists(lPath))
 			{
-				Debugger.LogError($"Directory already exists at path {lPath}");
+				ExceptionHandler.Singleton.LogMessage(
+					$"{projectDirectory.Text} directory already exists",
+					$"Directory already exists",
+					ExceptionHandler.ExceptionGravity.Error
+				);
+				Debugger.LogError($"{projectDirectory.Text} directory already exists");
 				return;
 			}
 

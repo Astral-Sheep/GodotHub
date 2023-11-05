@@ -20,7 +20,9 @@ namespace Com.Astral.GodotHub.Data
 				.LastOrDefault();
 
 			if (lConstructor == null)
+			{
 				return lContract;
+			}
 
 			lContract.OverrideCreator = (@params) => lConstructor.Invoke(@params);
 			IList<JsonProperty> lProperties = CreateConstructorParameters(lConstructor, lContract.Properties);

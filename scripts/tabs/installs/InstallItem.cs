@@ -1,4 +1,5 @@
 using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Debug;
 using Com.Astral.GodotHub.Utils;
 using Com.Astral.GodotHub.Utils.Comparisons;
 using Godot;
@@ -57,7 +58,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			{
 				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}][b]Missing version[/b][/color]";
 				isMonoBox.ButtonPressed = false;
-				timeLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}N/A[/color]";
+				timeLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}]N/A[/color]";
 				openButton.Disabled = true;
 				uninstallButton.Text = "Remove";
 				uninstallButton.Pressed += OnRemovePressed;
@@ -87,7 +88,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
-				Debugger.LogException(lException);
+				ExceptionHandler.Singleton.LogException(lException);
+				//Debugger.LogException(lException);
 			}
 		}
 
@@ -99,7 +101,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
-				Debugger.LogException(lException);
+				ExceptionHandler.Singleton.LogException(lException);
+				//Debugger.LogException(lException);
 			}
 
 			Remove();

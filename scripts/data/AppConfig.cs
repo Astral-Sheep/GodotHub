@@ -173,15 +173,22 @@ namespace Com.Astral.GodotHub.Data
 
 			switch (lError)
 			{
-				case GError.FileNoPermission:
-				case GError.Unauthorized:
-					Debugger.LogError($"Can't load nor create config file: {lError}");
-					break;
-				case GError.Ok:
-					break;
-				default:
+				case GError.DoesNotExist:
+				case GError.Failed:
+				case GError.FileNotFound:
 					ResetAll();
 					Save();
+					break;
+				case GError.FileNoPermission:
+				case GError.Unauthorized:
+					ExceptionHandler.Singleton.LogMessage(
+						$"Can't load nor create application config file: {lError}",
+						lError.ToString(),
+						ExceptionHandler.ExceptionGravity.Error
+					);
+					Debugger.LogError($"Can't load nor create config file: {lError}");
+					break;
+				default:
 					break;
 			}
 		}

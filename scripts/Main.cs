@@ -52,7 +52,6 @@ namespace Com.Astral.GodotHub
 			if (!lError.Ok)
 			{
 				ExceptionHandler.Singleton.LogException(lError.Exception);
-				//Debugger.LogException(lError.Exception);
 			}
 
 			Initialized?.Invoke();

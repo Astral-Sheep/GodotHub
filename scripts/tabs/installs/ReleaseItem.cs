@@ -136,8 +136,12 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 			}
 
-			//To do: create error popup
-			Debugger.LogError($"No asset named {lAssetName}");
+			ExceptionHandler.Singleton.LogMessage(
+				$"Can't install release {lAssetName}: failed to find corresponding source",
+				"Release install error",
+				ExceptionHandler.ExceptionGravity.Error
+			);
+			Debugger.LogError($"Can't install release {lAssetName}: failed to find corresponding source");
 		}
 
 		protected void OnInstallItemClosed(InstallItem pItem)

@@ -34,8 +34,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		{
 			if (pVersion.major < 4 != (((int)pRenderMode & (int)RenderMode.Config5) == 0))
 			{
-				Debugger.LogMessage($"{pVersion.major < 4} == {(((int)pRenderMode & (int)RenderMode.Config5) == 0)}");
-				Debugger.LogMessage($"Invalid version/render mode combination: {pVersion} | {pRenderMode}");
+				//Debugger.LogMessage($"{pVersion.major < 4} == {((int)pRenderMode & (int)RenderMode.Config5) == 0}");
+				Debugger.LogError($"Invalid version/render mode combination: {pVersion} | {pRenderMode}");
 				return;
 			}
 
@@ -47,7 +47,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 				}
 				catch (Exception lException)
 				{
-					Debugger.LogException(lException);
+					ExceptionHandler.Singleton.LogException(lException);
+					//Debugger.LogException(lException);
 					return;
 				}
 			}
@@ -66,7 +67,8 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 			if (!lError.Ok)
 			{
 				//To do: create error popup
-				Debugger.LogException(lError.Exception);
+				ExceptionHandler.Singleton.LogException(lError.Exception);
+				//Debugger.LogException(lError.Exception);
 			}
 			else
 			{
@@ -243,7 +245,7 @@ namespace Com.Astral.GodotHub.Tabs.Projects
 		}
 
 		/// <summary>
-		/// To do: save an .svg file containing the godot default icon
+		/// To do: save a .svg file containing the godot default icon
 		/// </summary>
 		public static void AddIcon(string pProjectPath)
 		{

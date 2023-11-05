@@ -29,6 +29,18 @@ namespace Com.Astral.GodotHub.Data
 		public static List<Release> Releases { get; private set; }
 		private static GitHubClient client;
 
+		/// <summary>
+		/// Initialize the <see cref="GitHubClient"/> and load the repositories<br/>
+		/// Can be called only once (won't do anything otherwise)<br/>
+		/// Exceptions are handled by returning an <see cref="Error"/>
+		/// </summary>
+		/// <exception cref="ApiException"></exception>
+		/// <exception cref="DirectoryNotFoundException"></exception>
+		/// <exception cref="FileNotFoundException"></exception>
+		/// <exception cref="IOException"></exception>
+		/// <exception cref="PathTooLongException"></exception>
+		/// <exception cref="System.Security.SecurityException"></exception>
+		/// <exception cref="UnauthorizedAccessException"></exception>
 		public async static Task<Error> Init()
 		{
 			if (client != null)
@@ -63,8 +75,16 @@ namespace Com.Astral.GodotHub.Data
 		}
 
 		/// <summary>
-		/// Check if there are new releases and retrieve them
+		/// Check if there are new releases and retrieve them<br/>
+		/// Exceptions are handled by returning an <see cref="Error"/>
 		/// </summary>
+		/// <exception cref="ApiException"></exception>
+		/// <exception cref="DirectoryNotFoundException"></exception>
+		/// <exception cref="FileNotFoundException"></exception>
+		/// <exception cref="IOException"></exception>
+		/// <exception cref="PathTooLongException"></exception>
+		/// <exception cref="System.Security.SecurityException"></exception>
+		/// <exception cref="UnauthorizedAccessException"></exception>
 		public async static Task<Error> UpdateReleases()
 		{
 			if (Releases == null)
@@ -147,8 +167,7 @@ namespace Com.Astral.GodotHub.Data
 			{
 				Releases = JsonConvert.DeserializeObject<List<Release>>(
 					lReader.ReadToEnd(),
-					new JsonSerializerSettings()
-					{
+					new JsonSerializerSettings() {
 						ContractResolver = new FullParameterContractResolver()
 					}
 				);

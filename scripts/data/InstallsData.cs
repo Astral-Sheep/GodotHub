@@ -55,6 +55,11 @@ namespace Com.Astral.GodotHub.Data
 					break;
 				case GError.FileNoPermission:
 				case GError.Unauthorized:
+					ExceptionHandler.Singleton.LogMessage(
+						$"Can't load nor create installs config file: {lError}",
+						lError.ToString(),
+						ExceptionHandler.ExceptionGravity.Error
+					);
 					Debugger.LogError($"Can't load nor create config file: {lError}");
 					break;
 				default:
@@ -81,6 +86,7 @@ namespace Com.Astral.GodotHub.Data
 
 			if (!File.Exists(pPath))
 			{
+				ExceptionHandler.Singleton.LogMessage($"Invalid file passed as executable: {pPath}\nVersion not added");
 				Debugger.LogError($"Invalid file passed as executable: {pPath}. Version not added");
 				return false;
 			}
@@ -95,6 +101,10 @@ namespace Com.Astral.GodotHub.Data
 				{
 					if (!pPath.Contains("_mono"))
 					{
+						ExceptionHandler.Singleton.LogMessage(
+							$"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one",
+							"Lesser version passed"
+						);
 						Debugger.LogWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
 						return false;
 					}
@@ -102,6 +112,10 @@ namespace Com.Astral.GodotHub.Data
 					//Get architecture in _win{xx}.exe
 					else if (int.Parse(pPath[^6..^4]) <= int.Parse(lCurrent[^6..^4]))
 					{
+						ExceptionHandler.Singleton.LogMessage(
+							$"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one",
+							"Lesser version passed"
+						);
 						Debugger.LogWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
 						return false;
 					}
@@ -109,6 +123,10 @@ namespace Com.Astral.GodotHub.Data
 					//Get architecture in linux.x86_{xx}
 					else if (int.Parse(pPath[^2..]) <= int.Parse(lCurrent[^2..]))
 					{
+						ExceptionHandler.Singleton.LogMessage(
+							$"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one",
+							"Lesser version passed"
+						);
 						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
 						return false;
 					}

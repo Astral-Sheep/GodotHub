@@ -26,12 +26,10 @@ namespace Com.Astral.GodotHub.Tabs
 			installsTab.Toggle(installsButton.ButtonPressed);
 #if DEBUG
 			documentationTab.Toggle(documentationButton.ButtonPressed);
-#endif //DEBUG
-
-#if !DEBUG
+#else
 			documentationButton.Visible = false;
 			documentationTab.Visible = false;
-#endif //!DEBUG
+#endif //DEBUG
 		}
 
 		protected void OnProjectsToggled(bool pToggle)

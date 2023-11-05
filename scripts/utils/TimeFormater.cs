@@ -9,7 +9,7 @@ namespace Com.Astral.GodotHub.Utils
 			DateTime lCurrentTime = DateTime.UtcNow;
 			TimeSpan lDifferenceSpan = lCurrentTime - pTime;
 
-			//To refactor: i don't think it needs an explanation of why
+			//To refactor: I don't think it needs an explanation of why
 			if (pTime.Year < lCurrentTime.Year)
 			{
 				int lDifference = lCurrentTime.Year - pTime.Year;
