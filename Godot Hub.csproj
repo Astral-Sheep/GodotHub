@@ -14,7 +14,14 @@
     <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="AdminInstall\**" />
+    <EmbeddedResource Remove="AdminInstall\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="Octokit" Version="7.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="AdminInstall\AdminInstall.csproj" />
   </ItemGroup>
 </Project>

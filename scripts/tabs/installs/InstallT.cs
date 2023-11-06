@@ -80,6 +80,10 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 				pProgress.Report(0.9f);
 			}
+			catch (UnauthorizedAccessException)
+			{
+
+			}
 			catch (OperationCanceledException)
 			{
 				CancelUnzip(lZip, null);
@@ -87,11 +91,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 			catch (Exception lException)
 			{
-				if (lException is not UnauthorizedAccessException)
-				{
-					CancelUnzip(lZip, null);
-				}
-
+				CancelUnzip(lZip, null);
 				ExceptionHandler.Singleton.LogException(lException);
 				//Debugger.LogException(lException);
 				return Result.Failed;
