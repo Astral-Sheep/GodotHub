@@ -7,14 +7,15 @@
     <Nullable>enable</Nullable>
     <StartupObject>Com.Astral.GodotHub.AdminInstall.Program</StartupObject>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <RootNamespace>Com.Astral.GodotHub.AdminInstall</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090</NoWarn>
+    <NoWarn>1701;1702;IDE0090;IDE0063</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090</NoWarn>
+    <NoWarn>1701;1702;IDE0090;IDE0063</NoWarn>
   </PropertyGroup>
 
 </Project>

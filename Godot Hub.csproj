@@ -2,26 +2,91 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
-    <RootNamespace>Com.Astral.GodotHub</RootNamespace>
+    <RootNamespace>Com.Astral.GodotHub.Core</RootNamespace>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
+    <NoWarn>1701;1702;IDE0090;IDE0063;CA1822</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportDebug|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
+    <NoWarn>1701;1702;IDE0090;IDE0063;CA1822</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='ExportRelease|AnyCPU'">
-    <NoWarn>1701;1702;IDE0090;CA1822</NoWarn>
+    <NoWarn>1701;1702;IDE0090;IDE0063;CA1822</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="AdminInstall\**" />
-    <EmbeddedResource Remove="AdminInstall\**" />
+    <Compile Remove="admin_install\**" />
+    <Compile Remove="scripts\core\**" />
+    <EmbeddedResource Remove="admin_install\**" />
+    <EmbeddedResource Remove="scripts\core\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="scripts\core\data\AppConfig.cs" />
+    <Compile Include="scripts\core\data\Architecture.cs" />
+    <Compile Include="scripts\core\data\FullParameterContractResolver.cs" />
+    <Compile Include="scripts\core\data\GDFile.cs" />
+    <Compile Include="scripts\core\data\GDRepository.cs" />
+    <Compile Include="scripts\core\data\InstallsData.cs" />
+    <Compile Include="scripts\core\data\OS.cs" />
+    <Compile Include="scripts\core\data\ProjectsData.cs" />
+    <Compile Include="scripts\core\data\Source.cs" />
+    <Compile Include="scripts\core\data\Version.cs" />
+    <Compile Include="scripts\core\debug\Debugger.cs" />
+    <Compile Include="scripts\core\debug\ExceptionHandler.cs" />
+    <Compile Include="scripts\core\Main.cs" />
+    <Compile Include="scripts\core\settings\buttons\directory\DirButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\directory\DownloadDirButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\directory\InstallDirButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\directory\ProjectDirButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\ISettingButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\ResetButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\SettingButton.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\AutoCloseDLToggle.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\AutoDeleteToggle.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\AutoShortcutToggle.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\AutoUpdateToggle.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\DebugToggle.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\SameDirToggle.cs" />
+    <Compile Include="scripts\core\settings\buttons\toggles\SettingToggle.cs" />
+    <Compile Include="scripts\core\settings\SettingsPanel.cs" />
+    <Compile Include="scripts\core\SplashScreen.cs" />
+    <Compile Include="scripts\core\tabs\documentation\DocumentationTab.cs" />
+    <Compile Include="scripts\core\tabs\installs\Admin.cs" />
+    <Compile Include="scripts\core\tabs\installs\DownloadPanel.cs" />
+    <Compile Include="scripts\core\tabs\installs\Installer.cs" />
+    <Compile Include="scripts\core\tabs\installs\InstallItem.cs" />
+    <Compile Include="scripts\core\tabs\installs\InstallsPanel.cs" />
+    <Compile Include="scripts\core\tabs\installs\InstallsTab.cs" />
+    <Compile Include="scripts\core\tabs\installs\InstallT.cs" />
+    <Compile Include="scripts\core\tabs\installs\ReleaseItem.cs" />
+    <Compile Include="scripts\core\tabs\installs\ReleasePanel.cs" />
+    <Compile Include="scripts\core\tabs\projects\NewProjectDialog.cs" />
+    <Compile Include="scripts\core\tabs\projects\ProjectCreator.cs" />
+    <Compile Include="scripts\core\tabs\projects\ProjectItem.cs" />
+    <Compile Include="scripts\core\tabs\projects\ProjectsTabs.cs" />
+    <Compile Include="scripts\core\tabs\projects\RenderMode.cs" />
+    <Compile Include="scripts\core\tabs\projects\VersionningMode.cs" />
+    <Compile Include="scripts\core\tabs\SortedPanel.cs" />
+    <Compile Include="scripts\core\tabs\SortToggle.cs" />
+    <Compile Include="scripts\core\tabs\Tab.cs" />
+    <Compile Include="scripts\core\tabs\TabManager.cs" />
+    <Compile Include="scripts\core\utils\Colors.cs" />
+    <Compile Include="scripts\core\utils\comparisons\Comparer.cs" />
+    <Compile Include="scripts\core\utils\comparisons\IFavoriteItem.cs" />
+    <Compile Include="scripts\core\utils\comparisons\IMonoItem.cs" />
+    <Compile Include="scripts\core\utils\comparisons\INamedItem.cs" />
+    <Compile Include="scripts\core\utils\comparisons\ITimedItem.cs" />
+    <Compile Include="scripts\core\utils\comparisons\IValidItem.cs" />
+    <Compile Include="scripts\core\utils\comparisons\IVersionItem.cs" />
+    <Compile Include="scripts\core\utils\Error.cs" />
+    <Compile Include="scripts\core\utils\PathT.cs" />
+    <Compile Include="scripts\core\utils\TimeFormater.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="Octokit" Version="7.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="AdminInstall\AdminInstall.csproj" />
+    <ProjectReference Include="admin_install\AdminInstall.csproj" />
   </ItemGroup>
 </Project>

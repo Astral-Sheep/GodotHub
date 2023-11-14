@@ -133,7 +133,7 @@ namespace Com.Astral.GodotHub.Utils
 		/// </summary>
 		public static string GetEnvironmentPath(Environment.SpecialFolder pFolder)
 		{
-			return Environment.GetFolderPath(pFolder).Replace("\\", "/");
+			return Environment.GetFolderPath(pFolder).Replace('\\', '/');
 		}
 	}
 }

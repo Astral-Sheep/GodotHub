@@ -110,6 +110,9 @@ namespace Com.Astral.GodotHub.Debug
 		public static void LogException(Exception pException)
 		{
 			LogError($"{pException.GetType()}: {pException.Message}");
+#if DEBUG
+			GD.PrintErr(pException);
+#endif //DEBUG
 		}
 
 		private static string FormatMessage(string pMessage, Color pColor)

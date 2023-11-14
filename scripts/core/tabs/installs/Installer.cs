@@ -155,9 +155,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			autoThrowCancel = true;
 			lResult = source.os switch {
-				OS.Windows => await InstallT.UnzipWindows(source, installationSource.Token, lProgress),
-				OS.Linux => await InstallT.UnzipLinux(source, installationSource.Token, lProgress),
-				OS.MacOS => await InstallT.UnzipMacOS(source, installationSource.Token, lProgress),
+				OS.Windows => await InstallT.ExtractWindows(source, installationSource.Token, lProgress),
+				OS.Linux => await InstallT.ExtractLinux(source, installationSource.Token, lProgress),
+				OS.MacOS => await InstallT.ExtractMacOS(source, installationSource.Token, lProgress),
 				_ => InstallT.Result.Failed,
 			};
 			autoThrowCancel = false;
@@ -171,6 +171,9 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				CancelInstallation(true);
 			}
 
+#if GODOT_WINDOWS
+			Admin.EndAdminProcess();
+#endif //GODOT_WINDOWS
 			CancelAnimation();
 			statusLabel.Text = "Completed";
 			downloading = false;
@@ -179,11 +182,18 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		protected void CancelInstallation(bool pIsError)
 		{
+#if GODOT_WINDOWS
+			Admin.EndAdminProcess();
+#endif //GODOT_WINDOWS
 			CancelAnimation();
 
 			if (!pIsError)
 			{
 				statusLabel.Text = "Cancelled";
+			}
+			else
+			{
+				statusLabel.Text = "Failed";
 			}
 		}
 

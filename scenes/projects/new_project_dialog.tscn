@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://xvmi8s4miknq"]
 
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_554c5"]
-[ext_resource type="Script" path="res://scripts/tabs/projects/NewProjectDialog.cs" id="2_sd55l"]
+[ext_resource type="Script" path="res://scripts/core/tabs/projects/NewProjectDialog.cs" id="2_sd55l"]
 
 [node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("projectName", "projectDirectory", "folderCreateButton", "browseButton", "versionOption", "renderOption", "versionningOption")]
 transparent_bg = true

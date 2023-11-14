@@ -1,10 +1,7 @@
 using Com.Astral.GodotHub.Data;
 using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Tabs.Installs;
 using Godot;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using Error = Com.Astral.GodotHub.Utils.Error;
 
 namespace Com.Astral.GodotHub
@@ -33,7 +30,6 @@ namespace Com.Astral.GodotHub
 		{
 			//Hardcoded values because they're completely arbitrary
 			DisplayServer.WindowSetMinSize(new Vector2I(1100, 600));
-			GD.Print(AdminInstaller.InstallAsAdmin("--win", "--all", AppConfig.InstallDir));
 			Init();
 		}
 

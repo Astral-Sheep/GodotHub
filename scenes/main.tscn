@@ -1,35 +1,35 @@
 [gd_scene load_steps=36 format=3 uid="uid://qiyp3s4s212a"]
 
-[ext_resource type="Script" path="res://scripts/Main.cs" id="1_l0edh"]
-[ext_resource type="Script" path="res://scripts/tabs/TabManager.cs" id="2_mi5hl"]
-[ext_resource type="Script" path="res://scripts/tabs/projects/ProjectsTabs.cs" id="3_047ry"]
+[ext_resource type="Script" path="res://scripts/core/Main.cs" id="1_j271r"]
+[ext_resource type="Script" path="res://scripts/core/tabs/TabManager.cs" id="3_e26kt"]
 [ext_resource type="ButtonGroup" uid="uid://degxsui0oeqmj" path="res://resources/button_groups/tab_btn_group.tres" id="3_tsmd8"]
 [ext_resource type="PackedScene" uid="uid://83qph142ha7s" path="res://scenes/projects/project_item.tscn" id="4_ftw23"]
 [ext_resource type="PackedScene" uid="uid://c54ctd2k2mbg0" path="res://scenes/settings/folder_dialog.tscn" id="5_10olf"]
-[ext_resource type="Script" path="res://scripts/tabs/installs/InstallsTab.cs" id="5_s1nr3"]
+[ext_resource type="Script" path="res://scripts/core/tabs/projects/ProjectsTabs.cs" id="5_opam3"]
 [ext_resource type="ButtonGroup" uid="uid://c2ypx5qbtttva" path="res://resources/button_groups/install_btn_group.tres" id="7_5b0sc"]
-[ext_resource type="Script" path="res://scripts/tabs/installs/ReleasePanel.cs" id="7_07w4y"]
 [ext_resource type="Theme" uid="uid://brtddydnujip" path="res://resources/themes/blue_btn.theme" id="7_26ckp"]
 [ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="7_le08s"]
 [ext_resource type="PackedScene" uid="uid://xvmi8s4miknq" path="res://scenes/projects/new_project_dialog.tscn" id="7_v6ut4"]
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="7_xfihf"]
 [ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
-[ext_resource type="Script" path="res://scripts/tabs/installs/InstallsPanel.cs" id="9_mmwvm"]
 [ext_resource type="Theme" uid="uid://owhv26bfo2cv" path="res://resources/themes/star_btn.theme" id="9_ol1lc"]
 [ext_resource type="PackedScene" uid="uid://3ek1c5uks77u" path="res://scenes/installs/installer.tscn" id="10_e5igd"]
 [ext_resource type="PackedScene" path="res://scenes/sort_button.tscn" id="10_h7r2s"]
-[ext_resource type="Script" path="res://scripts/tabs/installs/DownloadPanel.cs" id="10_mj2qp"]
 [ext_resource type="PackedScene" uid="uid://8wgykcf75ex1" path="res://scenes/installs/install_item.tscn" id="10_ty7wm"]
 [ext_resource type="PackedScene" uid="uid://dpptd81s7nml2" path="res://scenes/installs/subbutton.tscn" id="12_3gmeu"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/InstallsTab.cs" id="13_haedx"]
 [ext_resource type="PackedScene" uid="uid://dh08036ig8ywv" path="res://scenes/debug/debugger.tscn" id="14_cqlha"]
-[ext_resource type="Script" path="res://scripts/tabs/documentation/DocumentationTab.cs" id="14_tou5o"]
-[ext_resource type="Script" path="res://scripts/SplashScreen.cs" id="15_14etp"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/InstallsPanel.cs" id="16_m7mow"]
 [ext_resource type="PackedScene" uid="uid://djyx4rm2ak0n5" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/ReleasePanel.cs" id="18_q7iih"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="19_hewk5"]
+[ext_resource type="Script" path="res://scripts/core/tabs/documentation/DocumentationTab.cs" id="20_x68s2"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/DownloadPanel.cs" id="21_irdd8"]
 [ext_resource type="StyleBox" uid="uid://c4b7kd0ijhmvq" path="res://resources/style_boxes/panels/mid_dark_panel.stylebox" id="23_voqpq"]
 [ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
 [ext_resource type="StyleBox" uid="uid://cf5kfntpwc2kk" path="res://resources/style_boxes/panels/soft_dark_panel.stylebox" id="26_gjfo7"]
 [ext_resource type="Texture2D" uid="uid://b6m2numrdnkgc" path="res://assets/sprites/download_btn.png" id="29_7sdgg"]
+[ext_resource type="Script" path="res://scripts/core/SplashScreen.cs" id="30_wi8nv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1gn1"]
 bg_color = Color(0, 0, 0, 0.247059)
@@ -47,7 +47,7 @@ bg_color = Color(0, 0, 0, 0.247059)
 bg_color = Color(0, 0, 0, 0.247059)
 
 [node name="Main" type="Node"]
-script = ExtResource("1_l0edh")
+script = ExtResource("1_j271r")
 fileDialogScene = ExtResource("5_10olf")
 
 [node name="UI" type="Control" parent="." node_paths=PackedStringArray("projectsTab", "installsTab", "documentationTab", "projectsButton", "installsButton", "documentationButton")]
@@ -57,7 +57,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("2_mi5hl")
+script = ExtResource("3_e26kt")
 projectsTab = NodePath("Content/VBoxContainer/TabContainer/ProjectsTab")
 installsTab = NodePath("Content/VBoxContainer/TabContainer/InstallsTab")
 documentationTab = NodePath("Content/VBoxContainer/TabContainer/DocumentationTab")
@@ -98,7 +98,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("3_047ry")
+script = ExtResource("5_opam3")
 projectItemScene = ExtResource("4_ftw23")
 itemContainer = NodePath("ProjectsList/VBoxContainer")
 folderPopupScene = ExtResource("5_10olf")
@@ -224,7 +224,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("5_s1nr3")
+script = ExtResource("13_haedx")
 installsPanel = NodePath("InstallsPanel")
 releasesPanel = NodePath("ReleasePanel")
 installsButton = NodePath("UpperButtons/InstallsButton")
@@ -260,7 +260,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("9_mmwvm")
+script = ExtResource("16_m7mow")
 installItemScene = ExtResource("10_ty7wm")
 addButton = NodePath("SortOptions/AddButton")
 fileDialogScene = ExtResource("5_10olf")
@@ -360,7 +360,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("7_07w4y")
+script = ExtResource("18_q7iih")
 releaseItemScene = ExtResource("8_8lusi")
 versionButton = NodePath("SortOptions/VersionButton")
 dateButton = NodePath("SortOptions/DateButton")
@@ -424,7 +424,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("14_tou5o")
+script = ExtResource("20_x68s2")
 
 [node name="Label" type="Label" parent="UI/Content/VBoxContainer/TabContainer/DocumentationTab"]
 layout_mode = 1
@@ -451,7 +451,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("10_mj2qp")
+script = ExtResource("21_irdd8")
 panel = NodePath("Panel")
 background = NodePath("Background")
 installerScene = ExtResource("10_e5igd")
@@ -629,7 +629,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.0627451, 0.0627451, 0.0627451, 1)
-script = ExtResource("15_14etp")
+script = ExtResource("30_wi8nv")
 fadeDuration = 0.3
 
 [editable path="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions/DateButton"]
