@@ -1,4 +1,4 @@
-﻿namespace Com.Astral.GodotHub.Data
+﻿namespace Com.Astral.GodotHub.Core.Data
 {
 	/// <summary>
 	/// Struct corresponding to an engine executable or a Godot project

@@ -1,6 +1,6 @@
-using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Core.Data;
 
-namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
+namespace Com.Astral.GodotHub.Core.Settings.Buttons.Toggles
 {
 	public partial class AutoUpdateToggle : SettingToggle
 	{

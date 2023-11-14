@@ -1,5 +1,5 @@
-﻿using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
+﻿using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -7,9 +7,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using Label = Godot.Label;
-using OS = Com.Astral.GodotHub.Data.OS;
+using OS = Com.Astral.GodotHub.Core.Data.OS;
 
-namespace Com.Astral.GodotHub.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Installs
 {
 	public partial class Installer : Control
 	{

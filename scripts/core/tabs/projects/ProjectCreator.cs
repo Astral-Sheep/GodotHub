@@ -1,16 +1,16 @@
-﻿using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils;
+﻿using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Error = Com.Astral.GodotHub.Utils.Error;
+using Error = Com.Astral.GodotHub.Core.Utils.Error;
 using FileAccess = Godot.FileAccess;
-using Version = Com.Astral.GodotHub.Data.Version;
+using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Tabs.Projects
+namespace Com.Astral.GodotHub.Core.Tabs.Projects
 {
 	public static class ProjectCreator
 	{

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Com.Astral.GodotHub.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Installs
 {
 	public partial class InstallsTab : Tab
 	{

@@ -1,4 +1,4 @@
-namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
+namespace Com.Astral.GodotHub.Core.Settings.Buttons.Toggles
 {
 	public abstract partial class SettingToggle : SettingButton
 	{

@@ -1,22 +1,20 @@
 ﻿#if GODOT_WINDOWS
 
 using Com.Astral.GodotHub.AdminInstall;
-using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Core.Debug;
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
+using Debugger = Com.Astral.GodotHub.Core.Debug.Debugger;
 using Mutex = System.Threading.Mutex;
-using Debugger = Com.Astral.GodotHub.Debug.Debugger;
-using Godot;
-using System.ComponentModel;
 
-namespace Com.Astral.GodotHub.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Installs
 {
 	/// <summary>
 	/// Static class used to run file writing process with admin permission<br/>
@@ -24,18 +22,16 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 	/// </summary>
 	public static class Admin
 	{
-		private const string MUTEX_NAME = @"GodotHub-AdminMutex";
-
 		private static readonly string adminProcessPath = @$"{AppDomain.CurrentDomain.BaseDirectory}\AdminInstall.exe";
-		private static readonly Mutex mutex = new Mutex(true, MUTEX_NAME);
+		private static readonly Mutex mutex = new Mutex(true, AdminInstallConstants.MUTEX_NAME);
 		private static Process adminProcess;
 		private static bool extracted = false;
 
 		static Admin()
 		{
-			MemoryMappedFile.CreateNew(AdminInstaller.ZIP_MAP_NAME, 4096);
-			MemoryMappedFile.CreateNew(AdminInstaller.EXTRACT_MAP_NAME, 4096);
-			MemoryMappedFile.CreateNew(AdminInstaller.DELETE_MAP_NAME, 1);
+			MemoryMappedFile.CreateNew(AdminInstallConstants.ZIP_MAP_NAME, 4096);
+			MemoryMappedFile.CreateNew(AdminInstallConstants.EXTRACT_MAP_NAME, 4096);
+			MemoryMappedFile.CreateNew(AdminInstallConstants.JUMP_MAP_NAME, 1);
 		}
 
 		public static bool Download(HttpContent pContent, string pZipPath)
@@ -54,10 +50,10 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				lContent.Read(lContentBytes, 0, (int)lContent.Length);
 				lContent.Close();
 
-				WriteBytesInMap(AdminInstaller.DOWNLOAD_MAP_NAME, lContentBytes);
-				WriteStringInMap(AdminInstaller.ZIP_MAP_NAME, pZipPath);
+				WriteBytesInMap(AdminInstallConstants.DOWNLOAD_MAP_NAME, lContentBytes);
+				WriteStringInMap(AdminInstallConstants.ZIP_MAP_NAME, pZipPath);
 
-				adminProcess = StartAdminProcess("--write_zip");
+				adminProcess = StartAdminProcess(AdminInstallConstants.WRITE_ARGUMENT);
 				Thread.Sleep(500);
 			}
 			catch (Win32Exception)
@@ -82,8 +78,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			{
 				try
 				{
-					WriteStringInMap(AdminInstaller.ZIP_MAP_NAME, pZipPath);
-					adminProcess = StartAdminProcess("--extract");
+					WriteStringInMap(AdminInstallConstants.ZIP_MAP_NAME, pZipPath);
+					adminProcess = StartAdminProcess(AdminInstallConstants.EXTRACT_ARGUMENT);
 					Thread.Sleep(500);
 				}
 				catch (Win32Exception)
@@ -98,8 +94,8 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				}
 			}
 
-			WriteStringInMap(AdminInstaller.EXTRACT_MAP_NAME, pExtractDirectory);
-			WriteBytesInMap(AdminInstaller.DELETE_MAP_NAME, new byte[] { 0 });
+			WriteStringInMap(AdminInstallConstants.EXTRACT_MAP_NAME, pExtractDirectory);
+			SetJumpMap(JumpInstruction.None);
 
 			mutex.ReleaseMutex();
 			mutex.WaitOne();
@@ -114,12 +110,24 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 			if (!extracted)
 			{
-				WriteBytesInMap(AdminInstaller.DELETE_MAP_NAME, new byte[] { 1 });
+				SetJumpMap(JumpInstruction.Delete);
 			}
 
 			mutex.ReleaseMutex();
 			mutex.WaitOne();
 			return !adminProcess.HasExited || (adminProcess.HasExited && adminProcess.ExitCode == 0);
+		}
+
+		public static void CancelUnzip(string pZipPath, string pExecutablePath)
+		{
+			if (adminProcess == null)
+				return;
+
+			WriteStringInMap(AdminInstallConstants.ZIP_MAP_NAME, pZipPath);
+			WriteStringInMap(AdminInstallConstants.EXTRACT_MAP_NAME, pExecutablePath);
+			SetJumpMap(JumpInstruction.Cancel);
+			mutex.ReleaseMutex();
+			mutex.WaitOne();
 		}
 
 		public static void EndAdminProcess()
@@ -133,6 +141,11 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 
 			adminProcess = null;
+		}
+
+		private static void SetJumpMap(JumpInstruction pInstruction)
+		{
+			WriteBytesInMap(AdminInstallConstants.JUMP_MAP_NAME, new byte[] { (byte)pInstruction });
 		}
 
 		private static void WriteStringInMap(string pMapName, string pString)

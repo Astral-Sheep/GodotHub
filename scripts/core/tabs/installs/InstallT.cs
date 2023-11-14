@@ -1,6 +1,6 @@
-﻿using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils;
+﻿using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 using Environment = System.Environment;
 using HttpClient = System.Net.Http.HttpClient;
-using Version = Com.Astral.GodotHub.Data.Version;
+using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Installs
 {
 	public static class InstallT
 	{
@@ -82,7 +82,12 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 #if GODOT_WINDOWS
 			catch (UnauthorizedAccessException)
 			{
-				if (!/*await */Admin.Download(lResponse.Content, lZip))
+				//if (await Task.Run(() => Admin.Download(lResponse.Content, lZip)))
+				if (Admin.Download(lResponse.Content, lZip))
+				{
+					pProgress.Report(0.9f);
+				}
+				else
 				{
 					return Result.Failed;
 				}
@@ -128,8 +133,6 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 			}
 
 #if GODOT_WINDOWS
-			//string lFolder = pSource.mono ? lZip[..^4] : lDir;
-			//string lFolder = pSource.mono ? AppConfig.InstallDir + "/" + pSource.asset.Name[..^4] : AppConfig.InstallDir;
 			string lFolder = AppConfig.InstallDir;
 
 			if (pSource.mono)
@@ -189,7 +192,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				return lResult;
 			}
 
-			string lFormattedFolder = lZip[..^4];
+			string lFormattedFolder = AppConfig.InstallDir + "/" + pSource.asset.Name[..^4];
 
 			if (pSource.mono)
 			{
@@ -254,7 +257,7 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 				return lResult;
 			}
 
-			string lOriginalFolder = PathT.GetMacOSFolderFromZip(lZip, pSource.mono);
+			string lOriginalFolder = PathT.GetMacOSFolderFromZip(AppConfig.InstallDir + "/" + pSource.asset.Name, pSource.mono);
 			string lFormattedFolder = PathT.FormatMacOSFolder(lOriginalFolder, pSource.version, pSource.mono);
 			PathT.RenameFolder(lOriginalFolder, lFormattedFolder);
 
@@ -302,7 +305,12 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 #if GODOT_WINDOWS
 			catch (UnauthorizedAccessException)
 			{
-				if (!/*await */Admin.ExtractZip(pZip, pDir))
+				//if (await Task.Run(() => Admin.ExtractZip(pZip, pDir)))
+				if (Admin.ExtractZip(pZip, pDir))
+				{
+					pProgress.Report(AppConfig.AutoDeleteZip ? 0.7f : 1f);
+				}
+				else
 				{
 					return Result.Failed;
 				}
@@ -330,9 +338,10 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 #if GODOT_WINDOWS
 				catch (UnauthorizedAccessException)
 				{
-					if (!/*await */Admin.DeleteZip())
+					//if (await Task.Run(() => Admin.DeleteZip()))
+					if (Admin.DeleteZip())
 					{
-						return Result.Installed;
+						pProgress.Report(1f);
 					}
 				}
 #endif //GODOT_WINDOWS
@@ -367,28 +376,34 @@ namespace Com.Astral.GodotHub.Tabs.Installs
 
 		private static void CancelUnzip(string pZip, string pDir)
 		{
-			if (pZip != null && File.Exists(pZip))
+			try
 			{
-				try
+				if (pZip != null && File.Exists(pZip))
 				{
 					File.Delete(pZip);
 				}
-				catch (Exception lException)
+
+				if (pDir != null)
 				{
-					ExceptionHandler.Singleton.LogException(lException);
+					if (Directory.Exists(pDir))
+					{
+						Directory.Delete(pDir);
+					}
+					else if (File.Exists(pDir))
+					{
+						File.Delete(pDir);
+					}
 				}
 			}
-
-			if (pDir != null && Directory.Exists(pDir))
+#if GODOT_WINDOWS
+			catch (UnauthorizedAccessException)
 			{
-				try
-				{
-					File.Delete(pDir);
-				}
-				catch (Exception lException)
-				{
-					ExceptionHandler.Singleton.LogException(lException);
-				}
+				Admin.CancelUnzip(pZip ?? "", pDir ?? "");
+			}
+#endif //GODOT_WINDOWS
+			catch (Exception lException)
+			{
+				ExceptionHandler.Singleton.LogException(lException);
 			}
 		}
 	}

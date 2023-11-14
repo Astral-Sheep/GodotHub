@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Com.Astral.GodotHub.Tabs
+namespace Com.Astral.GodotHub.Core.Tabs
 {
 	public partial class TabManager : Control
 	{

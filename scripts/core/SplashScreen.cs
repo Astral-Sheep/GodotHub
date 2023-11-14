@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Core
 {
 	public partial class SplashScreen : ColorRect
 	{

@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Com.Astral.GodotHub.Settings.Buttons.Directory
+namespace Com.Astral.GodotHub.Core.Settings.Buttons.Directory
 {
 	public abstract partial class DirButton : SettingButton
 	{

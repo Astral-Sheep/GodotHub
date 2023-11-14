@@ -1,18 +1,18 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils;
-using Com.Astral.GodotHub.Utils.Comparisons;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils;
+using Com.Astral.GodotHub.Core.Utils.Comparisons;
 using Godot;
 using System;
 using System.Diagnostics;
 using System.IO;
 
-using Colors = Com.Astral.GodotHub.Utils.Colors;
-using Debugger = Com.Astral.GodotHub.Debug.Debugger;
+using Colors = Com.Astral.GodotHub.Core.Utils.Colors;
+using Debugger = Com.Astral.GodotHub.Core.Debug.Debugger;
 using Label = Godot.Label;
-using Version = Com.Astral.GodotHub.Data.Version;
+using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Installs
 {
 	public partial class InstallItem : Control, IFavoriteItem, IMonoItem, ITimedItem, IVersionItem, IValidItem
 	{

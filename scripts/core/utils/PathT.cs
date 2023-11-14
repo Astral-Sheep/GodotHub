@@ -1,13 +1,13 @@
-﻿using Com.Astral.GodotHub.Debug;
+﻿using Com.Astral.GodotHub.Core.Debug;
 using Godot;
 using System;
 using System.IO;
 
 using Environment = System.Environment;
-using OS = Com.Astral.GodotHub.Data.OS;
-using Version = Com.Astral.GodotHub.Data.Version;
+using OS = Com.Astral.GodotHub.Core.Data.OS;
+using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Utils
+namespace Com.Astral.GodotHub.Core.Utils
 {
 	public static class PathT
 	{

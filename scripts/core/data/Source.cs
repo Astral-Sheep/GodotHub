@@ -1,6 +1,6 @@
 ﻿using Octokit;
 
-namespace Com.Astral.GodotHub.Data
+namespace Com.Astral.GodotHub.Core.Data
 {
 	/// <summary>
 	/// Struct representing a <see cref="ReleaseAsset"/> with additional data

@@ -1,5 +1,5 @@
-﻿using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils;
+﻿using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 using GError = Godot.Error;
 
-namespace Com.Astral.GodotHub.Data
+namespace Com.Astral.GodotHub.Core.Data
 {
 	public static class InstallsData
 	{

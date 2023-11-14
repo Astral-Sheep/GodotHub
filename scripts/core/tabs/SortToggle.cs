@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-namespace Com.Astral.GodotHub.Tabs
+namespace Com.Astral.GodotHub.Core.Tabs
 {
 	public partial class SortToggle : Button
 	{

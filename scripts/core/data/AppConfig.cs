@@ -1,5 +1,5 @@
-﻿using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils;
+﻿using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils;
 using Godot;
 using System;
 using System.Runtime.InteropServices;
@@ -7,7 +7,7 @@ using Environment = System.Environment;
 
 using GError = Godot.Error;
 
-namespace Com.Astral.GodotHub.Data
+namespace Com.Astral.GodotHub.Core.Data
 {
 	/// <summary>
 	/// Static class used to get and set application parameters

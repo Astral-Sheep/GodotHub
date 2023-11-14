@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Com.Astral.GodotHub.Utils
+namespace Com.Astral.GodotHub.Core.Utils
 {
 	/// <summary>
 	/// Structure used to approximate a Rust enum: <c>Error(string)</c>

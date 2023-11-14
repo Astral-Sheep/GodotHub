@@ -1,10 +1,10 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
 using Godot;
 using System;
-using Error = Com.Astral.GodotHub.Utils.Error;
+using Error = Com.Astral.GodotHub.Core.Utils.Error;
 
-namespace Com.Astral.GodotHub
+namespace Com.Astral.GodotHub.Core
 {
 	public partial class Main : Node
 	{

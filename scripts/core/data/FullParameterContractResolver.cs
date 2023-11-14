@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Com.Astral.GodotHub.Data
+namespace Com.Astral.GodotHub.Core.Data
 {
 	/// <summary>
 	/// <see cref="IContractResolver"/> used to select the most complete constructor when deserializing a .json file

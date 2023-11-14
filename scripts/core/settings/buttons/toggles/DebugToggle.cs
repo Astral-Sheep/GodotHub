@@ -1,7 +1,7 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
 
-namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
+namespace Com.Astral.GodotHub.Core.Settings.Buttons.Toggles
 {
 	public partial class DebugToggle : SettingToggle
 	{

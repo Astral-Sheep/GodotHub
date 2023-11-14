@@ -1,7 +1,7 @@
-using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Core.Data;
 using Godot;
 
-namespace Com.Astral.GodotHub.Settings.Buttons
+namespace Com.Astral.GodotHub.Core.Settings.Buttons
 {
 	public partial class ResetButton : Button, ISettingButton
 	{

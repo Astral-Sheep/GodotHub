@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <StartupObject>Com.Astral.GodotHub.AdminInstall.Program</StartupObject>
+    <ApplicationManifest>admin_install.manifest</ApplicationManifest>
+    <RootNamespace>Com.Astral.GodotHub.AdminInstall</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;IDE0090;IDE0063</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;IDE0090;IDE0063</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+	  <Compile Remove="admin_install\**" />
+	  <Compile Remove="assets\**" />
+	  <Compile Remove="resources\**" />
+	  <Compile Remove="scenes\**" />
+	  <Compile Remove="scripts\core\**" />
+    <EmbeddedResource Remove="admin_install\**" />
+    <EmbeddedResource Remove="assets\**" />
+    <EmbeddedResource Remove="resources\**" />
+    <EmbeddedResource Remove="scenes\**" />
+    <EmbeddedResource Remove="scripts\core\**" />
+    <None Remove="admin_install\**" />
+    <None Remove="assets\**" />
+    <None Remove="resources\**" />
+    <None Remove="scenes\**" />
+    <None Remove="scripts\core\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="export_presets.cfg" />
+    <None Remove="icon.svg" />
+    <None Remove="icon.svg.import" />
+    <None Remove="LICENSE.md" />
+    <None Remove="project.godot" />
+    <None Remove="README.md" />
+  </ItemGroup>
+
+</Project>

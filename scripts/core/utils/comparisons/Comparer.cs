@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Com.Astral.GodotHub.Utils.Comparisons
+namespace Com.Astral.GodotHub.Core.Utils.Comparisons
 {
 	public static class Comparer
 	{

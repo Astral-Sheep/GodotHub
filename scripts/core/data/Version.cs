@@ -1,8 +1,8 @@
-﻿using Com.Astral.GodotHub.Debug;
+﻿using Com.Astral.GodotHub.Core.Debug;
 using System;
 using System.Text.RegularExpressions;
 
-namespace Com.Astral.GodotHub.Data
+namespace Com.Astral.GodotHub.Core.Data
 {
 	/// <summary>
 	/// Representation of a Godot version as major.minor.patch

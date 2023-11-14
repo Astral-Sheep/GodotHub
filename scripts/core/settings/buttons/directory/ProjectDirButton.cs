@@ -1,6 +1,6 @@
-using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Core.Data;
 
-namespace Com.Astral.GodotHub.Settings.Buttons.Directory
+namespace Com.Astral.GodotHub.Core.Settings.Buttons.Directory
 {
 	public partial class ProjectDirButton : DirButton
 	{

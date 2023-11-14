@@ -16,8 +16,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="admin_install\**" />
+    <Compile Remove="obj\**" />
+    <Compile Remove="scripts\admin_install\**" />
     <Compile Remove="scripts\core\**" />
     <EmbeddedResource Remove="admin_install\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="scripts\admin_install\**" />
     <EmbeddedResource Remove="scripts\core\**" />
   </ItemGroup>
   <ItemGroup>
@@ -87,6 +91,6 @@
     <PackageReference Include="Octokit" Version="7.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="admin_install\AdminInstall.csproj" />
+    <ProjectReference Include="AdminInstall.csproj" />
   </ItemGroup>
 </Project>

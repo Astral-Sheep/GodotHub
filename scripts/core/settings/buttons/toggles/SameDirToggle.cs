@@ -1,8 +1,8 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Settings.Buttons.Directory;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Settings.Buttons.Directory;
 using Godot;
 
-namespace Com.Astral.GodotHub.Settings.Buttons.Toggles
+namespace Com.Astral.GodotHub.Core.Settings.Buttons.Toggles
 {
 	public partial class SameDirToggle : SettingToggle
 	{

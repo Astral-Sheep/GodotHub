@@ -1,6 +1,6 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils.Comparisons;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils.Comparisons;
 using Godot;
 using Octokit;
 using System;
@@ -8,10 +8,10 @@ using System.Collections.Generic;
 using System.IO;
 
 using Label = Godot.Label;
-using OS = Com.Astral.GodotHub.Data.OS;
-using Version = Com.Astral.GodotHub.Data.Version;
+using OS = Com.Astral.GodotHub.Core.Data.OS;
+using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Installs
 {
 	public partial class ReleaseItem : Control, IVersionItem, IValidItem
 	{

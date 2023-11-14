@@ -1,10 +1,10 @@
-using Com.Astral.GodotHub.Data;
+using Com.Astral.GodotHub.Core.Data;
 using Godot;
 using System;
 
-using Colors = Com.Astral.GodotHub.Utils.Colors;
+using Colors = Com.Astral.GodotHub.Core.Utils.Colors;
 
-namespace Com.Astral.GodotHub.Debug
+namespace Com.Astral.GodotHub.Core.Debug
 {
 	/// <summary>
 	/// In-app console

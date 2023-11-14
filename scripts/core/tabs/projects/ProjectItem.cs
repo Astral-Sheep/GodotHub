@@ -1,7 +1,7 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Debug;
-using Com.Astral.GodotHub.Utils;
-using Com.Astral.GodotHub.Utils.Comparisons;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Debug;
+using Com.Astral.GodotHub.Core.Utils;
+using Com.Astral.GodotHub.Core.Utils.Comparisons;
 using Godot;
 using System;
 using System.Collections.Generic;
@@ -9,12 +9,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 
-using Colors = Com.Astral.GodotHub.Utils.Colors;
-using Debugger = Com.Astral.GodotHub.Debug.Debugger;
+using Colors = Com.Astral.GodotHub.Core.Utils.Colors;
+using Debugger = Com.Astral.GodotHub.Core.Debug.Debugger;
 using Error = Godot.Error;
-using Version = Com.Astral.GodotHub.Data.Version;
+using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Tabs.Projects
+namespace Com.Astral.GodotHub.Core.Tabs.Projects
 {
 	public partial class ProjectItem : Control, IFavoriteItem, INamedItem, ITimedItem, IVersionItem, IValidItem
 	{

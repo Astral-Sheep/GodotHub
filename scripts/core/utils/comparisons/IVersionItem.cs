@@ -1,6 +1,6 @@
-﻿using Com.Astral.GodotHub.Data;
+﻿using Com.Astral.GodotHub.Core.Data;
 
-namespace Com.Astral.GodotHub.Utils.Comparisons
+namespace Com.Astral.GodotHub.Core.Utils.Comparisons
 {
 	public interface IVersionItem
 	{

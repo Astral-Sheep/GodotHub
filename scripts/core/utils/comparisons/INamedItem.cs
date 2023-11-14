@@ -1,4 +1,4 @@
-﻿namespace Com.Astral.GodotHub.Utils.Comparisons
+﻿namespace Com.Astral.GodotHub.Core.Utils.Comparisons
 {
 	public interface INamedItem
 	{

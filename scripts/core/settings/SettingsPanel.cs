@@ -1,10 +1,10 @@
-using Com.Astral.GodotHub.Data;
-using Com.Astral.GodotHub.Settings.Buttons;
+using Com.Astral.GodotHub.Core.Data;
+using Com.Astral.GodotHub.Core.Settings.Buttons;
 using Godot;
 using Godot.Collections;
 using System.Collections.Generic;
 
-namespace Com.Astral.GodotHub.Settings
+namespace Com.Astral.GodotHub.Core.Settings
 {
 	public partial class SettingsPanel : Control
 	{

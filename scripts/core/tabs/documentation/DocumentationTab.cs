@@ -1,4 +1,4 @@
-namespace Com.Astral.GodotHub.Tabs.Documentation
+namespace Com.Astral.GodotHub.Core.Tabs.Documentation
 {
 	public partial class DocumentationTab : Tab
 	{
