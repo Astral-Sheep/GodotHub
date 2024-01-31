@@ -23,6 +23,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		[Export] protected SortToggle dateButton;
 
 		protected List<InstallItem> items = new List<InstallItem>();
+		protected Comparison<InstallItem> currentComparison = Comparer.CompareTimes;
 
 		public override void _Ready()
 		{
@@ -32,6 +33,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			{
 				CreateItem(lVersions[i]);
 			}
+
+			Sort();
 
 			InstallsData.VersionAdded += OnVersionAdded;
 			InstallItem.Closed += OnItemClosed;
@@ -68,6 +71,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		protected void OnVersionAdded(GDFile pInstall)
 		{
 			CreateItem(pInstall);
+			Sort();
 		}
 
 		protected void OnItemClosed(InstallItem pItem)
@@ -111,12 +115,16 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			if (pToggled)
 			{
 				dateButton.Disable();
-				Sort(Comparer.CompareFavorites);
+				// Sort(Comparer.CompareFavorites);
+				currentComparison = Comparer.CompareFavorites;
+				Sort();
 			}
 			else
 			{
 				dateButton.Enable();
-				Sort(Comparer.CompareTimes);
+				// Sort(Comparer.CompareTimes);
+				currentComparison = Comparer.CompareTimes;
+				Sort();
 			}
 		}
 
@@ -125,7 +133,9 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			favoriteButton.SetPressedNoSignal(false);
 			monoButton.Disable();
 			dateButton.Disable();
-			Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
+			currentComparison = pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions;
+			// Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
+			Sort();
 		}
 
 		protected void OnMonoToggled(bool pToggled)
@@ -133,7 +143,9 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			favoriteButton.SetPressedNoSignal(false);
 			versionButton.Disable();
 			dateButton.Disable();
-			Sort(pToggled ? Comparer.CompareMonos : Comparer.ReversedCompareMonos);
+			currentComparison = pToggled ? Comparer.CompareMonos : Comparer.ReversedCompareMonos;
+			// Sort(pToggled ? Comparer.CompareMonos : Comparer.ReversedCompareMonos);
+			Sort();
 		}
 
 		protected void OnDateToggled(bool pToggled)
@@ -141,14 +153,15 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			favoriteButton.SetPressedNoSignal(false);
 			versionButton.Disable();
 			monoButton.Disable();
-			Sort(pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes);
+			currentComparison = pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes;
+			Sort(/*pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes*/);
 		}
 
 		#endregion //EVENT_HANDLING
 
-		protected void Sort(Comparison<InstallItem> pComparison)
+		protected void Sort(/*Comparison<InstallItem> pComparison*/)
 		{
-			items.Sort(pComparison);
+			items.Sort(currentComparison);
 
 			for (int i = 0; i < items.Count; i++)
 			{

@@ -28,7 +28,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 		[Export] protected SortToggle versionButton;
 
 		protected List<ProjectItem> items = new List<ProjectItem>();
-		protected Comparison<ProjectItem> currentSort;
+		protected Comparison<ProjectItem> currentComparison;
 
 		public override void _Ready()
 		{
@@ -74,7 +74,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 
 		protected void Sort()
 		{
-			items.Sort(currentSort);
+			items.Sort(currentComparison);
 
 			for (int i = 0; i < items.Count; i++)
 			{
@@ -139,12 +139,12 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			if (pToggled)
 			{
 				versionButton.Disable();
-				currentSort = Comparer.CompareFavorites;
+				currentComparison = Comparer.CompareFavorites;
 			}
 			else
 			{
 				dateButton.Enable();
-				currentSort = Comparer.CompareTimes;
+				currentComparison = Comparer.CompareTimes;
 			}
 
 			Sort();
@@ -156,7 +156,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			dateButton.Disable();
 			versionButton.Disable();
 
-			currentSort = pToggled ? Comparer.CompareNames : Comparer.ReversedCompareNames;
+			currentComparison = pToggled ? Comparer.CompareNames : Comparer.ReversedCompareNames;
 			Sort();
 		}
 
@@ -166,7 +166,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			nameButton.Disable();
 			versionButton.Disable();
 
-			currentSort = pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes;
+			currentComparison = pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes;
 			Sort();
 		}
 
@@ -176,7 +176,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			nameButton.Disable();
 			dateButton.Disable();
 
-			currentSort = pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions;
+			currentComparison = pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions;
 			Sort();
 		}
 
