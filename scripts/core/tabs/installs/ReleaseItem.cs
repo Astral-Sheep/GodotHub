@@ -209,11 +209,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 						$"{lFile.Path[first..]}\n" +
 						$"{GetExecutableName()}"
 					);
-					
-					if (lFile.Path[first..] == GetExecutableName())
-					{
-						return true;
-					}
+
+					return lFile.Path[first..] == GetExecutableName();
 				}
 			}
 
