@@ -145,7 +145,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 			if (installationSource.Token.IsCancellationRequested)
 			{
-				CancelInstallation(true);
+				CancelInstallation(false);
 				return InstallT.Result.Cancelled;
 			}
 

@@ -190,7 +190,34 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 		protected bool IsInstalled()
 		{
-			return Directory.Exists(AppConfig.InstallDir + "/" + GetAssetName(false));
+			if (Directory.Exists(AppConfig.InstallDir + "/" + GetAssetName(false)))
+			{
+				return true;
+			}
+
+			foreach (GDFile lFile in InstallsData.GetAllVersions())
+			{
+				if (lFile.Version == Version)
+				{
+					int first = lFile.Path.LastIndexOf('/') + 1;
+
+					if (first >= lFile.Path.Length)
+						continue;
+					
+					Debugger.LogMessage(
+						"--------------------\n" +
+						$"{lFile.Path[first..]}\n" +
+						$"{GetExecutableName()}"
+					);
+					
+					if (lFile.Path[first..] == GetExecutableName())
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
 		}
 
 		protected void SetInstallButton()
@@ -250,6 +277,25 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 			lAssetName += GetOS(pIsFile) + FILE_TYPE;
 			return pIsFile ? lAssetName : lAssetName[..^4];
+		}
+
+		protected string GetExecutableName()
+		{
+			string lExeName = assetNamePrefix;
+
+			if (monoCheck.ButtonPressed)
+			{
+				lExeName += "_mono";
+			}
+
+			lExeName += GetOS(true);
+
+			if (osButton.Selected == (int)OS.Windows && !lExeName.EndsWith(".exe"))
+			{
+				lExeName += ".exe";
+			}
+			
+			return lExeName;
 		}
 
 		protected string GetOS(bool pIsFile)

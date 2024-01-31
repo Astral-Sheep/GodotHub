@@ -32,13 +32,13 @@ namespace Com.Astral.GodotHub.Core.Data
 		static InstallsData()
 		{
 #if GODOT_WINDOWS
-			folderExpr = new Regex(@"Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_win[0-9]{2}");
+			folderExpr = new Regex("Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_win[0-9]{2}");
 			exePath = "/Godot_v{0}-stable{1}_win{2}.exe";
 #elif GODOT_LINUXBSD
-			folderExpr = new Regex(@"Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_linux[._]x86_[0-9]{2}");
+			folderExpr = new Regex("Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_linux[._]x86_[0-9]{2}");
 			exePath = "/Godot_{0}-stable{1}_linux.x86_{2}";
 #elif GODOT_MACOS
-			folderExpr = new Regex(@"(?:Godot)(_mono)??(?:[.]app)$");
+			folderExpr = new Regex("(?:Godot)(_mono)??(?:[.]app)$");
 			exePath = "/Contents/MacOS/Godot";
 #endif
 
@@ -73,8 +73,11 @@ namespace Com.Astral.GodotHub.Core.Data
 		public static bool AddVersion(string pPath, bool pIsExe)
 		{
 			if (!folderExpr.IsMatch(pPath))
+			{
+				Debugger.LogWarning($"[b]Path isn't valid[/b]: {pPath}");
 				return false;
-
+			}
+			
 			if (!pIsExe)
 			{
 #if GODOT_MACOS
@@ -83,7 +86,7 @@ namespace Com.Astral.GodotHub.Core.Data
 				pPath += string.Format(exePath, (Version)pPath, pPath.Contains("_mono") ? "_mono" : "", pPath[^2..]);
 #endif
 			}
-
+			
 			if (!File.Exists(pPath))
 			{
 				ExceptionHandler.Singleton.LogMessage($"Invalid file passed as executable: {pPath}\nVersion not added");

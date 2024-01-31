@@ -140,7 +140,11 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			{
 				lFolder += "/" + pSource.asset.Name[..^4];
 			}
-
+			else
+			{
+				lFolder += "/" + pSource.asset.Name[..^8];
+			}
+			
 			InstallsData.AddVersion(lFolder, false);
 
 			if (AppConfig.AutoCreateShortcut)
