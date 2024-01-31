@@ -42,33 +42,29 @@ namespace Com.Astral.GodotHub.AdminInstall
 
 		internal static void CancelInstall(bool pDeleteZip, bool pDeleteExecutable)
 		{
-			//if (pDeleteZip)
-			//{
-			//	string lZip = GetZipPath();
+			if (pDeleteZip)
+			{
+				string lZip = GetZipPath();
 
-			//	if (File.Exists(lZip))
-			//	{
-			//		File.Delete(lZip);
-			//	}
-			//}
+				if (File.Exists(lZip))
+				{
+					File.Delete(lZip);
+				}
+			}
 
-			//if (pDeleteExecutable)
-			//{
-			//	string lExecutable = GetExtractPath();
+			if (pDeleteExecutable)
+			{
+				string lExecutable = GetExtractPath();
 
-			//	if (File.Exists(lExecutable))
-			//	{
-			//		File.Delete(lExecutable);
-			//	}
-			//	else if (Directory.Exists(lExecutable))
-			//	{
-			//		Console.WriteLine(lExecutable);
-			//		Console.ReadKey();
-			//		Console.WriteLine("You sure?");
-			//		Console.ReadKey();
-			//		Directory.Delete(lExecutable);
-			//	}
-			//}
+				if (File.Exists(lExecutable))
+				{
+					File.Delete(lExecutable);
+				}
+				else if (Directory.Exists(lExecutable))
+				{
+					Directory.Delete(lExecutable);
+				}
+			}
 		}
 
 		internal static byte Jump()
@@ -104,6 +100,10 @@ namespace Com.Astral.GodotHub.AdminInstall
 					lMMVStream.Read(lStringBytes, 0, lStringBytes.Length);
 					lMMVStream.Close();
 					string lString = Encoding.UTF8.GetString(lStringBytes);
+					
+					// Since the stream has a static size, the string can be shorter than the allocated space.
+					// The remaining bytes are set to 0, and we don't want to recover that part,
+					// thus the lString[..lString.IndexOf('\0')]
 					return lString[..lString.IndexOf('\0')];
 				}
 			}

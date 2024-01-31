@@ -89,6 +89,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				}
 				else
 				{
+					Debugger.LogError("Download failed");
 					return Result.Failed;
 				}
 			}
@@ -312,6 +313,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				}
 				else
 				{
+					Debugger.LogError("Extract failed");
 					return Result.Failed;
 				}
 			}

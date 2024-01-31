@@ -263,13 +263,13 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 			if (osButton.Selected == (int)OS.Linux)
 			{
-				lOS = $"_linux";
+				lOS = "_linux";
 				lOS += pIsFile && monoCheck.ButtonPressed ? "_x86" : ".x86";
 				lOS += architectureButton.Selected == (int)Architecture.x32 ? "_32" : "_64";
 			}
 			else
 			{
-				lOS = $"_win";
+				lOS = "_win";
 				lOS += architectureButton.Selected == (int)Architecture.x32 ? "32" : "64";
 
 				if (!monoCheck.ButtonPressed)

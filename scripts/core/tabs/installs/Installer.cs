@@ -172,7 +172,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			}
 
 #if GODOT_WINDOWS
-			Admin.EndAdminProcess();
+			Admin.EndAdminInstallProcess();
 #endif //GODOT_WINDOWS
 			CancelAnimation();
 			statusLabel.Text = "Completed";
@@ -183,18 +183,14 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		protected void CancelInstallation(bool pIsError)
 		{
 #if GODOT_WINDOWS
-			Admin.EndAdminProcess();
+			Admin.EndAdminInstallProcess();
 #endif //GODOT_WINDOWS
 			CancelAnimation();
+			statusLabel.Text = pIsError ? "Failed" : "Cancelled";
 
-			if (!pIsError)
-			{
-				statusLabel.Text = "Cancelled";
-			}
-			else
-			{
-				statusLabel.Text = "Failed";
-			}
+			StyleBoxFlat lStyleBox = loadingBar.GetThemeStylebox("fill").Duplicate() as StyleBoxFlat;
+			lStyleBox.BgColor = Utils.Colors.Singleton.Red;
+			loadingBar.AddThemeStyleboxOverride("fill", lStyleBox);
 		}
 
 		protected void CancelAnimation()

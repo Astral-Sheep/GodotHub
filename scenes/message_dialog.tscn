@@ -11,6 +11,7 @@ visible = true
 transient = false
 unresizable = true
 always_on_top = true
+popup_window = true
 theme = ExtResource("1_w1lgf")
 dialog_text = "This is an error"
 dialog_autowrap = true

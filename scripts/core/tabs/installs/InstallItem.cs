@@ -89,20 +89,28 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			catch (Exception lException)
 			{
 				ExceptionHandler.Singleton.LogException(lException);
-				//Debugger.LogException(lException);
 			}
 		}
 
 		protected void Uninstall()
 		{
+			string lPath = PathT.GetFolderFromExe(pathLabel.Text);
+
 			try
 			{
-				Directory.Delete(PathT.GetFolderFromExe(pathLabel.Text), true);
+				Directory.Delete(lPath, true);
 			}
+#if GODOT_WINDOWS
+			catch (UnauthorizedAccessException)
+			{
+				if (!Admin.DeletePaths(lPath))
+					return;
+			}
+#endif //GODOT_WINDOWS
 			catch (Exception lException)
 			{
 				ExceptionHandler.Singleton.LogException(lException);
-				//Debugger.LogException(lException);
+				return;
 			}
 
 			Remove();
