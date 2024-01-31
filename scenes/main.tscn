@@ -1,4 +1,4 @@
-[gd_scene load_steps=36 format=3 uid="uid://qiyp3s4s212a"]
+[gd_scene load_steps=37 format=3 uid="uid://qiyp3s4s212a"]
 
 [ext_resource type="Script" path="res://scripts/core/Main.cs" id="1_j271r"]
 [ext_resource type="Script" path="res://scripts/core/tabs/TabManager.cs" id="3_e26kt"]
@@ -24,6 +24,7 @@
 [ext_resource type="Script" path="res://scripts/core/tabs/installs/ReleasePanel.cs" id="18_q7iih"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="19_hewk5"]
 [ext_resource type="Script" path="res://scripts/core/tabs/documentation/DocumentationTab.cs" id="20_x68s2"]
+[ext_resource type="Script" path="res://scripts/core/tabs/UpdateRepoButton.cs" id="21_g4g8d"]
 [ext_resource type="Script" path="res://scripts/core/tabs/installs/DownloadPanel.cs" id="21_irdd8"]
 [ext_resource type="StyleBox" uid="uid://c4b7kd0ijhmvq" path="res://resources/style_boxes/panels/mid_dark_panel.stylebox" id="23_voqpq"]
 [ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
@@ -443,6 +444,18 @@ grow_vertical = 2
 text = "DOCUMENTATON"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="RepoUpdateButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_top = 25.0
+offset_right = -25.0
+grow_horizontal = 0
+focus_mode = 0
+text = "Update Repo"
+script = ExtResource("21_g4g8d")
 
 [node name="DownloadPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
 layout_mode = 1

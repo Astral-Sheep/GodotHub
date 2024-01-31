@@ -95,7 +95,7 @@ namespace Com.Astral.GodotHub.Core.Data
 
 					for (int i = Releases.Count - 1; i >= 0; i--)
 					{
-						if ((Version)Releases[i].Name < Version.minimumSupportedVersion)
+						if ((Version)Releases[i].TagName < Version.minimumSupportedVersion)
 						{
 							Releases.RemoveAt(i);
 						}
@@ -127,11 +127,11 @@ namespace Com.Astral.GodotHub.Core.Data
 			{
 				List<Release> lReleases = ReadOnlyListToList(await client.Repository.Release.GetAll(USER, REPO));
 				int lLastIndex = 0;
-				string lLastName = Releases[0].Name;
+				string lLastName = Releases[0].TagName;
 
 				for (lLastIndex = 0; lLastIndex < lReleases.Count; lLastIndex++)
 				{
-					if (lReleases[lLastIndex].Name == lLastName)
+					if (lReleases[lLastIndex].TagName == lLastName)
 						break;
 				}
 

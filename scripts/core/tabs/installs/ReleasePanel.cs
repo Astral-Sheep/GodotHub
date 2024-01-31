@@ -18,15 +18,27 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		[Export] protected SortToggle dateButton;
 
 		protected List<ReleaseItem> items = new List<ReleaseItem>();
+		protected Comparison<ReleaseItem> currentComparison = CompareIndices;
 
 		public override void _Ready()
 		{
-			GDRepository.Loaded += OnRepoRetrieved;
+			GDRepository.Loaded += OnRepoLoaded;
 		}
 
-		protected void OnRepoRetrieved()
+		protected override void Dispose(bool pDisposing)
 		{
-			GDRepository.Loaded -= OnRepoRetrieved;
+			base.Dispose(pDisposing);
+
+			if (!pDisposing)
+				return;
+
+			GDRepository.Loaded -= OnRepoLoaded;
+			GDRepository.Updated -= OnRepoUpdated;
+		}
+
+		protected void OnRepoLoaded()
+		{
+			GDRepository.Loaded -= OnRepoLoaded;
 			List<Release> lReleases = GDRepository.Releases;
 			Release lRelease;
 
@@ -34,15 +46,35 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			{
 				lRelease = lReleases[i];
 
-				if ((Version)lRelease.Name < Version.minimumSupportedVersion)
+				if ((Version)lRelease.TagName < Version.minimumSupportedVersion)
 					continue;
 
 				items.Add(CreateItem(lReleases[i], i));
 			}
+			
+			Sort();
 
 			versionButton.CustomToggled += OnVersionToggled;
 			dateButton.CustomToggled += OnDateToggled;
 			dateButton.ButtonPressed = true;
+
+			GDRepository.Updated += OnRepoUpdated;
+		}
+
+		protected void OnRepoUpdated(List<Release> pReleases)
+		{
+			if (pReleases.Count <= 0)
+				return;
+			
+			for (int i = 0; i < pReleases.Count; i++)
+			{
+				if ((Version)pReleases[i].TagName < Version.minimumSupportedVersion)
+					continue;
+				
+				items.Add(CreateItem(pReleases[i], i));
+			}
+			
+			Sort();
 		}
 
 		protected ReleaseItem CreateItem(Release pRelease, int pIndex)
@@ -56,18 +88,20 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		protected void OnVersionToggled(bool pToggled)
 		{
 			dateButton.Disable();
-			Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
+			currentComparison = pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions;
+			Sort();
 		}
 
 		protected void OnDateToggled(bool pToggled)
 		{
 			versionButton.Disable();
-			Sort(pToggled ? CompareIndices : ReversedCompareIndices);
+			currentComparison = pToggled ? CompareIndices : ReversedCompareIndices;
+			Sort();
 		}
 
-		protected void Sort(Comparison<ReleaseItem> pComparison)
+		protected void Sort()
 		{
-			items.Sort(pComparison);
+			items.Sort(currentComparison);
 
 			for (int i = 0; i < items.Count; i++)
 			{
@@ -75,12 +109,12 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			}
 		}
 
-		protected int CompareIndices(ReleaseItem pLhs, ReleaseItem pRhs)
+		protected static int CompareIndices(ReleaseItem pLhs, ReleaseItem pRhs)
 		{
 			return pLhs.Index - pRhs.Index;
 		}
 
-		protected int ReversedCompareIndices(ReleaseItem pLhs, ReleaseItem pRhs)
+		protected static int ReversedCompareIndices(ReleaseItem pLhs, ReleaseItem pRhs)
 		{
 			return CompareIndices(pRhs, pLhs);
 		}

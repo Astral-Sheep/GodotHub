@@ -44,7 +44,7 @@ namespace Com.Astral.GodotHub.Core.Data
 		/// </summary>
 		public static Version GetVersion(Release pRelease)
 		{
-			return (Version)pRelease.Name;
+			return (Version)pRelease.TagName;
 		}
 
 		/// <summary>

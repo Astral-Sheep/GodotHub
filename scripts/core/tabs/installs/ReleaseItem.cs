@@ -79,8 +79,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		public void Init(Release pRelease, int pIndex)
 		{
 			Index = pIndex;
-			assetNamePrefix = $"{ASSET_NAME_PREFIX}{pRelease.Name}";
-			Version lVersion = (Version)pRelease.Name;
+			assetNamePrefix = $"{ASSET_NAME_PREFIX}{pRelease.TagName}";
+			Version lVersion = (Version)pRelease.TagName;
 			Version = Source.GetVersion(pRelease);
 
 			installers = new List<Installer>();
