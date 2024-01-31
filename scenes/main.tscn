@@ -334,6 +334,7 @@ anchor_bottom = 0.5
 offset_top = -22.0
 offset_bottom = 23.0
 grow_horizontal = 0
+focus_mode = 0
 theme = ExtResource("7_le08s")
 text = "Add"
 
