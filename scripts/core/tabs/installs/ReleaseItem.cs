@@ -203,12 +203,6 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 					if (first >= lFile.Path.Length)
 						continue;
-					
-					Debugger.LogMessage(
-						"--------------------\n" +
-						$"{lFile.Path[first..]}\n" +
-						$"{GetExecutableName()}"
-					);
 
 					return lFile.Path[first..] == GetExecutableName();
 				}
