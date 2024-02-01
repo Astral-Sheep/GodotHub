@@ -559,11 +559,12 @@ offset_top = 100.0
 offset_right = -10.0
 offset_bottom = 250.0
 grow_horizontal = 2
+theme_override_constants/separation = 6
 
 [node name="ProjectsButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
 light_mask = 0
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_vertical = 0
 focus_mode = 0
 toggle_mode = true
 button_pressed = true
@@ -575,7 +576,7 @@ text = "Projects"
 [node name="InstallsButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
 light_mask = 0
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_vertical = 0
 focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("3_tsmd8")
@@ -586,7 +587,7 @@ text = "Installs"
 [node name="DocumentationButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
 light_mask = 0
 layout_mode = 2
-size_flags_vertical = 6
+size_flags_vertical = 0
 focus_mode = 0
 toggle_mode = true
 button_group = ExtResource("3_tsmd8")
