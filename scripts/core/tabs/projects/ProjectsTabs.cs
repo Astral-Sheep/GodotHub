@@ -28,7 +28,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 		[Export] protected SortToggle versionButton;
 
 		protected List<ProjectItem> items = new List<ProjectItem>();
-		protected Comparison<ProjectItem> currentComparison;
+		protected Comparison<ProjectItem> currentComparison = Comparer.CompareTimes;
 
 		public override void _Ready()
 		{
@@ -40,6 +40,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 				CreateItem(lProjects[i]);
 			}
 
+			Sort();
+			
 			favoriteButton.Toggled += OnFavoriteToggled;
 			nameButton.CustomToggled += OnNameToggled;
 			dateButton.CustomToggled += OnDateToggled;

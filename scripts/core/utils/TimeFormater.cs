@@ -4,91 +4,71 @@ namespace Com.Astral.GodotHub.Core.Utils
 {
 	public static class TimeFormater
 	{
+		private const string YEAR = "year";
+		private const string MONTH = "month";
+		private const string DAY = "day";
+		private const string HOUR = "hour";
+		private const string MINUTE = "minute";
+		private const string SECOND = "second";
+		private const string NOW = "Now";
+		
 		public static string Format(DateTime pTime)
 		{
 			DateTime lCurrentTime = DateTime.UtcNow;
 			TimeSpan lDifferenceSpan = lCurrentTime - pTime;
 
-			//To refactor: I don't think it needs an explanation of why
-			if (pTime.Year < lCurrentTime.Year)
+			// Basic comparisons
+			if (lDifferenceSpan.TotalSeconds < 1d)
 			{
-				int lDifference = lCurrentTime.Year - pTime.Year;
+				return NOW;
+			}
 
-				if (lDifference == 1 && lCurrentTime.Month < pTime.Month)
-				{
-					return FormatInternal(pTime.Month - lCurrentTime.Month, "month");
-				}
-				else
-				{
-					return FormatInternal(lDifference, "year");
-				}
-			}
-			else if (pTime.Month < lCurrentTime.Month)
+			if (lDifferenceSpan.TotalMinutes < 1d)
 			{
-				int lDifference = lCurrentTime.Month - pTime.Month;
+				return FormatInternal((int)Math.Floor(lDifferenceSpan.TotalSeconds), SECOND);
+			}
 
-				if (lDifference == 1 && lCurrentTime.Day < pTime.Day)
-				{
-					return FormatInternal(lDifferenceSpan.Days, "day");
-				}
-				else
-				{
-					return FormatInternal(lDifference, "month");
-				}
-			}
-			else if (pTime.Day < lCurrentTime.Day)
+			if (lDifferenceSpan.TotalHours < 1d)
 			{
-				if (lDifferenceSpan.TotalHours < 24)
-				{
-					return FormatInternal(lDifferenceSpan.Hours, "hour");
-				}
-				else
-				{
-					return FormatInternal(lDifferenceSpan.Days, "day");
-				}
+				return FormatInternal((int)Math.Floor(lDifferenceSpan.TotalMinutes), MINUTE);
 			}
-			else if (pTime.Hour < lCurrentTime.Hour)
-			{
-				if (lDifferenceSpan.TotalMinutes < 60)
-				{
-					return FormatInternal(lDifferenceSpan.Minutes, "minute");
-				}
-				else
-				{
-					return FormatInternal(lDifferenceSpan.Hours, "hour");
-				}
-			}
-			else if (pTime.Minute < lCurrentTime.Minute)
-			{
-				if (lDifferenceSpan.TotalSeconds < 60)
-				{
-					return FormatInternal(lDifferenceSpan.Seconds, "second");
-				}
-				else
-				{
-					return FormatInternal(lDifferenceSpan.Minutes, "minute");
-				}
-			}
-			else if (pTime.Second < lCurrentTime.Second)
-			{
-				if (lDifferenceSpan.TotalSeconds < 1)
-				{
-					return "Now";
-				}
-				else
-				{
-					return FormatInternal(lDifferenceSpan.Seconds, "second");
 
-				}
-			}
-			else
+			if (lDifferenceSpan.TotalDays < 1d)
 			{
-				return "Now";
+				return FormatInternal((int)Math.Floor(lDifferenceSpan.TotalHours), HOUR);
 			}
+
+			// Comparisons that need more information on the date of the year
+			int lYearDiff = (int)Math.Floor(lDifferenceSpan.TotalDays / 365.2425);
+
+			if (lYearDiff > 0)
+			{
+				return FormatInternal(lYearDiff, YEAR);
+			}
+			
+			if (lCurrentTime.Month == pTime.Month)
+			{
+				return FormatInternal((int)Math.Floor(lDifferenceSpan.TotalDays), DAY);
+			}
+			
+			int lMonthDiff = lCurrentTime.Month - pTime.Month;
+
+			if (lMonthDiff < 0)
+			{
+				lMonthDiff += 12;
+			}
+
+			if (lMonthDiff == 1 && lCurrentTime.Day < pTime.Day)
+			{
+				return FormatInternal((int)Math.Floor(lDifferenceSpan.TotalDays), DAY);
+			}
+
+			return FormatInternal(lMonthDiff, MONTH);
 		}
-
+		
 		private static string FormatInternal(int pValue, string pSuffix)
 		{
+			// Will need refactoring if localisation is added
 			return $"{pValue} {pSuffix}{(pValue > 1 ? "s" : "")} ago";
 		}
 	}
