@@ -1,11 +1,9 @@
 ﻿using Com.Astral.GodotHub.Core.Data;
 using Com.Astral.GodotHub.Core.Debug;
 using Com.Astral.GodotHub.Core.Utils;
-using Godot;
 using System;
 using System.Collections.Generic;
 using System.IO;
-
 using Error = Com.Astral.GodotHub.Core.Utils.Error;
 using FileAccess = Godot.FileAccess;
 using Version = Com.Astral.GodotHub.Core.Data.Version;
@@ -29,12 +27,11 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 		/// <param name="pDirectory">Path to the directory of the project</param>
 		/// <param name="pVersion"><see cref="Version"/> of the project</param>
 		/// <param name="pRenderMode"><see cref="RenderMode"/> of the project</param>
-		/// <param name="pVersionningMode"><see cref="VersionningMode"/> of the project</param>
-		public static void CreateProject(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
+		/// <param name="pVersioningMode"><see cref="VersioningMode"/> of the project</param>
+		public static void CreateProject(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersioningMode pVersioningMode)
 		{
 			if (pVersion.major < 4 != (((int)pRenderMode & (int)RenderMode.Config5) == 0))
 			{
-				//Debugger.LogMessage($"{pVersion.major < 4} == {((int)pRenderMode & (int)RenderMode.Config5) == 0}");
 				Debugger.LogError($"Invalid version/render mode combination: {pVersion} | {pRenderMode}");
 				return;
 			}
@@ -57,11 +54,11 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 
 			if (pVersion.major < 4)
 			{
-				lError = CreateProjectInternal4(pName, pDirectory, pVersion, pRenderMode, pVersionningMode);
+				lError = CreateProjectInternal4(pName, pDirectory, pVersion, pRenderMode, pVersioningMode);
 			}
 			else
 			{
-				lError = CreateProjectInternal5(pName, pDirectory, pVersion, pRenderMode, pVersionningMode);
+				lError = CreateProjectInternal5(pName, pDirectory, pVersion, pRenderMode, pVersioningMode);
 			}
 
 			if (!lError.Ok)
@@ -80,7 +77,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			}
 		}
 
-		private static Error CreateProjectInternal5(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
+		private static Error CreateProjectInternal5(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersioningMode pVersioningMode)
 		{
 			try
 			{
@@ -129,7 +126,14 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 				return new Error(lException);
 			}
 
-			if (pVersionningMode != VersionningMode.None)
+			Error lError = CopyIcon(pDirectory);
+
+			if (!lError.Ok)
+			{
+				return lError;
+			}
+			
+			if (pVersioningMode != VersioningMode.None)
 			{
 				return CreateVersionningFiles(pDirectory, ".godot/");
 			}
@@ -137,7 +141,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			return new Error();
 		}
 
-		private static Error CreateProjectInternal4(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
+		private static Error CreateProjectInternal4(string pName, string pDirectory, Version pVersion, RenderMode pRenderMode, VersioningMode pVersioningMode)
 		{
 			try
 			{
@@ -196,7 +200,14 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 				return new Error(lException);
 			}
 
-			if (pVersionningMode != VersionningMode.None)
+			Error lError = CopyIcon(pDirectory);
+
+			if (!lError.Ok)
+			{
+				return lError;
+			}
+
+			if (pVersioningMode != VersioningMode.None)
 			{
 				return CreateVersionningFiles(pDirectory, ".import/", ".mono/");
 			}
@@ -245,18 +256,24 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 		}
 
 		/// <summary>
-		/// To do: save a .svg file containing the godot default icon
+		/// Create a copy of the default project icon at <paramref name="pProjectPath"/>
 		/// </summary>
-		public static void AddIcon(string pProjectPath)
+		private static Error CopyIcon(string pProjectPath)
 		{
-			CompressedTexture2D lIcon = ResourceLoader.Load<CompressedTexture2D>("res://icon.svg");
-			//lIcon.TakeOverPath(pProjectPath + "/icon.png");
-			Stream lFile = File.OpenWrite($"{pProjectPath}/icon.png");
-			lFile.Write(lIcon.GetImage().GetData());
-			lFile.Close();
-			//ResourceSaver.Save(lIcon, $"{pProjectPath}/icon.svg", ResourceSaver.SaverFlags.None);
-			//FileAccess lFile = FileAccess.Open($"{pProjectPath}/icon.svg", FileAccess.ModeFlags.Write);
-			//File.Copy(ProjectSettings.GlobalizePath("res://icon.svg"), $"{pProjectPath}/icon.svg");
+			try
+			{
+				using (FileStream lFStream = new FileStream($"{pProjectPath}/icon.svg", FileMode.Create))
+				{
+					lFStream.Write(FileAccess.GetFileAsBytes("res://icon.svg"));
+					lFStream.Close();
+				}
+			}
+			catch (Exception lException)
+			{
+				return new Error(lException);
+			}
+
+			return new Error();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 using Com.Astral.GodotHub.Core.Data;
 using Godot;
 using System;
-
+using Com.Astral.GodotHub.Core.Utils;
 using Colors = Com.Astral.GodotHub.Core.Utils.Colors;
 
 namespace Com.Astral.GodotHub.Core.Debug
@@ -117,7 +117,7 @@ namespace Com.Astral.GodotHub.Core.Debug
 
 		private static string FormatMessage(string pMessage, Color pColor)
 		{
-			return $"[color=#{Colors.ToHexa(pColor)}]{pMessage}[/color]\n";
+			return BBCodeT.GetColoredText(pMessage, pColor);
 		}
 	}
 }

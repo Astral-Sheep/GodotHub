@@ -99,10 +99,9 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			lDialog.Confirmed += OnProjectConfirmed;
 		}
 
-		protected void OnProjectConfirmed(string pName, string pPath, Version pVersion, RenderMode pRenderMode, VersionningMode pVersionningMode)
+		protected void OnProjectConfirmed(string pName, string pPath, Version pVersion, RenderMode pRenderMode, VersioningMode pVersioningMode)
 		{
-			ProjectCreator.CreateProject(pName, pPath, pVersion, pRenderMode, pVersionningMode);
-			//ProjectCreator.AddIcon("C:/Users/thoma/Desktop");
+			ProjectCreator.CreateProject(pName, pPath, pVersion, pRenderMode, pVersioningMode);
 		}
 
 		protected void OnAddPressed()

@@ -3,10 +3,10 @@
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_554c5"]
 [ext_resource type="Script" path="res://scripts/core/tabs/projects/NewProjectDialog.cs" id="2_sd55l"]
 
-[node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("projectName", "projectDirectory", "folderCreateButton", "browseButton", "versionOption", "renderOption", "versionningOption")]
+[node name="NewProjectDialog" type="ConfirmationDialog" node_paths=PackedStringArray("projectName", "projectDirectory", "folderCreateButton", "browseButton", "nameErrorLabel", "pathErrorLabel", "versionOption", "renderOption", "versioningOption")]
 transparent_bg = true
 title = "Create new project"
-size = Vector2i(900, 550)
+size = Vector2i(900, 558)
 visible = true
 theme = ExtResource("1_554c5")
 script = ExtResource("2_sd55l")
@@ -14,9 +14,11 @@ projectName = NodePath("Content/Name/Name/LineEdit")
 projectDirectory = NodePath("Content/Path/Name/LineEdit")
 folderCreateButton = NodePath("Content/Name/Name/Button")
 browseButton = NodePath("Content/Path/Name/Button")
+nameErrorLabel = NodePath("Content/Name/NameErrorLabel")
+pathErrorLabel = NodePath("Content/Path/PathErrorLabel")
 versionOption = NodePath("Content/Options/Version/OptionButton")
 renderOption = NodePath("Content/Options/Renderer/OptionButton")
-versionningOption = NodePath("Content/VersionningOption/OptionButton")
+versioningOption = NodePath("Content/VersionningOption/OptionButton")
 
 [node name="Content" type="VBoxContainer" parent="."]
 anchors_preset = 15
@@ -24,8 +26,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = 15.0
-offset_right = 880.0
-offset_bottom = 475.0
+offset_right = -20.0
+offset_bottom = -75.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -34,7 +36,6 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="Content/Name"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 text = "Project Name:"
 
 [node name="Name" type="HBoxContainer" parent="Content/Name"]
@@ -46,7 +47,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 focus_mode = 1
-text = "xXxProjectName69xXx"
+text = "MyProject"
 placeholder_text = "Folder path"
 virtual_keyboard_enabled = false
 
@@ -56,12 +57,22 @@ layout_mode = 2
 focus_mode = 0
 text = "Create Folder"
 
+[node name="NameErrorLabel" type="RichTextLabel" parent="Content/Name"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/bold_font_size = 18
+theme_override_font_sizes/italics_font_size = 18
+theme_override_font_sizes/bold_italics_font_size = 18
+theme_override_font_sizes/mono_font_size = 18
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+
 [node name="Path" type="VBoxContainer" parent="Content"]
 layout_mode = 2
 
 [node name="Label" type="Label" parent="Content/Path"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 18
 text = "Project Path:"
 
 [node name="Name" type="HBoxContainer" parent="Content/Path"]
@@ -82,6 +93,17 @@ custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 focus_mode = 0
 text = "Browse"
+
+[node name="PathErrorLabel" type="RichTextLabel" parent="Content/Path"]
+layout_mode = 2
+theme_override_font_sizes/normal_font_size = 18
+theme_override_font_sizes/bold_font_size = 18
+theme_override_font_sizes/italics_font_size = 18
+theme_override_font_sizes/bold_italics_font_size = 18
+theme_override_font_sizes/mono_font_size = 18
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
 
 [node name="Space" type="Control" parent="Content"]
 custom_minimum_size = Vector2(0, 25)

@@ -4,7 +4,9 @@ using Com.Astral.GodotHub.Core.Utils;
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Colors = Com.Astral.GodotHub.Core.Utils.Colors;
 using Version = Com.Astral.GodotHub.Core.Data.Version;
 
 namespace Com.Astral.GodotHub.Core.Tabs.Projects
@@ -13,14 +15,24 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 	{
 		/// <summary>
 		/// Event called when the ok button is pressed
+		/// <code>
+		/// string:	Project name<br/>
+		/// string: Project directory<br/>
+		/// Version: Project engine version<br/>
+		/// RenderMode: Project render mode (can change depending on the version)<br/>
+		/// VersioningMode: Project version control type<br/>
+		/// </code>
 		/// </summary>
-		public new event Action<string, string, Version, RenderMode, VersionningMode> Confirmed;
+		public new event Action<string, string, Version, RenderMode, VersioningMode> Confirmed;
 
 		[ExportGroup("Project name")]
 		[Export] protected LineEdit projectName;
 		[Export] protected LineEdit projectDirectory;
 		[Export] protected Button folderCreateButton;
 		[Export] protected Button browseButton;
+		[ExportSubgroup("Error handling")]
+		[Export] protected RichTextLabel nameErrorLabel;
+		[Export] protected RichTextLabel pathErrorLabel;
 
 		[ExportGroup("Project version")]
 		[Export] protected OptionButton versionOption;
@@ -28,8 +40,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 		[ExportGroup("Renderer options")]
 		[Export] protected OptionButton renderOption;
 
-		[ExportGroup("Versionning options")]
-		[Export] protected OptionButton versionningOption;
+		[ExportGroup("Versioning options")]
+		[Export] protected OptionButton versioningOption;
 
 		protected int currentMajor;
 
@@ -63,9 +75,9 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 				GetOkButton().Disabled = true;
 			}
 
-			versionningOption.AddItem(VersionningMode.None.ToString(), (int)VersionningMode.None);
-			versionningOption.AddItem(VersionningMode.Git.ToString(), (int)VersionningMode.Git);
-			versionningOption.Selected = 0;
+			versioningOption.AddItem(VersioningMode.None.ToString(), (int)VersioningMode.None);
+			versioningOption.AddItem(VersioningMode.Git.ToString(), (int)VersioningMode.Git);
+			versioningOption.Selected = 0;
 
 			projectName.TextChanged += OnNameTextChanged;
 			projectDirectory.TextChanged += OnDirectoryTextChanged;
@@ -83,29 +95,36 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 				projectDirectory.Text,
 				(Version)versionOption.Text,
 				GetRenderMode(),
-				(VersionningMode)versionningOption.Selected
+				(VersioningMode)versioningOption.Selected
 			);
 		}
 
+		[SuppressMessage("ReSharper", "ConvertIfStatementToConditionalTernaryExpression")]
 		protected void OnNameTextChanged(string pName)
 		{
-			//To do: add RichTextLabel to log this on dialog popup
 			if (string.IsNullOrEmpty(pName))
 			{
-				Debugger.LogError("Invalid name: empty name");
+				nameErrorLabel.Text = BBCodeT.GetColoredText("Invalid name: empty name", Colors.Singleton.Red);
+			}
+			else
+			{
+				nameErrorLabel.Text = "";
 			}
 		}
 
 		protected void OnDirectoryTextChanged(string pPath)
 		{
-			//To do: add RichTextLabel to log this on dialog popup
 			if (!Directory.Exists(pPath))
 			{
-				Debugger.LogError("Invalid path");
+				pathErrorLabel.Text = BBCodeT.GetColoredText("Given folder does not exist", Colors.Singleton.Red);
 			}
 			else if (Directory.GetFiles(pPath).Length > 0)
 			{
-				Debugger.LogWarning("Non empty directory");
+				pathErrorLabel.Text = BBCodeT.GetColoredText("Given folder is not empty", Colors.Singleton.Yellow);
+			}
+			else
+			{
+				pathErrorLabel.Text = "";
 			}
 		}
 
@@ -117,7 +136,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			{
 				ExceptionHandler.Singleton.LogMessage(
 					$"{projectDirectory.Text} directory already exists",
-					$"Directory already exists",
+					"Directory already exists",
 					ExceptionHandler.ExceptionGravity.Error
 				);
 				Debugger.LogError($"{projectDirectory.Text} directory already exists");

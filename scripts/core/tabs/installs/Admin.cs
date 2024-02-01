@@ -174,7 +174,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				StartAdminProcess(adminDeleteProcessPath, lArguments).WaitForExit();
 			}
 #if GODOT_WINDOWS
-			catch (Win32Exception lException)
+			catch (Win32Exception)
 			{
 #if DEBUG
 				ExceptionHandler.Singleton.LogMessage(

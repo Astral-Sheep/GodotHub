@@ -1,6 +1,6 @@
 ﻿namespace Com.Astral.GodotHub.Core.Tabs.Projects
 {
-	public enum VersionningMode
+	public enum VersioningMode
 	{
 		None,
 		Git,
