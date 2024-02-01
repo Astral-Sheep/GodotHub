@@ -117,7 +117,7 @@ namespace Com.Astral.GodotHub.Core.Debug
 
 		private static string FormatMessage(string pMessage, Color pColor)
 		{
-			return BBCodeT.GetColoredText(pMessage, pColor);
+			return BBCodeT.GetColoredText(pMessage, pColor) + '\n';
 		}
 	}
 }
