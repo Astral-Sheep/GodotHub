@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
 [ext_resource type="Theme" uid="uid://owhv26bfo2cv" path="res://resources/themes/star_btn.theme" id="9_ol1lc"]
 [ext_resource type="PackedScene" uid="uid://3ek1c5uks77u" path="res://scenes/installs/installer.tscn" id="10_e5igd"]
-[ext_resource type="PackedScene" path="res://scenes/sort_button.tscn" id="10_h7r2s"]
+[ext_resource type="PackedScene" uid="uid://dcyk3xxppgacf" path="res://scenes/sort_button.tscn" id="10_h7r2s"]
 [ext_resource type="PackedScene" uid="uid://8wgykcf75ex1" path="res://scenes/installs/install_item.tscn" id="10_ty7wm"]
 [ext_resource type="PackedScene" uid="uid://dpptd81s7nml2" path="res://scenes/installs/subbutton.tscn" id="12_3gmeu"]
 [ext_resource type="Script" path="res://scripts/core/tabs/installs/InstallsTab.cs" id="13_haedx"]

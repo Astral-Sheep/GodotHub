@@ -14,6 +14,7 @@ namespace Com.Astral.GodotHub.Core.Tabs
 		public override void _Ready()
 		{
 			arrowRect.Visible = false;
+			arrowRect.PivotOffset = arrowRect.Size / 2f;
 			Toggled += OnToggled;
 		}
 
@@ -41,8 +42,8 @@ namespace Com.Astral.GodotHub.Core.Tabs
 		protected void OnToggled(bool pToggled)
 		{
 			SetPressedNoSignal(true);
-			arrowRect.Visible = true;
 			toggled = !toggled;
+			arrowRect.Visible = true;
 			arrowRect.Rotation = toggled ? 0f : Mathf.Pi;
 			CustomToggled?.Invoke(toggled);
 		}

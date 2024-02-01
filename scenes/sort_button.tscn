@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=4 format=3 uid="uid://dcyk3xxppgacf"]
 
 [ext_resource type="Theme" uid="uid://dpsfmlg5cj4ka" path="res://resources/themes/sort_btn.theme" id="1_0gx4y"]
 [ext_resource type="Script" path="res://scripts/core/tabs/SortToggle.cs" id="2_hv8wg"]
@@ -25,6 +25,5 @@ anchor_bottom = 1.0
 offset_left = 55.0
 offset_right = 70.0
 grow_vertical = 2
-pivot_offset = Vector2(7.5, 12.5)
 texture = ExtResource("3_0pcu5")
 stretch_mode = 5
