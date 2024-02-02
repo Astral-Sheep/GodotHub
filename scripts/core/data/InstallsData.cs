@@ -130,7 +130,7 @@ namespace Com.Astral.GodotHub.Core.Data
 							$"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one",
 							"Lesser version passed"
 						);
-						Debugger.PrintWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
+						Debugger.LogWarning($"Less advanced version passed in method {nameof(AddVersion)}, keeping the current one");
 						return false;
 					}
 #endif
