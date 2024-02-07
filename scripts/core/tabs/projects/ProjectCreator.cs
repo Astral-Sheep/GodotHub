@@ -12,6 +12,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 {
 	public static class ProjectCreator
 	{
+		private const string ICON_PATH = "assets/default_icon.svg";
+		
 		private static readonly Dictionary<RenderMode, (string feature, string method)> RenderModes = new() {
 			{ RenderMode.OpenGL2, ("", "GLES2") },
 			{ RenderMode.OpenGL3, ("", "GLES3") },
@@ -264,7 +266,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			{
 				using (FileStream lFStream = new FileStream($"{pProjectPath}/icon.svg", FileMode.Create))
 				{
-					lFStream.Write(FileAccess.GetFileAsBytes("res://icon.svg"));
+					lFStream.Write(FileAccess.GetFileAsBytes($"res://{ICON_PATH}"));
 					lFStream.Close();
 				}
 			}

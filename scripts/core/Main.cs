@@ -2,12 +2,17 @@ using Com.Astral.GodotHub.Core.Data;
 using Com.Astral.GodotHub.Core.Debug;
 using Godot;
 using System;
+
 using Error = Com.Astral.GodotHub.Core.Utils.Error;
+using GError = Godot.Error;
 
 namespace Com.Astral.GodotHub.Core
 {
 	public partial class Main : Node
 	{
+		private const string CURRENT_VERSION = "0.1.3";
+		private static readonly Vector2I DefaultWindowSize = new Vector2I(1100, 600);
+		
 		public static Main Instance { get; private set; }
 
 		public event Action Initialized;
@@ -26,10 +31,24 @@ namespace Com.Astral.GodotHub.Core
 			Instance = this;
 		}
 
+		public override void _EnterTree()
+		{
+			DisplayServer.WindowSetMinSize(DefaultWindowSize);
+
+			// ConfigFile lExportPresets = new ConfigFile();
+			// lExportPresets.Load("res://export_presets.cfg");
+			// string lAppVersion = (string)lExportPresets.GetValue("preset.0.options", "application/product_version", "0.0.0.0");
+			// lAppVersion = lAppVersion[..lAppVersion.RFind(".")];
+			
+			DisplayServer.WindowSetTitle(
+				$"{ProjectSettings.GetSetting("application/config/name", "Godot Hub")}" +
+				" " +
+				$"{GetProductVersion()}"
+			);
+		}
+
 		public override void _Ready()
 		{
-			//Hardcoded values because they're completely arbitrary
-			DisplayServer.WindowSetMinSize(new Vector2I(1100, 600));
 			Init();
 		}
 
@@ -54,6 +73,20 @@ namespace Com.Astral.GodotHub.Core
 			}
 
 			Initialized?.Invoke();
+		}
+
+		protected string GetProductVersion()
+		{
+			ConfigFile lExportPresets = new ConfigFile();
+			GError lError = lExportPresets.Load("res://export_presets.cfg");
+
+			if (lError != GError.Ok)
+			{
+				return "0.0.0";
+			}
+
+			string lVersion = (string)lExportPresets.GetValue("preset.0.options", "application/product_version", "0.0.0.0");
+			return lVersion[..lVersion.RFind(".")];
 		}
 
 		public FileDialog InstantiateFileDialog(Node pParent = null, bool pAutoFree = true)
