@@ -50,6 +50,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		{
 			install = pInstall;
 			pathLabel.Text = install.Path;
+			pathLabel.TooltipText = install.Path;
 			favoriteToggle.ButtonPressed = install.IsFavorite;
 			favoriteToggle.Toggled += OnFavoriteToggled;
 			IsFavorite = install.IsFavorite;

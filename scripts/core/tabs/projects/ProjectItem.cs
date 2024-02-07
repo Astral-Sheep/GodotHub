@@ -71,6 +71,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			project = pProject;
 			projectPath = pProject.Path + "/project.godot";
 			pathLabel.Text = pProject.Path;
+			pathLabel.TooltipText = pProject.Path;
 
 			ConfigFile lProject = new ConfigFile();
 			Error lError = lProject.Load(projectPath);

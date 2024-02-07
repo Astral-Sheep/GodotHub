@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- Tooltip on project path and version path
 - Process elevation for engine installation and deletion on windows
 - "Update Repo" button to check for new releases without restarting the application
 - Icon creation when creating a new project
