@@ -1,6 +1,6 @@
 ﻿#if GODOT_WINDOWS
 
-using Com.Astral.GodotHub.AdminInstall;
+using Com.Astral.GodotHub.Installer;
 using Com.Astral.GodotHub.Core.Debug;
 using System;
 using System.ComponentModel;
@@ -22,17 +22,17 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 	/// </summary>
 	public static class Admin
 	{
-		private static readonly string adminInstallProcessPath = @$"{AppDomain.CurrentDomain.BaseDirectory}\AdminInstall.exe";
-		private static readonly string adminDeleteProcessPath = @$"{AppDomain.CurrentDomain.BaseDirectory}\AdminDelete.exe";
+		private static readonly string adminInstallProcessPath = @$"{AppDomain.CurrentDomain.BaseDirectory}\GodotInstaller.exe";
+		private static readonly string uninstallerProcessPath = @$"{AppDomain.CurrentDomain.BaseDirectory}\GodotUninstaller.exe";
 		private static Mutex mutex;
 		private static Process adminProcess;
 		private static bool extracted = false;
 
 		static Admin()
 		{
-			MemoryMappedFile.CreateNew(AdminInstallConstants.ZIP_MAP_NAME, 4096);
-			MemoryMappedFile.CreateNew(AdminInstallConstants.EXTRACT_MAP_NAME, 4096);
-			MemoryMappedFile.CreateNew(AdminInstallConstants.JUMP_MAP_NAME, 1);
+			MemoryMappedFile.CreateNew(InstallerConstants.ZIP_MAP_NAME, 4096);
+			MemoryMappedFile.CreateNew(InstallerConstants.EXTRACT_MAP_NAME, 4096);
+			MemoryMappedFile.CreateNew(InstallerConstants.JUMP_MAP_NAME, 1);
 		}
 
 		public static bool Download(HttpContent pContent, string pZipPath)
@@ -45,16 +45,15 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 			try
 			{
-				// HttpContent
 				Stream lContent = pContent.ReadAsStream();
 				byte[] lContentBytes = new byte[lContent.Length];
 				lContent.Read(lContentBytes, 0, (int)lContent.Length);
 				lContent.Close();
 
-				WriteBytesInMap(AdminInstallConstants.DOWNLOAD_MAP_NAME, lContentBytes);
-				WriteStringInMap(AdminInstallConstants.ZIP_MAP_NAME, pZipPath);
+				WriteBytesInMap(InstallerConstants.DOWNLOAD_MAP_NAME, lContentBytes);
+				WriteStringInMap(InstallerConstants.ZIP_MAP_NAME, pZipPath);
 
-				adminProcess = StartAdminInstallProcess(AdminInstallConstants.WRITE_ARGUMENT);
+				adminProcess = StartAdminInstallProcess(InstallerConstants.WRITE_ARGUMENT);
 				Thread.Sleep(1000);
 			}
 			catch (Win32Exception)
@@ -92,8 +91,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			{
 				try
 				{
-					WriteStringInMap(AdminInstallConstants.ZIP_MAP_NAME, pZipPath);
-					adminProcess = StartAdminInstallProcess(AdminInstallConstants.EXTRACT_ARGUMENT);
+					WriteStringInMap(InstallerConstants.ZIP_MAP_NAME, pZipPath);
+					adminProcess = StartAdminInstallProcess(InstallerConstants.EXTRACT_ARGUMENT);
 					Thread.Sleep(1000);
 				}
 				catch (Win32Exception)
@@ -121,7 +120,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				}
 			}
 
-			WriteStringInMap(AdminInstallConstants.EXTRACT_MAP_NAME, pExtractDirectory);
+			WriteStringInMap(InstallerConstants.EXTRACT_MAP_NAME, pExtractDirectory);
 			SetJumpMap(JumpInstruction.None);
 
 			mutex.ReleaseMutex();
@@ -150,8 +149,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			if (adminProcess == null)
 				return;
 
-			WriteStringInMap(AdminInstallConstants.ZIP_MAP_NAME, pZipPath);
-			WriteStringInMap(AdminInstallConstants.EXTRACT_MAP_NAME, pExecutablePath);
+			WriteStringInMap(InstallerConstants.ZIP_MAP_NAME, pZipPath);
+			WriteStringInMap(InstallerConstants.EXTRACT_MAP_NAME, pExecutablePath);
 			SetJumpMap(JumpInstruction.Cancel);
 			mutex.ReleaseMutex();
 			mutex.WaitOne();
@@ -171,7 +170,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 			try
 			{
-				StartAdminProcess(adminDeleteProcessPath, lArguments).WaitForExit();
+				StartAdminProcess(uninstallerProcessPath, lArguments).WaitForExit();
 			}
 #if GODOT_WINDOWS
 			catch (Win32Exception)
@@ -228,7 +227,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		private static Process StartAdminInstallProcess(string pArgument)
 		{
 			extracted = false;
-			mutex = new Mutex(true, AdminInstallConstants.MUTEX_NAME);
+			mutex = new Mutex(true, InstallerConstants.MUTEX_NAME);
 			return StartAdminProcess(adminInstallProcessPath, pArgument);
 		}
 
@@ -259,7 +258,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 		private static void SetJumpMap(JumpInstruction pInstruction)
 		{
-			WriteBytesInMap(AdminInstallConstants.JUMP_MAP_NAME, new byte[] { (byte)pInstruction });
+			WriteBytesInMap(InstallerConstants.JUMP_MAP_NAME, new byte[] { (byte)pInstruction });
 		}
 
 		private static void WriteStringInMap(string pMapName, string pString)

@@ -1,6 +1,6 @@
-﻿namespace Com.Astral.GodotHub.AdminDelete
+﻿namespace Com.Astral.GodotHub.Uninstaller
 {
-	internal class DeleteProgram
+	internal class UninstallProgram
 	{
 		public static void Main(string[] pArgs)
 		{

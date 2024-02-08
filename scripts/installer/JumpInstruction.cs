@@ -1,4 +1,4 @@
-﻿namespace Com.Astral.GodotHub.AdminInstall
+﻿namespace Com.Astral.GodotHub.Installer
 {
 	public enum JumpInstruction : byte
 	{

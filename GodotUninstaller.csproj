@@ -1,0 +1,53 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <StartupObject>Com.Astral.GodotHub.Uninstaller.UninstallProgram</StartupObject>
+    <RootNamespace>Com.Astral.GodotHub.Uninstaller</RootNamespace>
+    <ApplicationManifest>godot_uninstaller.manifest</ApplicationManifest>
+    <BaseOutputPath>bin\GodotUninstaller</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\GodotUninstaller</BaseIntermediateOutputPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="assets\**" />
+    <Compile Remove="bin\**" />
+    <Compile Remove="obj\**" />
+    <Compile Remove="resources\**" />
+    <Compile Remove="scenes\**" />
+    <Compile Remove="scripts\core\**" />
+    <Compile Remove="scripts\installer\**" />
+    <EmbeddedResource Remove="assets\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <EmbeddedResource Remove="resources\**" />
+    <EmbeddedResource Remove="scenes\**" />
+    <EmbeddedResource Remove="scripts\core\**" />
+    <EmbeddedResource Remove="scripts\installer\**" />
+    <None Remove="assets\**" />
+    <None Remove="bin\**" />
+    <None Remove="obj\**" />
+    <None Remove="resources\**" />
+    <None Remove="scenes\**" />
+    <None Remove="scripts\core\**" />
+    <None Remove="scripts\installer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove=".gitattributes" />
+    <None Remove=".gitignore" />
+    <None Remove="CHANGELOG.md" />
+    <None Remove="export_presets.cfg" />
+    <None Remove="godot_installer.manifest" />
+    <None Remove="icon.ico" />
+    <None Remove="icon.svg" />
+    <None Remove="icon.svg.import" />
+    <None Remove="LICENSE.md" />
+    <None Remove="project.godot" />
+    <None Remove="README.md" />
+  </ItemGroup>
+
+</Project>

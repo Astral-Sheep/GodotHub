@@ -2,7 +2,7 @@
 using System.IO.MemoryMappedFiles;
 using System.Text;
 
-namespace Com.Astral.GodotHub.AdminInstall
+namespace Com.Astral.GodotHub.Installer
 {
 	internal static class AdminInstaller
 	{
@@ -10,7 +10,7 @@ namespace Com.Astral.GodotHub.AdminInstall
 		{
 			byte[] lContent;
 
-			using (MemoryMappedFile lMMFile = MemoryMappedFile.OpenExisting(AdminInstallConstants.DOWNLOAD_MAP_NAME))
+			using (MemoryMappedFile lMMFile = MemoryMappedFile.OpenExisting(InstallerConstants.DOWNLOAD_MAP_NAME))
 			{
 				using (MemoryMappedViewStream lMMVStream = lMMFile.CreateViewStream())
 				{
@@ -69,7 +69,7 @@ namespace Com.Astral.GodotHub.AdminInstall
 
 		internal static byte Jump()
 		{
-			using (MemoryMappedFile lMMFile = MemoryMappedFile.OpenExisting(AdminInstallConstants.JUMP_MAP_NAME))
+			using (MemoryMappedFile lMMFile = MemoryMappedFile.OpenExisting(InstallerConstants.JUMP_MAP_NAME))
 			{
 				using (MemoryMappedViewStream lMMVStream = lMMFile.CreateViewStream())
 				{
@@ -82,12 +82,12 @@ namespace Com.Astral.GodotHub.AdminInstall
 
 		private static string GetZipPath()
 		{
-			return GetStringFromMap(AdminInstallConstants.ZIP_MAP_NAME);
+			return GetStringFromMap(InstallerConstants.ZIP_MAP_NAME);
 		}
 
 		private static string GetExtractPath()
 		{
-			return GetStringFromMap(AdminInstallConstants.EXTRACT_MAP_NAME);
+			return GetStringFromMap(InstallerConstants.EXTRACT_MAP_NAME);
 		}
 
 		private static string GetStringFromMap(string pMapName)

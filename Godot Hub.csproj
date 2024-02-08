@@ -16,18 +16,18 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="obj\**" />
-    <Compile Remove="scripts\admin_delete\**" />
-    <Compile Remove="scripts\admin_install\**" />
+    <Compile Remove="scripts\installer\**" />
+    <Compile Remove="scripts\uninstaller\**" />
     <EmbeddedResource Remove="obj\**" />
-    <EmbeddedResource Remove="scripts\admin_delete\**" />
-    <EmbeddedResource Remove="scripts\admin_install\**" />
+    <EmbeddedResource Remove="scripts\installer\**" />
+    <EmbeddedResource Remove="scripts\uninstaller\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="newtonsoft.json" Version="13.0.3" />
     <PackageReference Include="Octokit" Version="7.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="AdminDelete.csproj" />
-    <ProjectReference Include="AdminInstall.csproj" />
+    <ProjectReference Include="GodotUninstaller.csproj" />
+    <ProjectReference Include="GodotInstaller.csproj" />
   </ItemGroup>
 </Project>

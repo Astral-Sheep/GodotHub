@@ -1,11 +1,11 @@
-﻿namespace Com.Astral.GodotHub.AdminInstall
+﻿namespace Com.Astral.GodotHub.Installer
 {
 	internal class InstallProgram
 	{
 		//arg[0] = --mode (--write_zip | --unzip)
 		public static void Main(string[] pArgs)
 		{
-			using (Mutex lMutex = Mutex.OpenExisting(AdminInstallConstants.MUTEX_NAME))
+			using (Mutex lMutex = Mutex.OpenExisting(InstallerConstants.MUTEX_NAME))
 			{
 				if (pArgs.Length == 0)
 				{
@@ -16,9 +16,9 @@
 
 				switch (pArgs[0])
 				{
-					case AdminInstallConstants.WRITE_ARGUMENT:
+					case InstallerConstants.WRITE_ARGUMENT:
 						goto WRITE;
-					case AdminInstallConstants.EXTRACT_ARGUMENT:
+					case InstallerConstants.EXTRACT_ARGUMENT:
 						goto EXTRACT;
 					default:
 						throw new ArgumentException($"Invalid mode given: {pArgs[0]}");

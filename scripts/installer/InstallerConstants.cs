@@ -1,6 +1,6 @@
-﻿namespace Com.Astral.GodotHub.AdminInstall
+﻿namespace Com.Astral.GodotHub.Installer
 {
-	public static class AdminInstallConstants
+	public static class InstallerConstants
 	{
 #if DEBUG
 		public const string MUTEX_NAME = "GodotHub-AdminMutex-Debug";

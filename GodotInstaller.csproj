@@ -5,13 +5,13 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>Com.Astral.GodotHub.AdminInstall.InstallProgram</StartupObject>
-    <ApplicationManifest>admin_install.manifest</ApplicationManifest>
-    <RootNamespace>Com.Astral.GodotHub.AdminInstall</RootNamespace>
+    <StartupObject>Com.Astral.GodotHub.Installer.InstallProgram</StartupObject>
+    <ApplicationManifest>godot_installer.manifest</ApplicationManifest>
+    <RootNamespace>Com.Astral.GodotHub.Installer</RootNamespace>
     <ProduceReferenceAssembly>True</ProduceReferenceAssembly>
     <SignAssembly>False</SignAssembly>
-    <BaseOutputPath>bin\AdminInstall</BaseOutputPath>
-    <BaseIntermediateOutputPath>obj\AdminInstall</BaseIntermediateOutputPath>
+    <BaseOutputPath>bin\GodotInstaller</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\GodotInstaller</BaseIntermediateOutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -27,12 +27,12 @@
   <ItemGroup>
 	<Compile Remove="bin\**" />
 	<Compile Remove="obj\**" />
-	<Compile Remove="scripts\admin_delete\**" />
 	<Compile Remove="scripts\core\**" />
+	<Compile Remove="scripts\uninstaller\**" />
 	<EmbeddedResource Remove="bin\**" />
 	<EmbeddedResource Remove="obj\**" />
-    <EmbeddedResource Remove="scripts\admin_delete\**" />
     <EmbeddedResource Remove="scripts\core\**" />
+    <EmbeddedResource Remove="scripts\uninstaller\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -41,10 +41,13 @@
 	<None Remove="obj\**" />
 	<None Remove="resources\**" />
 	<None Remove="scenes\**" />
+	<None Remove="scripts\uninstaller\**" />
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
-    <None Remove="admin_delete.manifest" />
+    <None Remove="CHANGELOG.md" />
     <None Remove="export_presets.cfg" />
+    <None Remove="godot_uninstaller.manifest" />
+    <None Remove="icon.ico" />
     <None Remove="icon.svg" />
     <None Remove="icon.svg.import" />
     <None Remove="LICENSE.md" />
