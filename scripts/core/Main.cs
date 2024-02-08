@@ -10,7 +10,7 @@ namespace Com.Astral.GodotHub.Core
 {
 	public partial class Main : Node
 	{
-		private const string CURRENT_VERSION = "0.1.3";
+		private const string CURRENT_VERSION = "0.1.4";
 		private static readonly Vector2I DefaultWindowSize = new Vector2I(1100, 600);
 		
 		public static Main Instance { get; private set; }
@@ -85,7 +85,15 @@ namespace Com.Astral.GodotHub.Core
 				return "0.0.0";
 			}
 
-			string lVersion = (string)lExportPresets.GetValue("preset.0.options", "application/product_version", "0.0.0.0");
+#if GODOT_WINDOWS
+			int lPreset = 0;
+#elif GODOT_LINUXBSD
+			int lPreset = 1;
+#else
+			int lPreset = 2;
+#endif
+
+			string lVersion = (string)lExportPresets.GetValue($"preset.{lPreset}.options", "application/product_version", "0.0.0.0");
 			return lVersion[..lVersion.RFind(".")];
 		}
 

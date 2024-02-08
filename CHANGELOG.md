@@ -7,14 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
-
+- GodotHub updater to update config files
 
 ### Changed
 - Release item text alignement
 - Rename installs as versions and install items as engine items
+- Rename config files
 
 ### Fixed
-
+- Application version not shown on build
 
 ### Removed
 
