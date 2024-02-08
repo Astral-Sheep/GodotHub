@@ -165,7 +165,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
-					ExceptionHandler.Singleton.LogException(lException);
+					Debugger.LogWarning($"{lException.GetType()}: {lException.Message}");
 					return Result.Installed;
 				}
 			}
@@ -235,8 +235,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
-					ExceptionHandler.Singleton.LogException(lException);
-					//Debugger.PrintException(lException);
+					Debugger.LogWarning($"{lException.GetType()}: {lException.Message}");
 					return Result.Installed;
 				}
 			}
@@ -287,8 +286,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				}
 				catch (Exception lException)
 				{
-					ExceptionHandler.Singleton.LogException(lException);
-					//Debugger.PrintException(lException);
+					Debugger.LogWarning($"{lException.GetType()}: {lException.Message}");
 					return Result.Installed;
 				}
 			}
