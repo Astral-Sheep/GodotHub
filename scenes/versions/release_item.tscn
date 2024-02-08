@@ -22,18 +22,18 @@ osButton = NodePath("OSOption")
 architectureButton = NodePath("ArchitectureOption")
 installButton = NodePath("InstallButton")
 
-[node name="Version" type="Label" parent="."]
+[node name="Version" type="RichTextLabel" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.2
 anchor_bottom = 1.0
 offset_left = 25.0
-offset_top = 25.0
-offset_bottom = -25.0
+offset_top = 15.0
+offset_bottom = -35.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Godot 1.0.0"
-vertical_alignment = 1
+bbcode_enabled = true
+text = "[b]Godot 1.0.0[/b]"
 
 [node name="Date" type="Label" parent="."]
 layout_mode = 1
@@ -42,8 +42,8 @@ anchor_top = 1.0
 anchor_right = 0.2
 anchor_bottom = 1.0
 offset_left = 25.0
-offset_top = -25.0
-offset_bottom = -10.0
+offset_top = -35.0
+offset_bottom = -20.0
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.588235, 0.588235, 0.588235, 1)
 theme_override_font_sizes/font_size = 10

@@ -32,7 +32,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 		public Version Version { get; protected set; }
 		public bool IsValid => true;
 
-		[Export] protected Label versionLabel;
+		[Export] protected RichTextLabel versionLabel;
 		[Export] protected Label dateLabel;
 		[Export] protected CheckBox monoCheck;
 		[Export] protected OptionButton osButton;
@@ -97,7 +97,12 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 				sources.Add(GetSource(lReleaseAsset));
 			}
 
-			versionLabel.Text = $"Godot {lVersion}";
+			if (!versionLabel.BbcodeEnabled)
+			{
+				versionLabel.BbcodeEnabled = true;
+			}
+
+			versionLabel.Text = $"[b]Godot {lVersion}[/b]";
 			dateLabel.Text = $"{pRelease.CreatedAt.Day:D2}/{pRelease.CreatedAt.Month:D2}/{pRelease.CreatedAt.Year:D4}";
 			SetInstallButton();
 
