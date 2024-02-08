@@ -53,7 +53,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			GetCancelButton().FocusMode = Control.FocusModeEnum.None;
 			projectDirectory.Text = AppConfig.ProjectDir;
 
-			List<GDFile> lAvailableVersions = InstallsData.GetAllVersions();
+			List<GDFile> lAvailableVersions = VersionsData.GetAllVersions();
 
 			if (lAvailableVersions.Count > 0)
 			{

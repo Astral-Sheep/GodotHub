@@ -25,7 +25,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 
 		public override void _Ready()
 		{
-			List<GDFile> lVersions = InstallsData.GetAllVersions();
+			List<GDFile> lVersions = VersionsData.GetAllVersions();
 
 			for (int i = 0; i < lVersions.Count; i++)
 			{
@@ -34,7 +34,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 
 			Sort();
 
-			InstallsData.VersionAdded += OnVersionAdded;
+			VersionsData.VersionAdded += OnVersionAdded;
 			EngineItem.Closed += OnItemClosed;
 
 			favoriteButton.Toggled += OnFavoriteToggled;
@@ -51,7 +51,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 			if (pDisposing)
 			{
 				EngineItem.Closed -= OnItemClosed;
-				InstallsData.VersionAdded -= OnVersionAdded;
+				VersionsData.VersionAdded -= OnVersionAdded;
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 			for (int i = 0; i < pPaths.Length; i++)
 			{
 				lPath = pPaths[i];
-				InstallsData.AddVersion(lPath, true);
+				VersionsData.AddVersion(lPath, true);
 			}
 		}
 

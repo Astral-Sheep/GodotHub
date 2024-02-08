@@ -60,7 +60,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			if (!pDisposing)
 				return;
 
-			InstallsData.VersionAdded -= OnVersionAdded;
+			VersionsData.VersionAdded -= OnVersionAdded;
 		}
 
 		/// <summary>
@@ -99,8 +99,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 				}
 
 				openButton.Pressed += OnOpenPressed;
-				InstallsData.VersionAdded += OnVersionAdded;
-				InstallsData.VersionRemoved += OnVersionRemoved;
+				VersionsData.VersionAdded += OnVersionAdded;
+				VersionsData.VersionRemoved += OnVersionRemoved;
 			}
 			else
 			{
@@ -112,7 +112,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 
 		protected bool SetVersion(Version pVersion)
 		{
-			List<Version> lCompatibleVersions = InstallsData.GetCompatibleVersions(pVersion);
+			List<Version> lCompatibleVersions = VersionsData.GetCompatibleVersions(pVersion);
 
 			if (lCompatibleVersions.Count == 0)
 				return false;
@@ -184,7 +184,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			try
 			{
 				Process.Start(new ProcessStartInfo() {
-					FileName = InstallsData.GetPath(versionButton.Text),
+					FileName = VersionsData.GetPath(versionButton.Text),
 					WorkingDirectory = project.Path,
 					Arguments = "--editor",
 				});

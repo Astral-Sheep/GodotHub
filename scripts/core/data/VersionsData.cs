@@ -10,7 +10,7 @@ using GError = Godot.Error;
 
 namespace Com.Astral.GodotHub.Core.Data
 {
-	public static class InstallsData
+	public static class VersionsData
 	{
 		private const string PATH = "path";
 		private const string FAVORITE = "favorite";
@@ -26,10 +26,10 @@ namespace Com.Astral.GodotHub.Core.Data
 
 		private static readonly string exePath;
 		private static readonly Regex folderExpr;
-		private static readonly string filePath = PathT.appdata + "/installs.cfg";
+		private static readonly string filePath = PathT.appdata + "/engines.cfg";
 		private static ConfigFile file;
 
-		static InstallsData()
+		static VersionsData()
 		{
 #if GODOT_WINDOWS
 			folderExpr = new Regex("Godot_v[0-9]+(?:[.][0-9]+){1,2}-stable(_mono)??_win[0-9]{2}");

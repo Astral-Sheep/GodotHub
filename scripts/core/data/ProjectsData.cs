@@ -20,7 +20,7 @@ namespace Com.Astral.GodotHub.Core.Data
 		/// </summary>
 		public static event Action<GDFile> Added;
 
-		private static readonly string filePath = PathT.appdata + "/project.cfg";
+		private static readonly string filePath = PathT.appdata + "/projects.cfg";
 		private static ConfigFile file;
 
 		static ProjectsData()

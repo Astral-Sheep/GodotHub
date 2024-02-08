@@ -200,7 +200,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 				return true;
 			}
 
-			foreach (GDFile lFile in InstallsData.GetAllVersions())
+			foreach (GDFile lFile in VersionsData.GetAllVersions())
 			{
 				if (lFile.Version == Version)
 				{

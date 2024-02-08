@@ -1,15 +1,14 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>Com.Astral.GodotHub.Uninstaller.UninstallProgram</StartupObject>
-    <RootNamespace>Com.Astral.GodotHub.Uninstaller</RootNamespace>
-    <ApplicationManifest>godot_uninstaller.manifest</ApplicationManifest>
-    <BaseOutputPath>bin\GodotUninstaller</BaseOutputPath>
-    <BaseIntermediateOutputPath>obj\GodotUninstaller</BaseIntermediateOutputPath>
+    <RootNamespace>Com.Astral.GodotHub.Updater</RootNamespace>
+    <BaseOutputPath>bin\GodotHubUpdater\</BaseOutputPath>
+    <BaseIntermediateOutputPath>obj\GodotHubUpdater\</BaseIntermediateOutputPath>
+    <StartupObject>Com.Astral.GodotHub.Updater.UpdateProgram</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,7 +19,7 @@
     <Compile Remove="scenes\**" />
     <Compile Remove="scripts\core\**" />
     <Compile Remove="scripts\installer\**" />
-    <Compile Remove="scripts\updater\**" />
+    <Compile Remove="scripts\uninstaller\**" />
     <EmbeddedResource Remove="assets\**" />
     <EmbeddedResource Remove="bin\**" />
     <EmbeddedResource Remove="obj\**" />
@@ -28,7 +27,7 @@
     <EmbeddedResource Remove="scenes\**" />
     <EmbeddedResource Remove="scripts\core\**" />
     <EmbeddedResource Remove="scripts\installer\**" />
-    <EmbeddedResource Remove="scripts\updater\**" />
+    <EmbeddedResource Remove="scripts\uninstaller\**" />
     <None Remove="assets\**" />
     <None Remove="bin\**" />
     <None Remove="obj\**" />
@@ -36,7 +35,7 @@
     <None Remove="scenes\**" />
     <None Remove="scripts\core\**" />
     <None Remove="scripts\installer\**" />
-    <None Remove="scripts\updater\**" />
+    <None Remove="scripts\uninstaller\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +44,7 @@
     <None Remove="CHANGELOG.md" />
     <None Remove="export_presets.cfg" />
     <None Remove="godot_installer.manifest" />
+    <None Remove="godot_uninstaller.manifest" />
     <None Remove="icon.ico" />
     <None Remove="icon.svg" />
     <None Remove="icon.svg.import" />

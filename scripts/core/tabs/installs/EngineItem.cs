@@ -118,7 +118,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 
 		protected void Remove()
 		{
-			InstallsData.RemoveVersion(engine.Version);
+			VersionsData.RemoveVersion(engine.Version);
 			Close();
 		}
 
@@ -145,7 +145,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Versions
 
 		protected void OnFavoriteToggled(bool pToggled)
 		{
-			InstallsData.SetFavorite(Version, pToggled);
+			VersionsData.SetFavorite(Version, pToggled);
 			IsFavorite = pToggled;
 		}
 

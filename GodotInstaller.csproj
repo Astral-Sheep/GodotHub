@@ -29,10 +29,12 @@
 	<Compile Remove="obj\**" />
 	<Compile Remove="scripts\core\**" />
 	<Compile Remove="scripts\uninstaller\**" />
+	<Compile Remove="scripts\updater\**" />
 	<EmbeddedResource Remove="bin\**" />
 	<EmbeddedResource Remove="obj\**" />
     <EmbeddedResource Remove="scripts\core\**" />
     <EmbeddedResource Remove="scripts\uninstaller\**" />
+    <EmbeddedResource Remove="scripts\updater\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -42,6 +44,7 @@
 	<None Remove="resources\**" />
 	<None Remove="scenes\**" />
 	<None Remove="scripts\uninstaller\**" />
+	<None Remove="scripts\updater\**" />
     <None Remove=".gitattributes" />
     <None Remove=".gitignore" />
     <None Remove="CHANGELOG.md" />

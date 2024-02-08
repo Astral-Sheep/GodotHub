@@ -86,7 +86,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 			{
 				using (StreamWriter lWriter = new StreamWriter($"{pDirectory}/project.godot"))
 				{
-					bool lIsMono = InstallsData.VersionIsMono(pVersion);
+					bool lIsMono = VersionsData.VersionIsMono(pVersion);
 					string lContent = 
 						$"; Engine configuration file.{PathT.EOL}" +
 						$"; It's best edited using the editor UI and not directly,{PathT.EOL}" +

@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://qiyp3s4s212a"]
+[gd_scene load_steps=36 format=3 uid="uid://qiyp3s4s212a"]
 
 [ext_resource type="Script" path="res://scripts/core/Main.cs" id="1_j271r"]
 [ext_resource type="Script" path="res://scripts/core/tabs/TabManager.cs" id="3_e26kt"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://83qph142ha7s" path="res://scenes/projects/project_item.tscn" id="4_ftw23"]
 [ext_resource type="PackedScene" uid="uid://c54ctd2k2mbg0" path="res://scenes/settings/folder_dialog.tscn" id="5_10olf"]
 [ext_resource type="Script" path="res://scripts/core/tabs/projects/ProjectsTabs.cs" id="5_opam3"]
-[ext_resource type="ButtonGroup" uid="uid://c2ypx5qbtttva" path="res://resources/button_groups/install_btn_group.tres" id="7_5b0sc"]
 [ext_resource type="Theme" uid="uid://brtddydnujip" path="res://resources/themes/blue_btn.theme" id="7_26ckp"]
 [ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="7_le08s"]
 [ext_resource type="PackedScene" uid="uid://xvmi8s4miknq" path="res://scenes/projects/new_project_dialog.tscn" id="7_v6ut4"]
@@ -245,13 +244,11 @@ theme_override_constants/separation = 40
 [node name="EnginesButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons" instance=ExtResource("14_s4qix")]
 layout_mode = 2
 size_flags_vertical = 4
-button_group = ExtResource("7_5b0sc")
 text = "Installed"
 
 [node name="ReleasesButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons" instance=ExtResource("14_s4qix")]
 layout_mode = 2
 size_flags_vertical = 4
-button_group = ExtResource("7_5b0sc")
 text = "Releases"
 
 [node name="EnginesPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab" node_paths=PackedStringArray("addButton", "favoriteButton", "versionButton", "monoButton", "dateButton", "itemContainer")]
