@@ -12,7 +12,7 @@ using Environment = System.Environment;
 using HttpClient = System.Net.Http.HttpClient;
 using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
 	public static class InstallT
 	{

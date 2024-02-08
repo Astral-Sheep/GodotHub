@@ -6,24 +6,24 @@ namespace Com.Astral.GodotHub.Core.Tabs
 	{
 		[ExportGroup("Tabs")]
 		[Export] protected Tab projectsTab;
-		[Export] protected Tab installsTab;
+		[Export] protected Tab versionsTab;
 		[Export] protected Tab documentationTab;
 
 		[ExportGroup("Buttons")]
 		[Export] protected Button projectsButton;
-		[Export] protected Button installsButton;
+		[Export] protected Button versionsButton;
 		[Export] protected Button documentationButton;
 
 		public override void _Ready()
 		{
 			projectsButton.Toggled += OnProjectsToggled;
-			installsButton.Toggled += OnInstallsToggled;
+			versionsButton.Toggled += OnVersionsToggled;
 #if DEBUG
 			documentationButton.Toggled += OnDocumentationToggled;
 #endif //DEBUG
 
 			projectsTab.Toggle(projectsButton.ButtonPressed);
-			installsTab.Toggle(installsButton.ButtonPressed);
+			versionsTab.Toggle(versionsButton.ButtonPressed);
 #if DEBUG
 			documentationTab.Toggle(documentationButton.ButtonPressed);
 #else
@@ -38,18 +38,18 @@ namespace Com.Astral.GodotHub.Core.Tabs
 				return;
 
 			projectsTab.Toggle(true);
-			installsTab.Toggle(false);
+			versionsTab.Toggle(false);
 #if DEBUG
 			documentationTab.Toggle(false);
 #endif //DEBUG
 		}
 
-		protected void OnInstallsToggled(bool pToggle)
+		protected void OnVersionsToggled(bool pToggle)
 		{
-			if (installsTab.Visible || !pToggle)
+			if (versionsTab.Visible || !pToggle)
 				return;
 			
-			installsTab.Toggle(true);
+			versionsTab.Toggle(true);
 			projectsTab.Toggle(false);
 #if DEBUG
 			documentationTab.Toggle(false);
@@ -64,7 +64,7 @@ namespace Com.Astral.GodotHub.Core.Tabs
 
 			documentationTab.Toggle(true);
 			projectsTab.Toggle(false);
-			installsTab.Toggle(false);
+			versionsTab.Toggle(false);
 		}
 #endif //DEBUG
 	}

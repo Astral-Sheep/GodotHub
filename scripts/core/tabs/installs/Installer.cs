@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Label = Godot.Label;
 using OS = Com.Astral.GodotHub.Core.Data.OS;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
 	public partial class Installer : Control
 	{

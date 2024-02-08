@@ -11,21 +11,21 @@
 [ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="7_le08s"]
 [ext_resource type="PackedScene" uid="uid://xvmi8s4miknq" path="res://scenes/projects/new_project_dialog.tscn" id="7_v6ut4"]
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="7_xfihf"]
-[ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/installs/release_item.tscn" id="8_8lusi"]
 [ext_resource type="Theme" uid="uid://owhv26bfo2cv" path="res://resources/themes/star_btn.theme" id="9_ol1lc"]
-[ext_resource type="PackedScene" uid="uid://3ek1c5uks77u" path="res://scenes/installs/installer.tscn" id="10_e5igd"]
 [ext_resource type="PackedScene" uid="uid://dcyk3xxppgacf" path="res://scenes/sort_button.tscn" id="10_h7r2s"]
-[ext_resource type="PackedScene" uid="uid://8wgykcf75ex1" path="res://scenes/installs/install_item.tscn" id="10_ty7wm"]
-[ext_resource type="PackedScene" uid="uid://dpptd81s7nml2" path="res://scenes/installs/subbutton.tscn" id="12_3gmeu"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/InstallsTab.cs" id="13_haedx"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/VersionsTab.cs" id="13_fj3i6"]
 [ext_resource type="PackedScene" uid="uid://dh08036ig8ywv" path="res://scenes/debug/debugger.tscn" id="14_cqlha"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/InstallsPanel.cs" id="16_m7mow"]
+[ext_resource type="PackedScene" uid="uid://dpptd81s7nml2" path="res://scenes/versions/subbutton.tscn" id="14_s4qix"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/EnginesPanel.cs" id="16_lff7v"]
+[ext_resource type="PackedScene" uid="uid://8wgykcf75ex1" path="res://scenes/versions/engine_item.tscn" id="16_lils6"]
 [ext_resource type="PackedScene" uid="uid://djyx4rm2ak0n5" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
+[ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/versions/release_item.tscn" id="18_emyc1"]
 [ext_resource type="Script" path="res://scripts/core/tabs/installs/ReleasePanel.cs" id="18_q7iih"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="19_hewk5"]
 [ext_resource type="Script" path="res://scripts/core/tabs/documentation/DocumentationTab.cs" id="20_x68s2"]
 [ext_resource type="Script" path="res://scripts/core/tabs/UpdateRepoButton.cs" id="21_g4g8d"]
 [ext_resource type="Script" path="res://scripts/core/tabs/installs/DownloadPanel.cs" id="21_irdd8"]
+[ext_resource type="PackedScene" uid="uid://3ek1c5uks77u" path="res://scenes/versions/installer.tscn" id="22_h78d5"]
 [ext_resource type="StyleBox" uid="uid://c4b7kd0ijhmvq" path="res://resources/style_boxes/panels/mid_dark_panel.stylebox" id="23_voqpq"]
 [ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
 [ext_resource type="StyleBox" uid="uid://cf5kfntpwc2kk" path="res://resources/style_boxes/panels/soft_dark_panel.stylebox" id="26_gjfo7"]
@@ -51,7 +51,7 @@ bg_color = Color(0, 0, 0, 0.247059)
 script = ExtResource("1_j271r")
 fileDialogScene = ExtResource("5_10olf")
 
-[node name="UI" type="Control" parent="." node_paths=PackedStringArray("projectsTab", "installsTab", "documentationTab", "projectsButton", "installsButton", "documentationButton")]
+[node name="UI" type="Control" parent="." node_paths=PackedStringArray("projectsTab", "versionsTab", "documentationTab", "projectsButton", "versionsButton", "documentationButton")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -60,10 +60,10 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_e26kt")
 projectsTab = NodePath("Content/VBoxContainer/TabContainer/ProjectsTab")
-installsTab = NodePath("Content/VBoxContainer/TabContainer/InstallsTab")
+versionsTab = NodePath("Content/VBoxContainer/TabContainer/VersionsTab")
 documentationTab = NodePath("Content/VBoxContainer/TabContainer/DocumentationTab")
 projectsButton = NodePath("Tabs/TabButtonContainer/ProjectsButton")
-installsButton = NodePath("Tabs/TabButtonContainer/InstallsButton")
+versionsButton = NodePath("Tabs/TabButtonContainer/VersionsButton")
 documentationButton = NodePath("Tabs/TabButtonContainer/DocumentationButton")
 
 [node name="Content" type="Panel" parent="UI"]
@@ -217,7 +217,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="InstallsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("installsPanel", "releasesPanel", "installsButton", "releasesButton")]
+[node name="VersionsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("enginesPanel", "releasesPanel", "enginesButton", "releasesButton")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -225,13 +225,13 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("13_haedx")
-installsPanel = NodePath("InstallsPanel")
+script = ExtResource("13_fj3i6")
+enginesPanel = NodePath("EnginesPanel")
 releasesPanel = NodePath("ReleasePanel")
-installsButton = NodePath("UpperButtons/InstallsButton")
+enginesButton = NodePath("UpperButtons/EnginesButton")
 releasesButton = NodePath("UpperButtons/ReleasesButton")
 
-[node name="UpperButtons" type="HBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab"]
+[node name="UpperButtons" type="HBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab"]
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -242,18 +242,19 @@ offset_bottom = 85.0
 grow_horizontal = 2
 theme_override_constants/separation = 40
 
-[node name="InstallsButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons" instance=ExtResource("12_3gmeu")]
+[node name="EnginesButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons" instance=ExtResource("14_s4qix")]
 layout_mode = 2
 size_flags_vertical = 4
 button_group = ExtResource("7_5b0sc")
+text = "Installed"
 
-[node name="ReleasesButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/UpperButtons" instance=ExtResource("12_3gmeu")]
+[node name="ReleasesButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/UpperButtons" instance=ExtResource("14_s4qix")]
 layout_mode = 2
 size_flags_vertical = 4
 button_group = ExtResource("7_5b0sc")
 text = "Releases"
 
-[node name="InstallsPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("addButton", "favoriteButton", "versionButton", "monoButton", "dateButton", "itemContainer")]
+[node name="EnginesPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab" node_paths=PackedStringArray("addButton", "favoriteButton", "versionButton", "monoButton", "dateButton", "itemContainer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -261,8 +262,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("16_m7mow")
-installItemScene = ExtResource("10_ty7wm")
+script = ExtResource("16_lff7v")
+engineItemScene = ExtResource("16_lils6")
 addButton = NodePath("SortOptions/AddButton")
 fileDialogScene = ExtResource("5_10olf")
 favoriteButton = NodePath("SortOptions/FavoriteButton")
@@ -271,7 +272,7 @@ monoButton = NodePath("SortOptions/MonoButton")
 dateButton = NodePath("SortOptions/DateButton")
 itemContainer = NodePath("InstallsList/VBoxContainer")
 
-[node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
+[node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -283,7 +284,7 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = ExtResource("26_gjfo7")
 
-[node name="FavoriteButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions"]
+[node name="FavoriteButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.038
@@ -298,34 +299,34 @@ focus_mode = 0
 theme = ExtResource("9_ol1lc")
 toggle_mode = true
 
-[node name="VersionButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions" instance=ExtResource("10_h7r2s")]
+[node name="VersionButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions" instance=ExtResource("10_h7r2s")]
 layout_mode = 1
 anchor_left = 0.05
 anchor_right = 0.3
 offset_left = 25.0
 text = "Version"
 
-[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions/VersionButton" index="0"]
+[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions/VersionButton" index="0"]
 offset_left = 90.0
 offset_right = 105.0
 
-[node name="MonoButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions" instance=ExtResource("10_h7r2s")]
+[node name="MonoButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions" instance=ExtResource("10_h7r2s")]
 layout_mode = 1
 anchor_left = 0.325
 anchor_right = 0.425
 text = "Mono"
 
-[node name="DateButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions" instance=ExtResource("10_h7r2s")]
+[node name="DateButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions" instance=ExtResource("10_h7r2s")]
 layout_mode = 1
 anchor_left = 0.45
 anchor_right = 0.65
 text = "Last Opened"
 
-[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions/DateButton" index="0"]
+[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions/DateButton" index="0"]
 offset_left = 140.0
 offset_right = 155.0
 
-[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions"]
+[node name="AddButton" type="Button" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions"]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.85
@@ -339,7 +340,7 @@ focus_mode = 0
 theme = ExtResource("7_le08s")
 text = "Add"
 
-[node name="InstallsList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel"]
+[node name="InstallsList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -349,12 +350,12 @@ offset_top = 200.0
 offset_right = -10.0
 offset_bottom = -5.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/InstallsList"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/InstallsList"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ReleasePanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab" node_paths=PackedStringArray("versionButton", "dateButton", "itemContainer")]
+[node name="ReleasePanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab" node_paths=PackedStringArray("versionButton", "dateButton", "itemContainer")]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -363,12 +364,12 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("18_q7iih")
-releaseItemScene = ExtResource("8_8lusi")
+releaseItemScene = ExtResource("18_emyc1")
 versionButton = NodePath("SortOptions/VersionButton")
 dateButton = NodePath("SortOptions/DateButton")
 itemContainer = NodePath("ReleasesList/VBoxContainer")
 
-[node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel"]
+[node name="SortOptions" type="Panel" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -380,27 +381,27 @@ grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = ExtResource("26_gjfo7")
 
-[node name="VersionButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/SortOptions" instance=ExtResource("10_h7r2s")]
+[node name="VersionButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/SortOptions" instance=ExtResource("10_h7r2s")]
 layout_mode = 1
 anchor_left = 0.0
 anchor_right = 0.15
 offset_left = 25.0
 text = "Version"
 
-[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/SortOptions/VersionButton" index="0"]
+[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/SortOptions/VersionButton" index="0"]
 offset_left = 90.0
 offset_right = 105.0
 
-[node name="DateButton" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/SortOptions" instance=ExtResource("10_h7r2s")]
+[node name="DateButton" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/SortOptions" instance=ExtResource("10_h7r2s")]
 layout_mode = 1
 anchor_left = 0.175
 text = "Release Date"
 
-[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/SortOptions/DateButton" index="0"]
+[node name="Arrow" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/SortOptions/DateButton" index="0"]
 offset_left = 150.0
 offset_right = 165.0
 
-[node name="ReleasesList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel"]
+[node name="ReleasesList" type="ScrollContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel"]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -413,7 +414,7 @@ grow_horizontal = 2
 grow_vertical = 2
 horizontal_scroll_mode = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/ReleasesList"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/ReleasesList"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -468,7 +469,7 @@ mouse_filter = 2
 script = ExtResource("21_irdd8")
 panel = NodePath("Panel")
 background = NodePath("Background")
-installerScene = ExtResource("10_e5igd")
+installerScene = ExtResource("22_h78d5")
 installerContainer = NodePath("Panel/ScrollContainer/InstallerContainer")
 openButton = NodePath("../../../../Tabs/MiscButtonContainer/InstallButton")
 closeButton = NodePath("Panel/CloseButton")
@@ -573,7 +574,7 @@ shortcut_feedback = false
 shortcut_in_tooltip = false
 text = "Projects"
 
-[node name="InstallsButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
+[node name="VersionsButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
 light_mask = 0
 layout_mode = 2
 size_flags_vertical = 0
@@ -649,8 +650,8 @@ fadeDuration = 0.3
 
 [editable path="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions/DateButton"]
 [editable path="UI/Content/VBoxContainer/TabContainer/ProjectsTab/UpperButtons/SortOptions/VersionButton"]
-[editable path="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions/VersionButton"]
-[editable path="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions/MonoButton"]
-[editable path="UI/Content/VBoxContainer/TabContainer/InstallsTab/InstallsPanel/SortOptions/DateButton"]
-[editable path="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/SortOptions/VersionButton"]
-[editable path="UI/Content/VBoxContainer/TabContainer/InstallsTab/ReleasePanel/SortOptions/DateButton"]
+[editable path="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions/VersionButton"]
+[editable path="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions/MonoButton"]
+[editable path="UI/Content/VBoxContainer/TabContainer/VersionsTab/EnginesPanel/SortOptions/DateButton"]
+[editable path="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/SortOptions/VersionButton"]
+[editable path="UI/Content/VBoxContainer/TabContainer/VersionsTab/ReleasePanel/SortOptions/DateButton"]

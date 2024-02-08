@@ -1,7 +1,7 @@
 [gd_scene load_steps=8 format=3 uid="uid://8wgykcf75ex1"]
 
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_wybn5"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/InstallItem.cs" id="2_l1ll4"]
+[ext_resource type="Script" path="res://scripts/core/tabs/installs/EngineItem.cs" id="2_us1bx"]
 [ext_resource type="PackedScene" uid="uid://bilwvy6kxj1nk" path="res://scenes/confirmation_dialog.tscn" id="3_woeeq"]
 [ext_resource type="Theme" uid="uid://owhv26bfo2cv" path="res://resources/themes/star_btn.theme" id="4_36lft"]
 [ext_resource type="Theme" uid="uid://brtddydnujip" path="res://resources/themes/blue_btn.theme" id="4_oxtu8"]
@@ -10,14 +10,14 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gi7kc"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 1)
 
-[node name="InstalltItem" type="Panel" node_paths=PackedStringArray("nameLabel", "pathLabel", "isMonoBox", "timeLabel", "favoriteToggle", "openButton", "uninstallButton")]
+[node name="EngineItem" type="Panel" node_paths=PackedStringArray("nameLabel", "pathLabel", "isMonoBox", "timeLabel", "favoriteToggle", "openButton", "uninstallButton")]
 clip_contents = true
 custom_minimum_size = Vector2(0, 75)
 offset_right = 1000.0
 offset_bottom = 75.0
 theme = ExtResource("1_wybn5")
 theme_override_styles/panel = SubResource("StyleBoxFlat_gi7kc")
-script = ExtResource("2_l1ll4")
+script = ExtResource("2_us1bx")
 confirmationPopup = ExtResource("3_woeeq")
 nameLabel = NodePath("VersionLabel")
 pathLabel = NodePath("Path")

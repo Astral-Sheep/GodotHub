@@ -11,7 +11,7 @@ using Label = Godot.Label;
 using OS = Com.Astral.GodotHub.Core.Data.OS;
 using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
 	public partial class ReleaseItem : Control, IVersionItem, IValidItem
 	{
@@ -68,7 +68,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			if (!pDisposing)
 				return;
 
-			InstallItem.Closed -= OnInstallItemClosed;
+			EngineItem.Closed -= OnEngineItemClosed;
 		}
 
 		/// <summary>
@@ -101,7 +101,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			dateLabel.Text = $"{pRelease.CreatedAt.Day:D2}/{pRelease.CreatedAt.Month:D2}/{pRelease.CreatedAt.Year:D4}";
 			SetInstallButton();
 
-			InstallItem.Closed += OnInstallItemClosed;
+			EngineItem.Closed += OnEngineItemClosed;
 		}
 
 		#region EVENT_HANDLING
@@ -144,7 +144,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			Debugger.LogError($"Can't install release {lAssetName}: failed to find corresponding source");
 		}
 
-		protected void OnInstallItemClosed(InstallItem pItem)
+		protected void OnEngineItemClosed(EngineItem pItem)
 		{
 			if (pItem.Version == Version)
 			{

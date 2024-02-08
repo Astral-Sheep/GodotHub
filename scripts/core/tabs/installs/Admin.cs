@@ -14,7 +14,7 @@ using System.Threading;
 using Debugger = Com.Astral.GodotHub.Core.Debug.Debugger;
 using Mutex = System.Threading.Mutex;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
 	/// <summary>
 	/// Static class used to run processes with admin permission<br/>

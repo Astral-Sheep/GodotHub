@@ -4,15 +4,13 @@ using Godot;
 using System;
 using System.Collections.Generic;
 
-using Version = Com.Astral.GodotHub.Core.Data.Version;
-
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
-	public partial class InstallsPanel : SortedPanel
+	public partial class EnginesPanel : SortedPanel
 	{
-		[Export] protected PackedScene installItemScene;
+		[Export] protected PackedScene engineItemScene;
 
-		[ExportGroup("Install addition")]
+		[ExportGroup("Engine addition")]
 		[Export] protected Button addButton;
 		[Export] protected PackedScene fileDialogScene;
 
@@ -22,8 +20,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		[Export] protected SortToggle monoButton;
 		[Export] protected SortToggle dateButton;
 
-		protected List<InstallItem> items = new List<InstallItem>();
-		protected Comparison<InstallItem> currentComparison = Comparer.CompareTimes;
+		protected List<EngineItem> items = new List<EngineItem>();
+		protected Comparison<EngineItem> currentComparison = Comparer.CompareTimes;
 
 		public override void _Ready()
 		{
@@ -37,7 +35,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			Sort();
 
 			InstallsData.VersionAdded += OnVersionAdded;
-			InstallItem.Closed += OnItemClosed;
+			EngineItem.Closed += OnItemClosed;
 
 			favoriteButton.Toggled += OnFavoriteToggled;
 			versionButton.CustomToggled += OnVersionToggled;
@@ -52,14 +50,14 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		{
 			if (pDisposing)
 			{
-				InstallItem.Closed -= OnItemClosed;
+				EngineItem.Closed -= OnItemClosed;
 				InstallsData.VersionAdded -= OnVersionAdded;
 			}
 		}
 
-		protected InstallItem CreateItem(GDFile pInstall)
+		protected EngineItem CreateItem(GDFile pInstall)
 		{
-			InstallItem lItem = installItemScene.Instantiate<InstallItem>();
+			EngineItem lItem = engineItemScene.Instantiate<EngineItem>();
 			itemContainer.AddChild(lItem);
 			lItem.Init(pInstall);
 			items.Add(lItem);
@@ -74,7 +72,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			Sort();
 		}
 
-		protected void OnItemClosed(InstallItem pItem)
+		protected void OnItemClosed(EngineItem pItem)
 		{
 			items.Remove(pItem);
 		}
@@ -115,14 +113,12 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			if (pToggled)
 			{
 				dateButton.Disable();
-				// Sort(Comparer.CompareFavorites);
 				currentComparison = Comparer.CompareFavorites;
 				Sort();
 			}
 			else
 			{
 				dateButton.Enable();
-				// Sort(Comparer.CompareTimes);
 				currentComparison = Comparer.CompareTimes;
 				Sort();
 			}
@@ -134,7 +130,6 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			monoButton.Disable();
 			dateButton.Disable();
 			currentComparison = pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions;
-			// Sort(pToggled ? Comparer.CompareVersions : Comparer.ReversedCompareVersions);
 			Sort();
 		}
 
@@ -144,7 +139,6 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			versionButton.Disable();
 			dateButton.Disable();
 			currentComparison = pToggled ? Comparer.CompareMonos : Comparer.ReversedCompareMonos;
-			// Sort(pToggled ? Comparer.CompareMonos : Comparer.ReversedCompareMonos);
 			Sort();
 		}
 
@@ -154,12 +148,12 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 			versionButton.Disable();
 			monoButton.Disable();
 			currentComparison = pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes;
-			Sort(/*pToggled ? Comparer.CompareTimes : Comparer.ReversedCompareTimes*/);
+			Sort();
 		}
 
 		#endregion //EVENT_HANDLING
 
-		protected void Sort(/*Comparison<InstallItem> pComparison*/)
+		protected void Sort()
 		{
 			items.Sort(currentComparison);
 

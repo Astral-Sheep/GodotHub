@@ -2,7 +2,7 @@ using Com.Astral.GodotHub.Core.Data;
 using Godot;
 using System.Collections.Generic;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
 	public partial class DownloadPanel : Control
 	{

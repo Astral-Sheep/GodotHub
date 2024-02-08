@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
 	public partial class ReleasePanel : SortedPanel
 	{

@@ -8,24 +8,23 @@ using System.Diagnostics;
 using System.IO;
 
 using Colors = Com.Astral.GodotHub.Core.Utils.Colors;
-using Debugger = Com.Astral.GodotHub.Core.Debug.Debugger;
 using Label = Godot.Label;
 using Version = Com.Astral.GodotHub.Core.Data.Version;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
-	public partial class InstallItem : Control, IFavoriteItem, IMonoItem, ITimedItem, IVersionItem, IValidItem
+	public partial class EngineItem : Control, IFavoriteItem, IMonoItem, ITimedItem, IVersionItem, IValidItem
 	{
 		/// <summary>
 		/// Event called when <see cref="Close"/> has been called and the item is going to be disposed
 		/// </summary>
-		public static event Action<InstallItem> Closed;
+		public static event Action<EngineItem> Closed;
 
 		public bool IsFavorite { get; protected set; }
 		public bool IsMono { get; protected set; }
 		public bool IsValid { get; protected set; } = true;
 		public double TimeSinceLastOpening { get; protected set; }
-		public Version Version => install.Version;
+		public Version Version => engine.Version;
 
 		[Export] protected PackedScene confirmationPopup;
 		[Export] protected float closeDuration = 0.25f;
@@ -41,21 +40,21 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 		[Export] protected Button openButton;
 		[Export] protected Button uninstallButton;
 
-		protected GDFile install;
+		protected GDFile engine;
 
 		/// <summary>
-		/// Set the data of this <see cref="InstallItem"/>
+		/// Set the data of this <see cref="EngineItem"/>
 		/// </summary>
-		public void Init(GDFile pInstall)
+		public void Init(GDFile pEngine)
 		{
-			install = pInstall;
-			pathLabel.Text = install.Path;
-			pathLabel.TooltipText = install.Path;
-			favoriteToggle.ButtonPressed = install.IsFavorite;
+			engine = pEngine;
+			pathLabel.Text = engine.Path;
+			pathLabel.TooltipText = engine.Path;
+			favoriteToggle.ButtonPressed = engine.IsFavorite;
 			favoriteToggle.Toggled += OnFavoriteToggled;
-			IsFavorite = install.IsFavorite;
+			IsFavorite = engine.IsFavorite;
 
-			if (!File.Exists(install.Path))
+			if (!File.Exists(engine.Path))
 			{
 				nameLabel.Text = $"[color=#{Colors.ToHexa(Colors.Singleton.Red)}][b]Missing version[/b][/color]";
 				isMonoBox.ButtonPressed = false;
@@ -67,10 +66,10 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				return;
 			}
 
-			nameLabel.Text = $"[b]Godot {install.Version}[/b]";
-			isMonoBox.ButtonPressed = install.Path.Contains("mono");
+			nameLabel.Text = $"[b]Godot {engine.Version}[/b]";
+			isMonoBox.ButtonPressed = engine.Path.Contains("mono");
 			IsMono = isMonoBox.ButtonPressed;
-			DateTime lTime = new FileInfo(install.Path).LastAccessTimeUtc;
+			DateTime lTime = new FileInfo(engine.Path).LastAccessTimeUtc;
 			TimeSinceLastOpening = (DateTime.UtcNow - lTime).TotalSeconds;
 			timeLabel.Text = TimeFormater.Format(lTime);
 			openButton.Pressed += Open;
@@ -119,7 +118,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 
 		protected void Remove()
 		{
-			InstallsData.RemoveVersion(install.Version);
+			InstallsData.RemoveVersion(engine.Version);
 			Close();
 		}
 

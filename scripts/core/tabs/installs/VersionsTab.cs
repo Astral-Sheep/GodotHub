@@ -1,41 +1,41 @@
 using Godot;
 
-namespace Com.Astral.GodotHub.Core.Tabs.Installs
+namespace Com.Astral.GodotHub.Core.Tabs.Versions
 {
-	public partial class InstallsTab : Tab
+	public partial class VersionsTab : Tab
 	{
 		[ExportGroup("Panels")]
-		[Export] protected InstallsPanel installsPanel;
+		[Export] protected EnginesPanel enginesPanel;
 		[Export] protected ReleasePanel releasesPanel;
-		[Export] protected Button installsButton;
+		[Export] protected Button enginesButton;
 		[Export] protected Button releasesButton;
 
 		public override void _Ready()
 		{
-			installsButton.ButtonPressed = true;
+			enginesButton.ButtonPressed = true;
 			releasesButton.ButtonPressed = false;
-			installsPanel.Visible = true;
+			enginesPanel.Visible = true;
 			releasesPanel.Visible = false;
 		}
 
 		protected override void Connect()
 		{
-			installsButton.Toggled += OnInstallsToggled;
+			enginesButton.Toggled += OnInstallsToggled;
 			releasesButton.Toggled += OnReleasesToggled;
 		}
 
 		protected override void Disconnect()
 		{
 			releasesButton.Toggled -= OnReleasesToggled;
-			installsButton.Toggled -= OnInstallsToggled;
+			enginesButton.Toggled -= OnInstallsToggled;
 		}
 
 		protected void OnInstallsToggled(bool pToggled)
 		{
-			if (!pToggled || installsPanel.Visible)
+			if (!pToggled || enginesPanel.Visible)
 				return;
 
-			installsPanel.Visible = true;
+			enginesPanel.Visible = true;
 			releasesPanel.Visible = false;
 		}
 
@@ -45,7 +45,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Installs
 				return;
 
 			releasesPanel.Visible = true;
-			installsPanel.Visible = false;
+			enginesPanel.Visible = false;
 		}
 	}
 }
