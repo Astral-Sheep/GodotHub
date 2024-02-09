@@ -12,18 +12,18 @@
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="7_xfihf"]
 [ext_resource type="Theme" uid="uid://owhv26bfo2cv" path="res://resources/themes/star_btn.theme" id="9_ol1lc"]
 [ext_resource type="PackedScene" uid="uid://dcyk3xxppgacf" path="res://scenes/sort_button.tscn" id="10_h7r2s"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/VersionsTab.cs" id="13_fj3i6"]
+[ext_resource type="Script" path="res://scripts/core/tabs/versions/VersionsTab.cs" id="13_baxvr"]
 [ext_resource type="PackedScene" uid="uid://dh08036ig8ywv" path="res://scenes/debug/debugger.tscn" id="14_cqlha"]
 [ext_resource type="PackedScene" uid="uid://dpptd81s7nml2" path="res://scenes/versions/subbutton.tscn" id="14_s4qix"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/EnginesPanel.cs" id="16_lff7v"]
+[ext_resource type="Script" path="res://scripts/core/tabs/versions/EnginesPanel.cs" id="15_glp5m"]
 [ext_resource type="PackedScene" uid="uid://8wgykcf75ex1" path="res://scenes/versions/engine_item.tscn" id="16_lils6"]
+[ext_resource type="Script" path="res://scripts/core/tabs/versions/ReleasePanel.cs" id="17_ca3wl"]
 [ext_resource type="PackedScene" uid="uid://djyx4rm2ak0n5" path="res://scenes/settings/settings.tscn" id="18_bwlxg"]
 [ext_resource type="PackedScene" uid="uid://c75ty2plb2sys" path="res://scenes/versions/release_item.tscn" id="18_emyc1"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/ReleasePanel.cs" id="18_q7iih"]
 [ext_resource type="Theme" uid="uid://c2cgnbja48m7i" path="res://resources/themes/close_btn.theme" id="19_hewk5"]
 [ext_resource type="Script" path="res://scripts/core/tabs/documentation/DocumentationTab.cs" id="20_x68s2"]
 [ext_resource type="Script" path="res://scripts/core/tabs/UpdateRepoButton.cs" id="21_g4g8d"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/DownloadPanel.cs" id="21_irdd8"]
+[ext_resource type="Script" path="res://scripts/core/tabs/versions/DownloadPanel.cs" id="21_m8s8u"]
 [ext_resource type="PackedScene" uid="uid://3ek1c5uks77u" path="res://scenes/versions/installer.tscn" id="22_h78d5"]
 [ext_resource type="StyleBox" uid="uid://c4b7kd0ijhmvq" path="res://resources/style_boxes/panels/mid_dark_panel.stylebox" id="23_voqpq"]
 [ext_resource type="Texture2D" uid="uid://b56ynjybl3xm3" path="res://assets/sprites/settings_icon.png" id="25_njxfo"]
@@ -91,6 +91,7 @@ size_flags_vertical = 3
 mouse_filter = 1
 
 [node name="ProjectsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("itemContainer", "addButton", "newButton", "favoriteButton", "nameButton", "dateButton", "versionButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -217,6 +218,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="VersionsTab" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("enginesPanel", "releasesPanel", "enginesButton", "releasesButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -224,7 +226,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 1
-script = ExtResource("13_fj3i6")
+script = ExtResource("13_baxvr")
 enginesPanel = NodePath("EnginesPanel")
 releasesPanel = NodePath("ReleasePanel")
 enginesButton = NodePath("UpperButtons/EnginesButton")
@@ -259,7 +261,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("16_lff7v")
+script = ExtResource("15_glp5m")
 engineItemScene = ExtResource("16_lils6")
 addButton = NodePath("SortOptions/AddButton")
 fileDialogScene = ExtResource("5_10olf")
@@ -360,7 +362,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("18_q7iih")
+script = ExtResource("17_ca3wl")
 releaseItemScene = ExtResource("18_emyc1")
 versionButton = NodePath("SortOptions/VersionButton")
 dateButton = NodePath("SortOptions/DateButton")
@@ -456,6 +458,7 @@ text = "Update Repo"
 script = ExtResource("21_g4g8d")
 
 [node name="DownloadPanel" type="Control" parent="UI/Content/VBoxContainer/TabContainer" node_paths=PackedStringArray("panel", "background", "installerContainer", "openButton", "closeButton")]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -463,7 +466,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("21_irdd8")
+script = ExtResource("21_m8s8u")
 panel = NodePath("Panel")
 background = NodePath("Background")
 installerScene = ExtResource("22_h78d5")
@@ -580,7 +583,7 @@ toggle_mode = true
 button_group = ExtResource("3_tsmd8")
 shortcut_feedback = false
 shortcut_in_tooltip = false
-text = "Installs"
+text = "Versions"
 
 [node name="DocumentationButton" type="Button" parent="UI/Tabs/TabButtonContainer"]
 light_mask = 0
@@ -633,9 +636,11 @@ icon_alignment = 1
 expand_icon = true
 
 [node name="Settings" parent="." node_paths=PackedStringArray("openButton") instance=ExtResource("18_bwlxg")]
+visible = false
 openButton = NodePath("../UI/Tabs/MiscButtonContainer/ParameterButton")
 
 [node name="SplashScreen" type="ColorRect" parent="."]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

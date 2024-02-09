@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://c75ty2plb2sys"]
 
 [ext_resource type="Theme" uid="uid://ce3m7fxsw8f6t" path="res://resources/themes/main.theme" id="1_0r2wn"]
-[ext_resource type="Script" path="res://scripts/core/tabs/installs/ReleaseItem.cs" id="1_ukbs0"]
+[ext_resource type="Script" path="res://scripts/core/tabs/versions/ReleaseItem.cs" id="1_ukbs0"]
 [ext_resource type="Theme" uid="uid://m20yduadk25m" path="res://resources/themes/half_blue_btn.theme" id="3_78hul"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d0sgs"]
