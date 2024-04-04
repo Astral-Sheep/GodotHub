@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - GodotHub updater to update config files
+- Option to delete old data when updating data to new version with GodotHubUpdater
 
 ### Changed
 - Release item text alignement

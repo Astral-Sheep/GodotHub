@@ -14,9 +14,11 @@
 			Appdata + "/installs.cfg",
 		};
 
-		public static void Main(string[] _)
+		public static void Main(string[] pArgs)
 		{
-			if (UpdatePath(OldProjectsPaths, NewProjectsPath))
+			bool lAutoDeleteSource = pArgs.Length > 0 && (pArgs[0].ToLower() == "-d" || pArgs[0].ToLower() == "--delete");
+			
+			if (UpdatePath(OldProjectsPaths, NewProjectsPath, lAutoDeleteSource))
 			{
 				Console.WriteLine("Projects data updated.");
 			}
@@ -25,7 +27,7 @@
 				Console.WriteLine("Projects data can't be updated.");
 			}
 
-			if (UpdatePath(OldEnginesPaths, NewEnginesPath))
+			if (UpdatePath(OldEnginesPaths, NewEnginesPath, lAutoDeleteSource))
 			{
 				Console.WriteLine("Engines data updated.");
 			}
@@ -38,18 +40,18 @@
 			Console.ReadKey();
 		}
 
-		private static bool UpdatePath(string[] pOldPaths, string pNewPath)
+		private static bool UpdatePath(string[] pOldPaths, string pNewPath, bool pDeleteSource = false)
 		{
 			for (int i = 0; i < pOldPaths.Length; i++)
 			{
-				if (CopyFile(pOldPaths[i], pNewPath))
+				if (CopyFile(pOldPaths[i], pNewPath, pDeleteSource))
 					return true;
 			}
 
 			return false;
 		}
 
-		private static bool CopyFile(string pSource, string pDestination)
+		private static bool CopyFile(string pSource, string pDestination, bool pDeleteSource)
 		{
 			if (!File.Exists(pSource))
 				return false;
@@ -72,7 +74,11 @@
 				return false;
 			}
 
-			File.Delete(pSource);
+			if (pDeleteSource)
+			{
+				File.Delete(pSource);
+			}
+			
 			return true;
 		}
 	}
