@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Fixed
 - Application version not shown on build
+- Bad C# solution initialization on mono project creation
 
 ### Removed
 

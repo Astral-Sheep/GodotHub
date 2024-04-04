@@ -98,7 +98,8 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 						$"config_version=5{PathT.EOL}{PathT.EOL}" +
 						$"[application]{PathT.EOL}{PathT.EOL}" +
 						$"config/name=\"{pName}\"{PathT.EOL}" +
-						$"config/features=PackedStringArray(\"{pVersion}\"{(lIsMono ? ", \"C#\"" : "")}, \"{RenderModes[pRenderMode].feature}\"){PathT.EOL}" +
+						// $"config/features=PackedStringArray(\"{pVersion.major}.{pVersion.minor}\"{(pVersion.patch == 0 ? "" : $", \"{pVersion}\"")}{(lIsMono ? ", \"C#\"" : "")}, \"{RenderModes[pRenderMode].feature}\"){PathT.EOL}" +
+						$"config/features=PackedStringArray(\"{pVersion.major}.{pVersion.minor}\"{(pVersion.patch == 0 ? "" : $", \"{pVersion}\"")}, \"{RenderModes[pRenderMode].feature}\"){PathT.EOL}" +
 						$"config/icon=\"res://icon.svg\"{PathT.EOL}";
 
 					if (lIsMono)
@@ -116,7 +117,7 @@ namespace Com.Astral.GodotHub.Core.Tabs.Projects
 
 						if (pRenderMode == RenderMode.Compatibility)
 						{
-							lContent += $"renderer/rendering_method=\"{RenderModes[pRenderMode].method}\"{PathT.EOL}";
+							lContent += $"renderer/rendering_method.mobile=\"{RenderModes[pRenderMode].method}\"{PathT.EOL}";
 						}
 					}
 
