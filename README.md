@@ -1,4 +1,7 @@
-Quick info: I haven't abandonned this project. It's just that I don't have the time and the energy to work on it. I still want to finish it and make it a good tool for Godot users.
+> [!IMPORTANT]
+> I haven't abandonned this project. It's just that I don't have the time and the energy to work on it. I still want to finish it and make it a good tool for Godot users.
+> 
+> I'm currently trying to rework the wireframes and the overall structure of the app to make it easier to use and more enjoyable for everyone.
 
 # GodotHub
 Like Unity hub but for Godot.
